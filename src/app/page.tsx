@@ -148,24 +148,25 @@ export default function Home() {
 
             {/* Trust Indicators */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-4xl mx-auto">
-            <button
-              onClick={() => setShowTestimonialModal(true)}
-              className="text-center hover:scale-105 transition-transform cursor-pointer group"
-            >
-              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2 group-hover:text-blue-700 transition-colors">500+</div>
-              <div className="text-sm md:text-base text-muted-foreground">Trusted Businesses</div>
-            </button>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">30%</div>
-              <div className="text-sm md:text-base text-muted-foreground">Cost Reduction</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">100%</div>
-              <div className="text-sm md:text-base text-muted-foreground">Secure Platform</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">24/7</div>
-              <div className="text-sm md:text-base text-muted-foreground">Support</div>
+              <button
+                onClick={() => setShowTestimonialModal(true)}
+                className="text-center hover:scale-105 transition-transform cursor-pointer group"
+              >
+                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2 group-hover:text-blue-700 transition-colors">500+</div>
+                <div className="text-sm md:text-base text-muted-foreground">Trusted Businesses</div>
+              </button>
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">30%</div>
+                <div className="text-sm md:text-base text-muted-foreground">Cost Reduction</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">100%</div>
+                <div className="text-sm md:text-base text-muted-foreground">Secure Platform</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">24/7</div>
+                <div className="text-sm md:text-base text-muted-foreground">Support</div>
+              </div>
             </div>
           </div>
         </div>

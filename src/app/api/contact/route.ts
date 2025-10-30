@@ -3,6 +3,7 @@ import { db } from '@/lib/db'
 import { z } from 'zod'
 import { rateLimit } from '@/lib/rate-limit'
 import jwt from 'jsonwebtoken'
+import { sendContactNotificationToAdmin } from '@/lib/email'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
 
@@ -148,8 +149,20 @@ export async function POST(request: NextRequest) {
       return newInquiry
     })
 
-    // TODO: Send notification email to admin
-    // await sendNotificationEmail(inquiry)
+    // Send notification email to admin
+    try {
+      await sendContactNotificationToAdmin({
+        id: inquiry.id,
+        name: inquiry.name,
+        email: inquiry.email,
+        company: inquiry.company || null,
+        message: inquiry.message,
+        type: inquiry.type
+      })
+    } catch (emailError) {
+      // Don't fail the request if email fails - it's logged in notification table
+      console.error('Failed to send notification email:', emailError)
+    }
 
     return NextResponse.json({
       message: 'Contact inquiry submitted successfully',

@@ -97,7 +97,7 @@
                 <button onclick="toggleLanguage()" class="hover:text-yellow-300 transition">
                     <i class="fas fa-globe mr-1"></i> <span id="langToggle">العربية</span>
                 </button>
-                <button onclick="toggleDirection()" class="hover:text-yellow-300 transition">
+                <button onclick="toggleDirection()" class="hover:text-yellow-300 transition" title="Toggle text direction">
                     <i class="fas fa-exchange-alt"></i>
                 </button>
             </div>
@@ -131,11 +131,10 @@
 
                 <!-- Mobile Menu Button -->
                 <div class="md:hidden">
-                    <button onclick="toggleMobileMenu()" class="text-gray-700">
+                    <button onclick="toggleMobileMenu()" class="text-gray-700" title="Open mobile menu">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
                 </div>
-            </div>
         </div>
 
         <!-- Mobile Menu -->
@@ -449,7 +448,7 @@
                         </div>
                         <div>
                             <label class="block text-gray-700 font-semibold mb-2" data-translate="service">Service Interest</label>
-                            <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saudi-green">
+                            <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saudi-green" title="Service Interest">
                                 <option value="">Select a service</option>
                                 <option value="business-setup">Business Setup</option>
                                 <option value="legal-compliance">Legal Compliance</option>
@@ -574,11 +573,10 @@
                     <p class="text-gray-400 mb-4">Subscribe for business insights and updates.</p>
                     <form onsubmit="handleNewsletter(event)" class="flex">
                         <input type="email" required class="flex-1 px-4 py-2 bg-gray-800 text-white rounded-l-lg focus:outline-none focus:bg-gray-700" placeholder="Your email">
-                        <button type="submit" class="bg-saudi-green px-4 py-2 rounded-r-lg hover:bg-green-700 transition">
+                        <button type="submit" aria-label="Subscribe to newsletter" class="bg-saudi-green px-4 py-2 rounded-r-lg hover:bg-green-700 transition">
                             <i class="fas fa-arrow-right"></i>
                         </button>
                     </form>
-                </div>
             </div>
             
             <div class="border-t border-gray-800 pt-8 text-center text-gray-400">

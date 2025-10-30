@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
 import Link from 'next/link'
-import { logger } from '@/lib/logger'
 
 interface Props {
   children: ReactNode
@@ -43,16 +42,24 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log the error
-    logger.error('React Error Boundary caught an error', {
-      errorId: this.state.errorId,
-      error: error.message,
-      stack: error.stack,
-      componentStack: errorInfo.componentStack,
-      errorBoundary: true,
-      userAgent: navigator.userAgent,
-      url: window.location.href,
-      timestamp: new Date().toISOString()
-    })
+    if (typeof window !== 'undefined') {
+      try {
+        const { logger } = require('@/lib/logger')
+        logger.error('React Error Boundary caught an error', {
+          errorId: this.state.errorId,
+          error: error.message,
+          stack: error.stack,
+          componentStack: errorInfo.componentStack,
+          errorBoundary: true,
+          userAgent: navigator.userAgent,
+          url: window.location.href,
+          timestamp: new Date().toISOString()
+        })
+      } catch (e) {
+        // Fallback if logger is not available
+        console.error('React Error Boundary caught an error', error)
+      }
+    }
 
     // Call custom error handler if provided
     if (this.props.onError) {
@@ -152,14 +159,21 @@ export class ErrorBoundary extends Component<Props, State> {
 // Hook for functional components
 export function useErrorHandler() {
   return (error: Error, errorInfo?: string) => {
-    logger.error('Error caught by useErrorHandler', {
-      error: error.message,
-      stack: error.stack,
-      errorInfo,
-      userAgent: navigator.userAgent,
-      url: window.location.href,
-      timestamp: new Date().toISOString()
-    })
+    if (typeof window !== 'undefined') {
+      try {
+        const { logger } = require('@/lib/logger')
+        logger.error('Error caught by useErrorHandler', {
+          error: error.message,
+          stack: error.stack,
+          errorInfo,
+          userAgent: navigator.userAgent,
+          url: window.location.href,
+          timestamp: new Date().toISOString()
+        })
+      } catch (e) {
+        console.error('Error caught by useErrorHandler', error)
+      }
+    }
   }
 }
 

@@ -173,10 +173,49 @@ export default function ResourceDetailPage() {
       return
     }
 
-    // Toggle favorite status
-    setIsFavorite(!isFavorite)
-    // TODO: Implement favorite API
+    try {
+      const token = localStorage.getItem('token')
+      const response = await fetch(`/api/resources/${slug}/favorite`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          action: isFavorite ? 'unfavorite' : 'favorite'
+        })
+      })
+
+      if (response.ok) {
+        setIsFavorite(!isFavorite)
+      }
+    } catch (error) {
+      // Silently fail - favorite status is optional
+    }
   }
+
+  useEffect(() => {
+    if (user && resource) {
+      // Check favorite status
+      const token = localStorage.getItem('token')
+      if (token) {
+        fetch(`/api/resources/${slug}/favorite`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.favorited !== undefined) {
+              setIsFavorite(data.favorited)
+            }
+          })
+          .catch(() => {
+            // Silently fail
+          })
+      }
+    }
+  }, [user, resource, slug])
 
   if (loading) {
     return (
