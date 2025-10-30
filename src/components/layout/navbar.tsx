@@ -18,7 +18,8 @@ import {
   User,
   LogOut,
   Settings,
-  Target
+  Target,
+  Shield
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -89,6 +90,7 @@ const navigation = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [user, setUser] = useState<any>(null)
   const pathname = usePathname()
 
   useEffect(() => {
@@ -96,6 +98,17 @@ export function Navbar() {
       setScrolled(window.scrollY > 10)
     }
     window.addEventListener('scroll', handleScroll)
+    
+    // Check if user is logged in
+    const userData = localStorage.getItem('user')
+    if (userData) {
+      try {
+        setUser(JSON.parse(userData))
+      } catch (e) {
+        // Invalid user data
+      }
+    }
+    
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
