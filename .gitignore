@@ -55,7 +55,7 @@ server.log
 prisma/sakila.db
 
 # Deployment scripts with sensitive data
-*.sh
+!build-vercel.sh
 !deploy.sh
 .vercelenv.sh
 

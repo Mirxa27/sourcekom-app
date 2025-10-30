@@ -1,5 +1,5 @@
 {
-  "buildCommand": "prisma generate && next build",
+  "buildCommand": "bash build-vercel.sh",
   "devCommand": "npm run dev",
   "framework": "nextjs",
   "installCommand": "npm install",
@@ -42,6 +42,5 @@
         }
       ]
     }
-  ],
-  "ignoreCommand": "if [ \"$VERCEL_ENV\" == \"production\" ] && git diff HEAD^ HEAD --quiet -- ':(exclude).vercelignore' ':(exclude)vercel.json'; then exit 0; else exit 1; fi"
+  ]
 }
