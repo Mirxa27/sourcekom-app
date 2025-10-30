@@ -39,7 +39,15 @@ export default function AboutPage() {
               Back to Home
             </Link>
             <div className="flex items-center space-x-2">
-              <img src="/logo.png" alt="SourceKom" className="h-10 w-auto" />
+              <img 
+                src="/logo.png" 
+                alt="SourceKom" 
+                className="h-10 w-auto"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement
+                  target.src = '/images/logos/logo-light.svg'
+                }}
+              />
             </div>
           </div>
         </div>
@@ -148,6 +156,10 @@ export default function AboutPage() {
                           width={128}
                           height={128}
                           className="object-cover w-full h-full"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement
+                            target.src = '/images/team/founder.jpg'
+                          }}
                         />
                       </div>
                       <h3 className="text-xl font-bold">Abdullah Mirza</h3>
@@ -362,6 +374,10 @@ export default function AboutPage() {
                   width={128}
                   height={128}
                   className="object-cover w-full h-full"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = '/images/team/founder.jpg'
+                  }}
                 />
               </div>
               <div>

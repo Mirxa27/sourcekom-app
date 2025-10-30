@@ -132,6 +132,10 @@ export function Navbar() {
               src="/logo.png" 
               alt="SourceKom" 
               className="h-10 w-auto transition-transform hover:scale-105"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement
+                target.src = '/images/logos/logo-light.svg'
+              }}
             />
           </Link>
 
