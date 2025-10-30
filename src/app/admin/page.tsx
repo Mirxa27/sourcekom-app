@@ -1235,13 +1235,25 @@ function IntegrationsSettingsForm({
             <option value="true">Enabled</option>
           </select>
         </div>
-        <Button onClick={() => {
-          onSave('stripe_api_key', formData.stripe_api_key, 'integrations', true)
-          onSave('paypal_client_id', formData.paypal_client_id, 'integrations', true)
-          onSave('social_login_enabled', formData.social_login_enabled, 'integrations', false)
-        }}>
-          Save Integration Settings
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => {
+            if (formData.stripe_api_key) onSave('stripe_api_key', formData.stripe_api_key, 'integrations', true)
+            if (formData.paypal_client_id) onSave('paypal_client_id', formData.paypal_client_id, 'integrations', true)
+            onSave('social_login_enabled', formData.social_login_enabled, 'integrations', false)
+          }}>
+            <Globe className="w-4 h-4 mr-2" />
+            Save Integration Settings
+          </Button>
+          <Button variant="outline" onClick={() => {
+            setFormData({
+              stripe_api_key: getValue('stripe_api_key') || '',
+              paypal_client_id: getValue('paypal_client_id') || '',
+              social_login_enabled: getValue('social_login_enabled') || 'false'
+            })
+          }}>
+            Reset
+          </Button>
+        </div>
       </CardContent>
     </Card>
   )
