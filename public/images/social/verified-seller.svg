@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="60" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="60" rx="6" fill="#D4AF37" fill-opacity="0.1" stroke="#D4AF37" stroke-width="2"/>
+  <circle cx="30" cy="30" r="12" fill="#D4AF37"/>
+  <path d="M26 30 L29 33 L35 27" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="50" y="32" font-family="Arial" font-size="12" font-weight="600" fill="#D4AF37">VERIFIED</text>
+  <text x="50" y="44" font-family="Arial" font-size="10" fill="#666">SELLER</text>
+</svg>

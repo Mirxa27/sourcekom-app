@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="120" y="100" width="160" height="120" rx="4" stroke="#006B3F" stroke-width="4" fill="none"/>
+  <path d="M120 120 L280 120" stroke="#006B3F" stroke-width="4"/>
+  <path d="M140 120 C140 90 160 70 200 70 C240 70 260 90 260 120" stroke="#006B3F" stroke-width="4" fill="none"/>
+  <circle cx="200" cy="160" r="3" fill="#D4AF37"/>
+  <text x="200" y="250" font-family="Arial" font-size="18" text-anchor="middle" fill="#006B3F">Your Cart is Empty</text>
+  <text x="200" y="275" font-family="Arial" font-size="14" text-anchor="middle" fill="#666">Add items to get started</text>
+</svg>

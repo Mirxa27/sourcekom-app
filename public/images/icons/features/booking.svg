@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Calendar/booking icon -->
+  <rect x="14" y="16" width="36" height="38" rx="3" stroke="#006B3F" stroke-width="3" fill="none"/>
+  <line x1="14" y1="26" x2="50" y2="26" stroke="#006B3F" stroke-width="3"/>
+  <line x1="24" y1="12" x2="24" y2="20" stroke="#006B3F" stroke-width="3" stroke-linecap="round"/>
+  <line x1="40" y1="12" x2="40" y2="20" stroke="#006B3F" stroke-width="3" stroke-linecap="round"/>
+  <!-- Check mark -->
+  <path d="M26 38 L30 42 L38 34" stroke="#D4AF37" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

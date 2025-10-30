@@ -59,3 +59,8 @@ prisma/sakila.db
 # Logs
 *.log
 vercel-deploy.log
+
+# Override global gitignore - allow public folder
+!public/
+!public/**
+!public/**/*

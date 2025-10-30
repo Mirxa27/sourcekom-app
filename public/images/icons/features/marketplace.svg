@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shopping bag/marketplace icon -->
+  <rect x="16" y="20" width="32" height="36" rx="2" stroke="#006B3F" stroke-width="3" fill="none"/>
+  <path d="M16 24 L48 24" stroke="#006B3F" stroke-width="3" stroke-linecap="round"/>
+  <path d="M24 20 C24 14 28 10 32 10 C36 10 40 14 40 20" stroke="#006B3F" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <circle cx="32" cy="38" r="2" fill="#D4AF37"/>
+</svg>

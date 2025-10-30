@@ -1,0 +1,21 @@
+<svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5DADE2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3498DB;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="yellowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F1C40F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F39C12;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Source text in light blue -->
+  <text x="5" y="25" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="url(#blueGradient)">Source</text>
+  
+  <!-- om text in yellow -->
+  <text x="50" y="25" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="url(#yellowGradient)">om</text>
+  
+  <!-- Arabic text مصدر -->
+  <text x="85" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="url(#blueGradient)" direction="rtl">مصدر</text>
+</svg>

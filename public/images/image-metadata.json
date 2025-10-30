@@ -1,0 +1,275 @@
+{
+  "digitalProducts": [
+    {
+      "id": "product-1",
+      "filename": "product-1.jpg",
+      "title": "Modern E-commerce Website Template",
+      "description": "Professional e-commerce website template with clean design and responsive layout",
+      "category": "website-template",
+      "tags": ["ecommerce", "modern", "responsive", "business"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "45KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "product-2",
+      "filename": "product-2.jpg",
+      "title": "Mobile Banking App Interface",
+      "description": "Secure mobile banking application interface with modern UI design",
+      "category": "mobile-app",
+      "tags": ["banking", "mobile", "finance", "security"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "42KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "product-3",
+      "filename": "product-3.jpg",
+      "title": "Business Logo Design Package",
+      "description": "Professional logo design package for modern businesses",
+      "category": "logo-design",
+      "tags": ["logo", "branding", "design", "corporate"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "38KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "product-4",
+      "filename": "product-4.jpg",
+      "title": "Digital Marketing Guide E-book",
+      "description": "Comprehensive digital marketing guide for Saudi businesses",
+      "category": "e-book",
+      "tags": ["marketing", "guide", "digital", "business"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "41KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "product-5",
+      "filename": "product-5.jpg",
+      "title": "Project Management Software Dashboard",
+      "description": "Advanced project management software with intuitive dashboard",
+      "category": "software",
+      "tags": ["project", "management", "dashboard", "productivity"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "44KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "product-6",
+      "filename": "product-6.jpg",
+      "title": "Corporate Video Template Package",
+      "description": "Professional video templates for corporate presentations",
+      "category": "video-template",
+      "tags": ["video", "corporate", "template", "presentation"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "46KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "product-7",
+      "filename": "product-7.jpg",
+      "title": "Audio Production Software Interface",
+      "description": "Professional audio production software with advanced features",
+      "category": "audio-software",
+      "tags": ["audio", "production", "software", "music"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "43KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "product-8",
+      "filename": "product-8.jpg",
+      "title": "Code Editor Theme Package",
+      "description": "Modern code editor themes for enhanced development experience",
+      "category": "development-tool",
+      "tags": ["code", "editor", "theme", "development"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "39KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "product-9",
+      "filename": "product-9.jpg",
+      "title": "Business Presentation Templates",
+      "description": "Professional presentation templates for business meetings",
+      "category": "presentation-template",
+      "tags": ["presentation", "business", "template", "professional"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "40KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "product-10",
+      "filename": "product-10.jpg",
+      "title": "Social Media Marketing Kit",
+      "description": "Complete social media marketing kit with templates and graphics",
+      "category": "marketing-materials",
+      "tags": ["social", "media", "marketing", "templates"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "45KB",
+      "format": "JPEG"
+    }
+  ],
+  "avatars": [
+    {
+      "id": "avatar-1",
+      "filename": "avatar-1.jpg",
+      "title": "Ahmed Al-Rashid - Business Consultant",
+      "description": "Professional business consultant with 10+ years experience",
+      "category": "consultant",
+      "tags": ["professional", "consultant", "business", "saudi"],
+      "dimensions": { "width": 200, "height": 200 },
+      "fileSize": "12KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "avatar-2",
+      "filename": "avatar-2.jpg",
+      "title": "Fatima Al-Saud - Legal Advisor",
+      "description": "Experienced legal advisor specializing in business law",
+      "category": "legal",
+      "tags": ["legal", "advisor", "professional", "lawyer"],
+      "dimensions": { "width": 200, "height": 200 },
+      "fileSize": "11KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "avatar-3",
+      "filename": "avatar-3.jpg",
+      "title": "Mohammed Al-Qahtani - IT Specialist",
+      "description": "IT specialist focusing on digital transformation",
+      "category": "technology",
+      "tags": ["IT", "specialist", "technology", "digital"],
+      "dimensions": { "width": 200, "height": 200 },
+      "fileSize": "13KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "avatar-4",
+      "filename": "avatar-4.jpg",
+      "title": "Nora Al-Fahad - Marketing Expert",
+      "description": "Marketing expert with digital and traditional experience",
+      "category": "marketing",
+      "tags": ["marketing", "expert", "digital", "strategy"],
+      "dimensions": { "width": 200, "height": 200 },
+      "fileSize": "12KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "avatar-5",
+      "filename": "avatar-5.jpg",
+      "title": "Khalid Al-Omar - Financial Advisor",
+      "description": "Certified financial advisor for businesses and individuals",
+      "category": "finance",
+      "tags": ["financial", "advisor", "certified", "business"],
+      "dimensions": { "width": 200, "height": 200 },
+      "fileSize": "11KB",
+      "format": "JPEG"
+    }
+  ],
+  "services": [
+    {
+      "id": "service-1",
+      "filename": "service-1.jpg",
+      "title": "Modern Consulting Office Space",
+      "description": "Professional consulting office with modern facilities",
+      "category": "office-space",
+      "tags": ["office", "consulting", "modern", "professional"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "48KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "service-2",
+      "filename": "service-2.jpg",
+      "title": "Training Facility with Modern Equipment",
+      "description": "State-of-the-art training facility for professional development",
+      "category": "training-facility",
+      "tags": ["training", "facility", "modern", "equipment"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "52KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "service-3",
+      "filename": "service-3.jpg",
+      "title": "Executive Meeting Room",
+      "description": "Luxury executive meeting room for business meetings",
+      "category": "meeting-room",
+      "tags": ["meeting", "executive", "luxury", "business"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "47KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "service-4",
+      "filename": "service-4.jpg",
+      "title": "Legal Office Interior",
+      "description": "Professional legal office with confidential meeting spaces",
+      "category": "legal-office",
+      "tags": ["legal", "office", "professional", "confidential"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "45KB",
+      "format": "JPEG"
+    },
+    {
+      "id": "service-5",
+      "filename": "service-5.jpg",
+      "title": "Photography Studio Setup",
+      "description": "Professional photography studio with lighting equipment",
+      "category": "photography-studio",
+      "tags": ["photography", "studio", "professional", "equipment"],
+      "dimensions": { "width": 400, "height": 300 },
+      "fileSize": "50KB",
+      "format": "JPEG"
+    }
+  ],
+  "categories": {
+    "digitalProducts": {
+      "website-templates": "Professional website templates for various industries",
+      "mobile-apps": "Mobile application interfaces and designs",
+      "graphics-design": "Logos, icons, and graphic design assets",
+      "e-books": "Digital books and guides for business and learning",
+      "software": "Software interfaces and applications",
+      "video-templates": "Video production templates and assets",
+      "audio-interfaces": "Audio software and interface designs",
+      "development-tools": "Code editors and development tools",
+      "presentation-templates": "Business and educational presentation templates",
+      "marketing-materials": "Digital marketing assets and templates"
+    },
+    "avatars": {
+      "consultants": "Business and management consultants",
+      "legal-professionals": "Lawyers and legal advisors",
+      "it-specialists": "Technology and IT professionals",
+      "marketing-experts": "Marketing and branding specialists",
+      "financial-advisors": "Finance and accounting professionals",
+      "trainers": "Professional trainers and educators",
+      "company-representatives": "Company logos and representative images"
+    },
+    "services": {
+      "office-spaces": "Professional office and consulting spaces",
+      "training-facilities": "Training and development facilities",
+      "meeting-rooms": "Conference and meeting facilities",
+      "legal-offices": "Legal profession office spaces",
+      "photography-studios": "Professional photography and media studios",
+      "conference-facilities": "Large conference and event spaces",
+      "equipment": "Professional equipment and tools",
+      "workspaces": "Modern workspace environments"
+    }
+  },
+  "usage": {
+    "marketplace": "Use these images for marketplace listings and product displays",
+    "profiles": "Avatar images for user and provider profiles",
+    "services": "Service and facility images for service listings",
+    "banners": "High-quality images for promotional banners",
+    "testimonials": "Professional images for testimonial sections"
+  },
+  "lastUpdated": "2025-10-29",
+  "totalImages": {
+    "digitalProducts": 50,
+    "avatars": 35,
+    "services": 30,
+    "total": 115
+  }
+}
