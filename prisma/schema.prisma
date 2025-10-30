@@ -1,0 +1,321 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  password      String
+  avatar        String?
+  bio           String?
+  role          UserRole @default(USER)
+  isActive      Boolean  @default(true)
+  emailVerified DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  resources     Resource[]
+  purchases     Purchase[]
+  payments      Payment[]
+  reviews       Review[]
+  subscriptions Subscription[]
+  notifications Notification[]
+  supportTickets SupportTicket[]
+  supportReplies SupportReply[]
+  
+  @@map("users")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String?
+  color       String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  resources Resource[]
+  
+  @@map("categories")
+}
+
+model Resource {
+  id           String        @id @default(cuid())
+  title        String
+  description  String
+  slug         String        @unique
+  content      String?       // For text-based resources
+  fileUrl      String?       // For downloadable files
+  fileUrl2     String?       // Additional file
+  fileUrl3     String?       // Additional file
+  previewUrl   String?       // Preview image/video
+  thumbnail    String?       // Thumbnail image
+  price        Float         @default(0)
+  originalPrice Float?       // For showing discounts
+  isFree       Boolean       @default(false)
+  isPublished  Boolean       @default(false)
+  isFeatured   Boolean       @default(false)
+  downloadCount Int          @default(0)
+  viewCount    Int           @default(0)
+  tags         String?       // JSON array of tags
+  metadata     String?       // Additional metadata as JSON
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  
+  // Foreign keys
+  authorId     String
+  categoryId   String
+  
+  // Relations
+  author       User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category     Category      @relation(fields: [categoryId], references: [id])
+  purchases    Purchase[]
+  payments     Payment[]
+  reviews      Review[]
+  
+  @@map("resources")
+}
+
+model Purchase {
+  id               String           @id @default(cuid())
+  amount           Float
+  currency         String           @default("SAR")
+  paymentMethod    String
+  paymentId        String?          // References Payment.id
+  paymentStatus    PaymentStatus    @default(PENDING)
+  downloadUrl      String?          // Temporary download URL
+  downloadExpires  DateTime?        // Download link expiration
+  refundStatus     RefundStatus?    @default(NONE)
+  refundReason     String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  
+  // Foreign keys
+  userId           String
+  resourceId       String
+  
+  // Relations
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource         Resource         @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  payment          Payment?         @relation(fields: [paymentId], references: [id])
+  
+  @@unique([userId, resourceId])
+  @@map("purchases")
+}
+
+model Payment {
+  id               String           @id @default(cuid())
+  amount           Float
+  currency         String           @default("SAR")
+  paymentMethod    String           @default("myfatoorah")
+  paymentStatus    PaymentStatus    @default(PENDING)
+  externalId       String?          // MyFatoorah InvoiceId
+  paymentUrl       String?          // Payment gateway redirect URL
+  customerReference String?         // Customer reference for tracking
+  customerInfo     String?          // JSON string with customer details
+  metadata         String?          // JSON string with additional payment data
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  
+  // Foreign keys
+  userId           String
+  resourceId       String
+  
+  // Relations
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource         Resource         @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  purchases        Purchase[]
+  
+  @@map("payments")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int      // 1-5 stars
+  comment   String?
+  isVerified Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Foreign keys
+  userId    String
+  resourceId String
+  
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resource  Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, resourceId])
+  @@map("reviews")
+}
+
+model Subscription {
+  id             String            @id @default(cuid())
+  plan           SubscriptionPlan
+  status         SubscriptionStatus @default(ACTIVE)
+  startDate      DateTime          @default(now())
+  endDate        DateTime?
+  amount         Float
+  currency       String            @default("SAR")
+  paymentMethod  String
+  paymentId      String?
+  features       String?           // JSON array of features
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  
+  // Foreign keys
+  userId         String
+  
+  // Relations
+  user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("subscriptions")
+}
+
+model NewsletterSubscription {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  isActive    Boolean  @default(true)
+  subscribedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("newsletter_subscriptions")
+}
+
+model ContactInquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  company   String?
+  message   String
+  type      String   @default("general") // general, resource_inquiry, legal_consultation
+  status    String   @default("PENDING") // PENDING, RESOLVED, CLOSED
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("contact_inquiries")
+}
+
+model Notification {
+  id         String   @id @default(cuid())
+  title      String
+  message    String
+  type       String   @default("info") // info, success, warning, error, purchase, download, system
+  isRead     Boolean  @default(false)
+  isGlobal   Boolean  @default(false)
+  actionUrl  String?
+  actionText String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  // Foreign keys
+  userId     String?
+  
+  // Relations
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("notifications")
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  eventType String   // page_view, resource_download, purchase, user_registration, etc.
+  eventData String?  // JSON string with additional event data
+  userId    String?
+  sessionId String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  
+  @@map("analytics_events")
+}
+
+model SupportTicket {
+  id          String   @id @default(cuid())
+  ticketId    String   @unique // TK-000001 format
+  userId      String
+  subject     String
+  category    String   // technical, billing, account, resources, legal, feature, other
+  priority    String   @default("medium") // low, medium, high, urgent
+  status      String   @default("open") // open, in_progress, resolved, closed
+  description String
+  attachments String?  // JSON array of attachment URLs
+  assignedTo  String?  // ID of support agent assigned to this ticket
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  replies     SupportReply[]
+  
+  @@map("support_tickets")
+}
+
+model SupportReply {
+  id         String   @id @default(cuid())
+  ticketId   String
+  userId     String   // Can be 'system' for automated replies
+  message    String
+  isInternal Boolean  @default(false) // true for internal notes, false for customer-visible replies
+  createdAt  DateTime @default(now())
+  
+  // Relations
+  ticket     SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("support_replies")
+}
+
+// Enums
+enum UserRole {
+  USER
+  CREATOR
+  ADMIN
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+  CANCELLED
+}
+
+enum RefundStatus {
+  NONE
+  REQUESTED
+  APPROVED
+  REJECTED
+}
+
+enum SubscriptionPlan {
+  FREE
+  BASIC
+  PREMIUM
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  SUSPENDED
+}
