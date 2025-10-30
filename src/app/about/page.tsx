@@ -149,13 +149,14 @@ export default function AboutPage() {
                 <div className="md:col-span-1">
                   <div className="aspect-square bg-gradient-to-br from-[var(--sourcekom-blue-light)]/10 to-[var(--sourcekom-yellow)]/10 flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity" onClick={() => setIsFounderModalOpen(true)}>
                     <div className="text-center">
-                      <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4 border-4 border-white shadow-lg">
+                      <div className="w-40 h-40 rounded-full overflow-hidden mx-auto mb-4 border-4 border-white shadow-lg">
                         <Image
                           src="/images/Abdullah_Mirza_founder.jpg"
-                          alt="Abdullah Mirza"
-                          width={128}
-                          height={128}
+                          alt="Abdullah Mirza - Founder & CEO"
+                          width={160}
+                          height={160}
                           className="object-cover w-full h-full"
+                          priority
                           onError={(e) => {
                             const target = e.target as HTMLImageElement
                             target.src = '/images/team/founder.jpg'
@@ -367,13 +368,14 @@ export default function AboutPage() {
           </DialogHeader>
           <div className="space-y-6">
             <div className="flex items-center gap-6">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-primary flex-shrink-0">
+              <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-primary flex-shrink-0 shadow-xl">
                 <Image
                   src="/images/Abdullah_Mirza_founder.jpg"
-                  alt="Abdullah Mirza"
-                  width={128}
-                  height={128}
+                  alt="Abdullah Mirza - Founder & CEO"
+                  width={160}
+                  height={160}
                   className="object-cover w-full h-full"
+                  priority
                   onError={(e) => {
                     const target = e.target as HTMLImageElement
                     target.src = '/images/team/founder.jpg'
