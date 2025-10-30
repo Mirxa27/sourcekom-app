@@ -35,6 +35,7 @@ model User {
   notifications Notification[]
   supportTickets SupportTicket[]
   supportReplies SupportReply[]
+  contents       Content[]
   
   @@map("users")
 }
@@ -282,6 +283,42 @@ model SupportReply {
   user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@map("support_replies")
+}
+
+model Setting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String   // JSON string for complex values
+  category    String   @default("general") // general, payment, email, sms, analytics, integrations
+  description String?
+  isEncrypted Boolean  @default(false)
+  updatedBy   String?  // User ID who last updated
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("settings")
+}
+
+model Content {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String   // Markdown or HTML content
+  excerpt     String?
+  type        String   @default("page") // page, post, announcement, faq
+  status      String   @default("draft") // draft, published, archived
+  featured    Boolean  @default(false)
+  seoTitle    String?
+  seoDescription String?
+  authorId    String
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  
+  @@map("contents")
 }
 
 // Enums

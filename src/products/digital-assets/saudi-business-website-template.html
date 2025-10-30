@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saudi Business Pro - Premium Business Template</title>
+    <meta name="description" content="Professional Saudi Arabian business website template with RTL support and Saudi market optimization">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts - Arabic and English -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-saudi-green: #006C35;
+            --secondary-saudi-white: #FFFFFF;
+            --accent-gold: #FFD700;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --bg-light: #F9FAFB;
+            --border-color: #E5E7EB;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        [lang="ar"], body[dir="rtl"] {
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        .gradient-saudi {
+            background: linear-gradient(135deg, var(--primary-saudi-green) 0%, #004d24 100%);
+        }
+        
+        .text-saudi-green {
+            color: var(--primary-saudi-green);
+        }
+        
+        .bg-saudi-green {
+            background-color: var(--primary-saudi-green);
+        }
+        
+        .hover-saudi-green:hover {
+            background-color: var(--primary-saudi-green);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .saudi-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23006C35' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .flag-animation {
+            background: linear-gradient(90deg, #006C35 33.33%, white 33.33%, white 66.66%, #FFD700 66.66%);
+            background-size: 300% 100%;
+            animation: flagWave 3s ease-in-out infinite;
+        }
+        
+        @keyframes flagWave {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Top Bar -->
+    <div class="bg-saudi-green text-white py-2 text-sm">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <span><i class="fas fa-phone mr-2"></i> +966 50 123 4567</span>
+                <span><i class="fas fa-envelope mr-2"></i> info@saudibusiness.com</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleLanguage()" class="hover:text-yellow-300 transition">
+                    <i class="fas fa-globe mr-1"></i> <span id="langToggle">العربية</span>
+                </button>
+                <button onclick="toggleDirection()" class="hover:text-yellow-300 transition">
+                    <i class="fas fa-exchange-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-saudi-green rounded-full flex items-center justify-center">
+                            <i class="fas fa-crown text-yellow-400"></i>
+                        </div>
+                        <span class="ml-3 text-xl font-bold text-saudi-green">SaudiBusiness Pro</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-gray-700 hover:text-saudi-green transition" data-translate="home">Home</a>
+                    <a href="#services" class="text-gray-700 hover:text-saudi-green transition" data-translate="services">Services</a>
+                    <a href="#about" class="text-gray-700 hover:text-saudi-green transition" data-translate="about">About</a>
+                    <a href="#contact" class="text-gray-700 hover:text-saudi-green transition" data-translate="contact">Contact</a>
+                    <button class="bg-saudi-green text-white px-6 py-2 rounded-full hover:bg-green-700 transition">
+                        <span data-translate="get_started">Get Started</span>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button onclick="toggleMobileMenu()" class="text-gray-700">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
+            <div class="px-4 py-2 space-y-2">
+                <a href="#home" class="block py-2 text-gray-700" data-translate="home">Home</a>
+                <a href="#services" class="block py-2 text-gray-700" data-translate="services">Services</a>
+                <a href="#about" class="block py-2 text-gray-700" data-translate="about">About</a>
+                <a href="#contact" class="block py-2 text-gray-700" data-translate="contact">Contact</a>
+                <button class="w-full bg-saudi-green text-white px-6 py-2 rounded-full">
+                    <span data-translate="get_started">Get Started</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative overflow-hidden">
+        <div class="saudi-pattern">
+            <div class="container mx-auto px-4 py-20 lg:py-32">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="inline-flex items-center bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full mb-6">
+                            <i class="fas fa-star mr-2"></i>
+                            <span data-translate="trusted_by">Trusted by 500+ Saudi Businesses</span>
+                        </div>
+                        <h1 class="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                            <span data-translate="hero_title">Business Excellence</span><br>
+                            <span class="text-saudi-green">Saudi Arabia</span>
+                        </h1>
+                        <p class="text-xl text-gray-600 mb-8" data-translate="hero_subtitle">
+                            Premium business solutions tailored for the Saudi market. 
+                            Accelerate your growth with our expert consulting services.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button class="bg-saudi-green text-white px-8 py-4 rounded-lg hover:bg-green-700 transition transform hover:scale-105">
+                                <i class="fas fa-rocket mr-2"></i>
+                                <span data-translate="start_journey">Start Your Journey</span>
+                            </button>
+                            <button class="border-2 border-saudi-green text-saudi-green px-8 py-4 rounded-lg hover:bg-saudi-green hover:text-white transition">
+                                <i class="fas fa-play-circle mr-2"></i>
+                                <span data-translate="watch_demo">Watch Demo</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Stats -->
+                        <div class="grid grid-cols-3 gap-6 mt-12">
+                            <div>
+                                <h3 class="text-3xl font-bold text-saudi-green">500+</h3>
+                                <p class="text-gray-600" data-translate="clients">Clients</p>
+                            </div>
+                            <div>
+                                <h3 class="text-3xl font-bold text-saudi-green">10+</h3>
+                                <p class="text-gray-600" data-translate="years">Years</p>
+                            </div>
+                            <div>
+                                <h3 class="text-3xl font-bold text-saudi-green">98%</h3>
+                                <p class="text-gray-600" data-translate="satisfaction">Satisfaction</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hero Image -->
+                    <div class="relative">
+                        <div class="animate-float">
+                            <div class="flag-animation h-96 rounded-2xl shadow-2xl"></div>
+                        </div>
+                        <div class="absolute -bottom-4 -right-4 bg-white p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-check text-saudi-green"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold" data-translate="vision_2030">Vision 2030</h4>
+                                    <p class="text-sm text-gray-600" data-translate="aligned">Aligned Partner</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4" data-translate="our_services">Our Services</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto" data-translate="services_subtitle">
+                    Comprehensive business solutions designed for Saudi market success
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="card-hover bg-white border border-gray-200 rounded-xl p-8">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-briefcase text-2xl text-saudi-green"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4" data-translate="business_setup">Business Setup</h3>
+                    <p class="text-gray-600 mb-6" data-translate="business_setup_desc">
+                        Complete company registration services including licenses, permits, and compliance.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="llc_setup">LLC Registration</span></li>
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="invest_license">Investment License</span></li>
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="commercial_reg">Commercial Registration</span></li>
+                    </ul>
+                    <button class="mt-6 text-saudi-green font-semibold hover:text-green-700 transition">
+                        Learn More <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="card-hover bg-white border border-gray-200 rounded-xl p-8">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-balance-scale text-2xl text-yellow-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4" data-translate="legal_compliance">Legal Compliance</h3>
+                    <p class="text-gray-600 mb-6" data-translate="legal_compliance_desc">
+                        Expert legal guidance ensuring full compliance with Saudi business regulations.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="saudization">Saudization Consulting</span></li>
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="labor_laws">Labor Law Compliance</span></li>
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="tax_compliance">Tax & Zakat Filing</span></li>
+                    </ul>
+                    <button class="mt-6 text-saudi-green font-semibold hover:text-green-700 transition">
+                        Learn More <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="card-hover bg-white border border-gray-200 rounded-xl p-8">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4" data-translate="market_entry">Market Entry</h3>
+                    <p class="text-gray-600 mb-6" data-translate="market_entry_desc">
+                        Strategic market entry services for international businesses entering Saudi Arabia.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="market_research">Market Research</span></li>
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="partner_search">Partner Search</span></li>
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="localization">Localization Strategy</span></li>
+                    </ul>
+                    <button class="mt-6 text-saudi-green font-semibold hover:text-green-700 transition">
+                        Learn More <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="card-hover bg-white border border-gray-200 rounded-xl p-8">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-users text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4" data-translate="hr_consulting">HR Consulting</h3>
+                    <p class="text-gray-600 mb-6" data-translate="hr_consulting_desc">
+                        Comprehensive HR solutions including recruitment, training, and workforce optimization.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="recruitment">Recruitment Services</span></li>
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="training">Training Programs</span></li>
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="hr_setup">HR System Setup</span></li>
+                    </ul>
+                    <button class="mt-6 text-saudi-green font-semibold hover:text-green-700 transition">
+                        Learn More <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Service 5 -->
+                <div class="card-hover bg-white border border-gray-200 rounded-xl p-8">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-cog text-2xl text-red-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4" data-translate="process_optimization">Process Optimization</h3>
+                    <p class="text-gray-600 mb-6" data-translate="process_optimization_desc">
+                        Streamline your business processes for maximum efficiency and cost reduction.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="process_mapping">Process Mapping</span></li>
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="automation">Automation Solutions</span></li>
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="quality_control">Quality Control</span></li>
+                    </ul>
+                    <button class="mt-6 text-saudi-green font-semibold hover:text-green-700 transition">
+                        Learn More <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- Service 6 -->
+                <div class="card-hover bg-white border border-gray-200 rounded-xl p-8">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-globe text-2xl text-indigo-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4" data-translate="digital_transformation">Digital Transformation</h3>
+                    <p class="text-gray-600 mb-6" data-translate="digital_transformation_desc">
+                        Modernize your business with cutting-edge digital solutions and technologies.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="web_development">Web Development</span></li>
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="mobile_apps">Mobile Apps</span></li>
+                        <li><i class="fas fa-check text-saudi-green mr-2"></i><span data-translate="cloud_solutions">Cloud Solutions</span></li>
+                    </ul>
+                    <button class="mt-6 text-saudi-green font-semibold hover:text-green-700 transition">
+                        Learn More <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-900 mb-6" data-translate="about_title">
+                        Leading Saudi Business Consulting Since 2013
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-6" data-translate="about_intro">
+                        We are a premier business consulting firm dedicated to helping companies thrive in the dynamic Saudi Arabian market. With deep local expertise and global perspective, we deliver results that matter.
+                    </p>
+                    <p class="text-lg text-gray-600 mb-8" data-translate="about_mission">
+                        Our mission is to accelerate Saudi Arabia's Vision 2030 by empowering businesses with the tools, knowledge, and strategies needed for sustainable growth and success.
+                    </p>
+                    
+                    <!-- Features -->
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-saudi-green rounded-full flex items-center justify-center mt-1 mr-4">
+                                <i class="fas fa-check text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900" data-translate="local_expertise">Local Market Expertise</h4>
+                                <p class="text-gray-600">Deep understanding of Saudi business culture and regulations</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-saudi-green rounded-full flex items-center justify-center mt-1 mr-4">
+                                <i class="fas fa-check text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900" data-translate="proven_results">Proven Track Record</h4>
+                                <p class="text-gray-600">500+ successful projects across various industries</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 bg-saudi-green rounded-full flex items-center justify-center mt-1 mr-4">
+                                <i class="fas fa-check text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900" data-translate="comprehensive_services">Comprehensive Services</h4>
+                                <p class="text-gray-600">End-to-end solutions from setup to growth optimization</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                        <div class="text-4xl font-bold text-saudi-green mb-2">15+</div>
+                        <p class="text-gray-600" data-translate="years_experience">Years Experience</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                        <div class="text-4xl font-bold text-saudi-green mb-2">500+</div>
+                        <p class="text-gray-600" data-translate="clients_served">Clients Served</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                        <div class="text-4xl font-bold text-saudi-green mb-2">50+</div>
+                        <p class="text-gray-600" data-translate="team_members">Team Members</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                        <div class="text-4xl font-bold text-saudi-green mb-2">98%</div>
+                        <p class="text-gray-600" data-translate="client_satisfaction">Client Satisfaction</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-saudi-green text-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4" data-translate="contact_title">Get Started Today</h2>
+                <p class="text-xl opacity-90" data-translate="contact_subtitle">
+                    Ready to grow your business in Saudi Arabia? Let's talk.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                <!-- Contact Form -->
+                <div class="bg-white rounded-xl p-8">
+                    <form onsubmit="handleSubmit(event)" class="space-y-6">
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2" data-translate="name">Name</label>
+                            <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saudi-green" placeholder="Your full name">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2" data-translate="company">Company</label>
+                            <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saudi-green" placeholder="Company name">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2" data-translate="email">Email</label>
+                            <input type="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saudi-green" placeholder="your@email.com">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2" data-translate="phone">Phone</label>
+                            <input type="tel" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saudi-green" placeholder="+966 5X XXX XXXX">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2" data-translate="service">Service Interest</label>
+                            <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saudi-green">
+                                <option value="">Select a service</option>
+                                <option value="business-setup">Business Setup</option>
+                                <option value="legal-compliance">Legal Compliance</option>
+                                <option value="market-entry">Market Entry</option>
+                                <option value="hr-consulting">HR Consulting</option>
+                                <option value="process-optimization">Process Optimization</option>
+                                <option value="digital-transformation">Digital Transformation</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-2" data-translate="message">Message</label>
+                            <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-saudi-green" placeholder="Tell us about your needs..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-saudi-green text-white py-4 rounded-lg hover:bg-green-700 transition font-semibold">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            <span data-translate="send_message">Send Message</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="space-y-8">
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-map-marker-alt text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1" data-translate="office_address">Office Address</h4>
+                            <p class="opacity-90">King Abdullah Financial District<br>Riyadh 11564, Saudi Arabia</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-phone text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1" data-translate="phone_contact">Phone</h4>
+                            <p class="opacity-90">+966 50 123 4567<br>+966 11 234 5678</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-envelope text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1" data-translate="email_contact">Email</h4>
+                            <p class="opacity-90">info@saudibusiness.com<br>consulting@saudibusiness.com</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-clock text-white"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-1" data-translate="business_hours">Business Hours</h4>
+                            <p class="opacity-90">Saturday - Thursday: 8:00 AM - 6:00 PM<br>Friday: Closed</p>
+                        </div>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="pt-8 border-t border-white border-opacity-20">
+                        <h4 class="font-semibold mb-4" data-translate="follow_us">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 bg-saudi-green rounded-full flex items-center justify-center">
+                            <i class="fas fa-crown text-yellow-400 text-sm"></i>
+                        </div>
+                        <span class="ml-2 text-lg font-bold">SaudiBusiness Pro</span>
+                    </div>
+                    <p class="text-gray-400">Your trusted partner for business success in Saudi Arabia.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="quick_links">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#services" class="hover:text-white transition">Services</a></li>
+                        <li><a href="#about" class="hover:text-white transition">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition">Case Studies</a></li>
+                        <li><a href="#" class="hover:text-white transition">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="services_footer">Services</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Business Setup</a></li>
+                        <li><a href="#" class="hover:text-white transition">Legal Compliance</a></li>
+                        <li><a href="#" class="hover:text-white transition">Market Entry</a></li>
+                        <li><a href="#" class="hover:text-white transition">HR Consulting</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4" data-translate="newsletter">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Subscribe for business insights and updates.</p>
+                    <form onsubmit="handleNewsletter(event)" class="flex">
+                        <input type="email" required class="flex-1 px-4 py-2 bg-gray-800 text-white rounded-l-lg focus:outline-none focus:bg-gray-700" placeholder="Your email">
+                        <button type="submit" class="bg-saudi-green px-4 py-2 rounded-r-lg hover:bg-green-700 transition">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 SaudiBusiness Pro. All rights reserved. | <a href="#" class="hover:text-white">Privacy Policy</a> | <a href="#" class="hover:text-white">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Translation data
+        const translations = {
+            en: {
+                home: "Home",
+                services: "Services", 
+                about: "About",
+                contact: "Contact",
+                get_started: "Get Started",
+                trusted_by: "Trusted by 500+ Saudi Businesses",
+                hero_title: "Business Excellence",
+                hero_subtitle: "Premium business solutions tailored for the Saudi market. Accelerate your growth with our expert consulting services.",
+                start_journey: "Start Your Journey",
+                watch_demo: "Watch Demo",
+                clients: "Clients",
+                years: "Years",
+                satisfaction: "Satisfaction",
+                our_services: "Our Services",
+                services_subtitle: "Comprehensive business solutions designed for Saudi market success",
+                business_setup: "Business Setup",
+                business_setup_desc: "Complete company registration services including licenses, permits, and compliance.",
+                legal_compliance: "Legal Compliance",
+                legal_compliance_desc: "Expert legal guidance ensuring full compliance with Saudi business regulations.",
+                market_entry: "Market Entry",
+                market_entry_desc: "Strategic market entry services for international businesses entering Saudi Arabia.",
+                hr_consulting: "HR Consulting",
+                hr_consulting_desc: "Comprehensive HR solutions including recruitment, training, and workforce optimization.",
+                process_optimization: "Process Optimization", 
+                process_optimization_desc: "Streamline your business processes for maximum efficiency and cost reduction.",
+                digital_transformation: "Digital Transformation",
+                digital_transformation_desc: "Modernize your business with cutting-edge digital solutions and technologies.",
+                about_title: "Leading Saudi Business Consulting Since 2013",
+                about_intro: "We are a premier business consulting firm dedicated to helping companies thrive in the dynamic Saudi Arabian market.",
+                about_mission: "Our mission is to accelerate Saudi Arabia's Vision 2030 by empowering businesses with the tools, knowledge, and strategies needed for sustainable growth.",
+                local_expertise: "Local Market Expertise",
+                proven_results: "Proven Track Record",
+                comprehensive_services: "Comprehensive Services",
+                contact_title: "Get Started Today",
+                contact_subtitle: "Ready to grow your business in Saudi Arabia? Let's talk."
+            },
+            ar: {
+                home: "الرئيسية",
+                services: "الخدمات",
+                about: "من نحن", 
+                contact: "اتصل بنا",
+                get_started: "ابدأ الآن",
+                trusted_by: "موثوق من قبل 500+ شركة سعودية",
+                hero_title: "التميز التجاري",
+                hero_subtitle: "حلول تجارية مميزة مصممة للسوق السعودي. تسارع نموك بخدماتنا الاستشارية الخبيرة.",
+                start_journey: "ابدأ رحلتك",
+                watch_demo: "شاهد العرض",
+                clients: "العملاء",
+                years: "سنوات",
+                satisfaction: "الرضا",
+                our_services: "خدماتنا",
+                services_subtitle: "حلول تجارية شاملة مصممة لنجاح السوق السعودي",
+                business_setup: "تأسيس الشركات",
+                business_setup_desc: "خدمات تسجيل شركات كاملة بما في ذلك التراخيص والتصاريح والامتثال.",
+                legal_compliance: "الامتثال القانوني",
+                legal_compliance_desc: "إرشادات قانونية خبيرة تضمن الامتثال الكامل للوائح التجارية السعودية.",
+                market_entry: "دخول السوق",
+                market_entry_desc: "خدمات دخول السوق الاستراتيجية للشركات الدولية الدخول إلى المملكة العربية السعودية.",
+                hr_consulting: "الاستشارات الموارد البشرية",
+                hr_consulting_desc: "حلول موارد بشرية شاملة بما في ذلك التوظيف والتدريب وتحسين القوى العاملة.",
+                process_optimization: "تحسين العمليات",
+                process_optimization_desc: "تبسيط عمليات عملك لتحقيق أقصى كفاءة وتخفيض التكاليف.",
+                digital_transformation: "التحول الرقمي",
+                digital_transformation_desc: "حدّث عملك بأحدث الحلول والتقنيات الرقمية.",
+                about_title: "الاستشارات التجارية السعودية الرائدة منذ 2013",
+                about_intro: "نحن شركة استشارية تجارية رائدة مكرسة لمساعدة الشركات على الازدهار في السوق السعودي الديناميكي.",
+                about_mission: "مهمتنا هي تسريع رؤية المملكة 2030 من خلال تمكين الشركات بالأدوات والمعرفة والاستراتيجيات اللازمة للنمو المستدام.",
+                local_expertise: "الخبرة المحلية",
+                proven_results: "سجل مثبت",
+                comprehensive_services: "خدمات شاملة",
+                contact_title: "ابدأ اليوم",
+                contact_subtitle: "هل أنت مستعد لنمو عملك في المملكة العربية السعودية؟ دعنا نتحدث."
+            }
+        };
+
+        let currentLang = 'en';
+        let currentDir = 'ltr';
+
+        // Toggle language
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            updateLanguage();
+            document.getElementById('langToggle').textContent = currentLang === 'en' ? 'العربية' : 'English';
+        }
+
+        // Toggle direction
+        function toggleDirection() {
+            currentDir = currentDir === 'ltr' ? 'rtl' : 'ltr';
+            document.documentElement.dir = currentDir;
+            document.documentElement.lang = currentLang === 'en' ? 'en' : 'ar';
+        }
+
+        // Update language
+        function updateLanguage() {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[currentLang][key]) {
+                    element.textContent = translations[currentLang][key];
+                }
+            });
+        }
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Handle form submission
+        function handleSubmit(event) {
+            event.preventDefault();
+            alert('Thank you for your message! We will contact you soon.');
+            event.target.reset();
+        }
+
+        // Handle newsletter
+        function handleNewsletter(event) {
+            event.preventDefault();
+            alert('Thank you for subscribing to our newsletter!');
+            event.target.reset();
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLanguage();
+        });
+    </script>
+</body>
+</html>
