@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
         ignored: ['**/*'],
       };
     }
+    // Ensure proper path resolution
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': require('path').resolve(__dirname, './src'),
+    };
     return config;
   },
   eslint: {
