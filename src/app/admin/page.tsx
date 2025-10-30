@@ -600,6 +600,7 @@ function AdminSettingsContent() {
   const [settings, setSettings] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('payment')
+  const [saveStatus, setSaveStatus] = useState<{ [key: string]: 'success' | 'error' | null }>({})
 
   useEffect(() => {
     fetchSettings()
@@ -625,9 +626,16 @@ function AdminSettingsContent() {
     }
   }
 
+  const getSettingValue = (key: string): string => {
+    const setting = settings.find(s => s.key === key)
+    return setting?.value || ''
+  }
+
   const saveSetting = async (key: string, value: string, category: string, isEncrypted: boolean = false) => {
     try {
       const token = localStorage.getItem('token')
+      setSaveStatus({ ...saveStatus, [key]: null })
+      
       const response = await fetch('/api/admin/settings', {
         method: 'POST',
         headers: {
@@ -643,12 +651,23 @@ function AdminSettingsContent() {
       })
 
       if (response.ok) {
+        setSaveStatus({ ...saveStatus, [key]: 'success' })
+        setTimeout(() => {
+          setSaveStatus({ ...saveStatus, [key]: null })
+        }, 3000)
         fetchSettings()
-        alert('Setting saved successfully')
+      } else {
+        setSaveStatus({ ...saveStatus, [key]: 'error' })
+        setTimeout(() => {
+          setSaveStatus({ ...saveStatus, [key]: null })
+        }, 3000)
       }
     } catch (error) {
       console.error('Failed to save setting:', error)
-      alert('Failed to save setting')
+      setSaveStatus({ ...saveStatus, [key]: 'error' })
+      setTimeout(() => {
+        setSaveStatus({ ...saveStatus, [key]: null })
+      }, 3000)
     }
   }
 
@@ -679,30 +698,46 @@ function AdminSettingsContent() {
       </div>
 
       {/* Settings Forms */}
-      {activeCategory === 'payment' && (
-        <PaymentSettingsForm onSave={saveSetting} />
-      )}
-      {activeCategory === 'email' && (
-        <EmailSettingsForm onSave={saveSetting} />
-      )}
-      {activeCategory === 'sms' && (
-        <SMSSettingsForm onSave={saveSetting} />
-      )}
-      {activeCategory === 'analytics' && (
-        <AnalyticsSettingsForm onSave={saveSetting} />
-      )}
-      {activeCategory === 'integrations' && (
-        <IntegrationsSettingsForm onSave={saveSetting} />
-      )}
-      {activeCategory === 'general' && (
-        <GeneralSettingsForm onSave={saveSetting} />
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      ) : (
+        <>
+          {activeCategory === 'payment' && (
+            <PaymentSettingsForm onSave={saveSetting} getValue={getSettingValue} saveStatus={saveStatus} />
+          )}
+          {activeCategory === 'email' && (
+            <EmailSettingsForm onSave={saveSetting} getValue={getSettingValue} saveStatus={saveStatus} />
+          )}
+          {activeCategory === 'sms' && (
+            <SMSSettingsForm onSave={saveSetting} getValue={getSettingValue} saveStatus={saveStatus} />
+          )}
+          {activeCategory === 'analytics' && (
+            <AnalyticsSettingsForm onSave={saveSetting} getValue={getSettingValue} saveStatus={saveStatus} />
+          )}
+          {activeCategory === 'integrations' && (
+            <IntegrationsSettingsForm onSave={saveSetting} getValue={getSettingValue} saveStatus={saveStatus} />
+          )}
+          {activeCategory === 'general' && (
+            <GeneralSettingsForm onSave={saveSetting} getValue={getSettingValue} saveStatus={saveStatus} />
+          )}
+        </>
       )}
     </div>
   )
 }
 
 // Payment Settings Form
-function PaymentSettingsForm({ onSave }: { onSave: (key: string, value: string, category: string, isEncrypted: boolean) => void }) {
+function PaymentSettingsForm({ 
+  onSave, 
+  getValue, 
+  saveStatus 
+}: { 
+  onSave: (key: string, value: string, category: string, isEncrypted: boolean) => void
+  getValue: (key: string) => string
+  saveStatus: { [key: string]: 'success' | 'error' | null }
+}) {
   const [formData, setFormData] = useState({
     myfatoorah_api_key: '',
     myfatoorah_test_mode: 'true',
@@ -710,6 +745,16 @@ function PaymentSettingsForm({ onSave }: { onSave: (key: string, value: string, 
     currency: 'SAR',
     vat_rate: '15'
   })
+
+  useEffect(() => {
+    setFormData({
+      myfatoorah_api_key: getValue('myfatoorah_api_key') || '',
+      myfatoorah_test_mode: getValue('myfatoorah_test_mode') || 'true',
+      myfatoorah_base_url: getValue('myfatoorah_base_url') || 'https://apitest.myfatoorah.com',
+      currency: getValue('currency') || 'SAR',
+      vat_rate: getValue('vat_rate') || '15'
+    })
+  }, [getValue])
 
   return (
     <Card>
@@ -720,13 +765,22 @@ function PaymentSettingsForm({ onSave }: { onSave: (key: string, value: string, 
       <CardContent className="space-y-4">
         <div>
           <Label>API Key</Label>
-          <Input
-            type="password"
-            value={formData.myfatoorah_api_key}
-            onChange={(e) => setFormData({ ...formData, myfatoorah_api_key: e.target.value })}
-            placeholder="Enter MyFatoorah API Key"
-            className="mt-2"
-          />
+          <div className="flex gap-2 items-center mt-2">
+            <Input
+              type="password"
+              value={formData.myfatoorah_api_key}
+              onChange={(e) => setFormData({ ...formData, myfatoorah_api_key: e.target.value })}
+              placeholder="Enter MyFatoorah API Key"
+              className="flex-1"
+            />
+            {saveStatus['myfatoorah_api_key'] === 'success' && (
+              <CheckCircle2 className="w-5 h-5 text-green-500" />
+            )}
+            {saveStatus['myfatoorah_api_key'] === 'error' && (
+              <XCircle className="w-5 h-5 text-red-500" />
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">Your MyFatoorah API key will be encrypted</p>
         </div>
         <div>
           <Label>Test Mode</Label>
@@ -766,22 +820,46 @@ function PaymentSettingsForm({ onSave }: { onSave: (key: string, value: string, 
             className="mt-2"
           />
         </div>
-        <Button onClick={() => {
-          onSave('myfatoorah_api_key', formData.myfatoorah_api_key, 'payment', true)
-          onSave('myfatoorah_test_mode', formData.myfatoorah_test_mode, 'payment', false)
-          onSave('myfatoorah_base_url', formData.myfatoorah_base_url, 'payment', false)
-          onSave('currency', formData.currency, 'payment', false)
-          onSave('vat_rate', formData.vat_rate, 'payment', false)
-        }}>
-          Save Payment Settings
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => {
+            if (formData.myfatoorah_api_key) {
+              onSave('myfatoorah_api_key', formData.myfatoorah_api_key, 'payment', true)
+            }
+            onSave('myfatoorah_test_mode', formData.myfatoorah_test_mode, 'payment', false)
+            onSave('myfatoorah_base_url', formData.myfatoorah_base_url, 'payment', false)
+            onSave('currency', formData.currency, 'payment', false)
+            onSave('vat_rate', formData.vat_rate, 'payment', false)
+          }}>
+            <Settings className="w-4 h-4 mr-2" />
+            Save Payment Settings
+          </Button>
+          <Button variant="outline" onClick={() => {
+            setFormData({
+              myfatoorah_api_key: getValue('myfatoorah_api_key') || '',
+              myfatoorah_test_mode: getValue('myfatoorah_test_mode') || 'true',
+              myfatoorah_base_url: getValue('myfatoorah_base_url') || 'https://apitest.myfatoorah.com',
+              currency: getValue('currency') || 'SAR',
+              vat_rate: getValue('vat_rate') || '15'
+            })
+          }}>
+            Reset
+          </Button>
+        </div>
       </CardContent>
     </Card>
   )
 }
 
 // Email Settings Form
-function EmailSettingsForm({ onSave }: { onSave: (key: string, value: string, category: string, isEncrypted: boolean) => void }) {
+function EmailSettingsForm({ 
+  onSave, 
+  getValue, 
+  saveStatus 
+}: { 
+  onSave: (key: string, value: string, category: string, isEncrypted: boolean) => void
+  getValue: (key: string) => string
+  saveStatus: { [key: string]: 'success' | 'error' | null }
+}) {
   const [formData, setFormData] = useState({
     smtp_host: '',
     smtp_port: '587',
@@ -790,6 +868,17 @@ function EmailSettingsForm({ onSave }: { onSave: (key: string, value: string, ca
     from_email: '',
     from_name: 'SourceKom'
   })
+
+  useEffect(() => {
+    setFormData({
+      smtp_host: getValue('smtp_host') || '',
+      smtp_port: getValue('smtp_port') || '587',
+      smtp_user: getValue('smtp_user') || '',
+      smtp_password: getValue('smtp_password') || '',
+      from_email: getValue('from_email') || '',
+      from_name: getValue('from_name') || 'SourceKom'
+    })
+  }, [getValue])
 
   return (
     <Card>
@@ -828,12 +917,22 @@ function EmailSettingsForm({ onSave }: { onSave: (key: string, value: string, ca
         </div>
         <div>
           <Label>SMTP Password</Label>
-          <Input
-            type="password"
-            value={formData.smtp_password}
-            onChange={(e) => setFormData({ ...formData, smtp_password: e.target.value })}
-            className="mt-2"
-          />
+          <div className="flex gap-2 items-center mt-2">
+            <Input
+              type="password"
+              value={formData.smtp_password}
+              onChange={(e) => setFormData({ ...formData, smtp_password: e.target.value })}
+              placeholder="Enter SMTP password"
+              className="flex-1"
+            />
+            {saveStatus['smtp_password'] === 'success' && (
+              <CheckCircle2 className="w-5 h-5 text-green-500" />
+            )}
+            {saveStatus['smtp_password'] === 'error' && (
+              <XCircle className="w-5 h-5 text-red-500" />
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">Password will be encrypted</p>
         </div>
         <div>
           <Label>From Email</Label>
@@ -853,28 +952,59 @@ function EmailSettingsForm({ onSave }: { onSave: (key: string, value: string, ca
             className="mt-2"
           />
         </div>
-        <Button onClick={() => {
-          onSave('smtp_host', formData.smtp_host, 'email', false)
-          onSave('smtp_port', formData.smtp_port, 'email', false)
-          onSave('smtp_user', formData.smtp_user, 'email', false)
-          onSave('smtp_password', formData.smtp_password, 'email', true)
-          onSave('from_email', formData.from_email, 'email', false)
-          onSave('from_name', formData.from_name, 'email', false)
-        }}>
-          Save Email Settings
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => {
+            if (formData.smtp_host) onSave('smtp_host', formData.smtp_host, 'email', false)
+            if (formData.smtp_port) onSave('smtp_port', formData.smtp_port, 'email', false)
+            if (formData.smtp_user) onSave('smtp_user', formData.smtp_user, 'email', false)
+            if (formData.smtp_password) onSave('smtp_password', formData.smtp_password, 'email', true)
+            if (formData.from_email) onSave('from_email', formData.from_email, 'email', false)
+            if (formData.from_name) onSave('from_name', formData.from_name, 'email', false)
+          }}>
+            <Mail className="w-4 h-4 mr-2" />
+            Save Email Settings
+          </Button>
+          <Button variant="outline" onClick={() => {
+            setFormData({
+              smtp_host: getValue('smtp_host') || '',
+              smtp_port: getValue('smtp_port') || '587',
+              smtp_user: getValue('smtp_user') || '',
+              smtp_password: getValue('smtp_password') || '',
+              from_email: getValue('from_email') || '',
+              from_name: getValue('from_name') || 'SourceKom'
+            })
+          }}>
+            Reset
+          </Button>
+        </div>
       </CardContent>
     </Card>
   )
 }
 
 // SMS Settings Form
-function SMSSettingsForm({ onSave }: { onSave: (key: string, value: string, category: string, isEncrypted: boolean) => void }) {
+function SMSSettingsForm({ 
+  onSave, 
+  getValue, 
+  saveStatus 
+}: { 
+  onSave: (key: string, value: string, category: string, isEncrypted: boolean) => void
+  getValue: (key: string) => string
+  saveStatus: { [key: string]: 'success' | 'error' | null }
+}) {
   const [formData, setFormData] = useState({
     sms_provider: '',
     sms_api_key: '',
     sms_sender_id: ''
   })
+
+  useEffect(() => {
+    setFormData({
+      sms_provider: getValue('sms_provider') || '',
+      sms_api_key: getValue('sms_api_key') || '',
+      sms_sender_id: getValue('sms_sender_id') || ''
+    })
+  }, [getValue])
 
   return (
     <Card>
@@ -898,13 +1028,22 @@ function SMSSettingsForm({ onSave }: { onSave: (key: string, value: string, cate
         </div>
         <div>
           <Label>API Key</Label>
-          <Input
-            type="password"
-            value={formData.sms_api_key}
-            onChange={(e) => setFormData({ ...formData, sms_api_key: e.target.value })}
-            placeholder="Enter SMS API Key"
-            className="mt-2"
-          />
+          <div className="flex gap-2 items-center mt-2">
+            <Input
+              type="password"
+              value={formData.sms_api_key}
+              onChange={(e) => setFormData({ ...formData, sms_api_key: e.target.value })}
+              placeholder="Enter SMS API Key"
+              className="flex-1"
+            />
+            {saveStatus['sms_api_key'] === 'success' && (
+              <CheckCircle2 className="w-5 h-5 text-green-500" />
+            )}
+            {saveStatus['sms_api_key'] === 'error' && (
+              <XCircle className="w-5 h-5 text-red-500" />
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">API key will be encrypted</p>
         </div>
         <div>
           <Label>Sender ID</Label>
@@ -916,25 +1055,53 @@ function SMSSettingsForm({ onSave }: { onSave: (key: string, value: string, cate
             className="mt-2"
           />
         </div>
-        <Button onClick={() => {
-          onSave('sms_provider', formData.sms_provider, 'sms', false)
-          onSave('sms_api_key', formData.sms_api_key, 'sms', true)
-          onSave('sms_sender_id', formData.sms_sender_id, 'sms', false)
-        }}>
-          Save SMS Settings
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => {
+            if (formData.sms_provider) onSave('sms_provider', formData.sms_provider, 'sms', false)
+            if (formData.sms_api_key) onSave('sms_api_key', formData.sms_api_key, 'sms', true)
+            if (formData.sms_sender_id) onSave('sms_sender_id', formData.sms_sender_id, 'sms', false)
+          }}>
+            <Bell className="w-4 h-4 mr-2" />
+            Save SMS Settings
+          </Button>
+          <Button variant="outline" onClick={() => {
+            setFormData({
+              sms_provider: getValue('sms_provider') || '',
+              sms_api_key: getValue('sms_api_key') || '',
+              sms_sender_id: getValue('sms_sender_id') || ''
+            })
+          }}>
+            Reset
+          </Button>
+        </div>
       </CardContent>
     </Card>
   )
 }
 
 // Analytics Settings Form
-function AnalyticsSettingsForm({ onSave }: { onSave: (key: string, value: string, category: string, isEncrypted: boolean) => void }) {
+function AnalyticsSettingsForm({ 
+  onSave, 
+  getValue, 
+  saveStatus 
+}: { 
+  onSave: (key: string, value: string, category: string, isEncrypted: boolean) => void
+  getValue: (key: string) => string
+  saveStatus: { [key: string]: 'success' | 'error' | null }
+}) {
   const [formData, setFormData] = useState({
     google_analytics_id: '',
     google_tag_manager_id: '',
     facebook_pixel_id: ''
   })
+
+  useEffect(() => {
+    setFormData({
+      google_analytics_id: getValue('google_analytics_id') || '',
+      google_tag_manager_id: getValue('google_tag_manager_id') || '',
+      facebook_pixel_id: getValue('facebook_pixel_id') || ''
+    })
+  }, [getValue])
 
   return (
     <Card>
@@ -973,25 +1140,53 @@ function AnalyticsSettingsForm({ onSave }: { onSave: (key: string, value: string
             className="mt-2"
           />
         </div>
-        <Button onClick={() => {
-          onSave('google_analytics_id', formData.google_analytics_id, 'analytics', false)
-          onSave('google_tag_manager_id', formData.google_tag_manager_id, 'analytics', false)
-          onSave('facebook_pixel_id', formData.facebook_pixel_id, 'analytics', false)
-        }}>
-          Save Analytics Settings
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={() => {
+            if (formData.google_analytics_id) onSave('google_analytics_id', formData.google_analytics_id, 'analytics', false)
+            if (formData.google_tag_manager_id) onSave('google_tag_manager_id', formData.google_tag_manager_id, 'analytics', false)
+            if (formData.facebook_pixel_id) onSave('facebook_pixel_id', formData.facebook_pixel_id, 'analytics', false)
+          }}>
+            <BarChart3 className="w-4 h-4 mr-2" />
+            Save Analytics Settings
+          </Button>
+          <Button variant="outline" onClick={() => {
+            setFormData({
+              google_analytics_id: getValue('google_analytics_id') || '',
+              google_tag_manager_id: getValue('google_tag_manager_id') || '',
+              facebook_pixel_id: getValue('facebook_pixel_id') || ''
+            })
+          }}>
+            Reset
+          </Button>
+        </div>
       </CardContent>
     </Card>
   )
 }
 
 // Integrations Settings Form
-function IntegrationsSettingsForm({ onSave }: { onSave: (key: string, value: string, category: string, isEncrypted: boolean) => void }) {
+function IntegrationsSettingsForm({ 
+  onSave, 
+  getValue, 
+  saveStatus 
+}: { 
+  onSave: (key: string, value: string, category: string, isEncrypted: boolean) => void
+  getValue: (key: string) => string
+  saveStatus: { [key: string]: 'success' | 'error' | null }
+}) {
   const [formData, setFormData] = useState({
     stripe_api_key: '',
     paypal_client_id: '',
     social_login_enabled: 'false'
   })
+
+  useEffect(() => {
+    setFormData({
+      stripe_api_key: getValue('stripe_api_key') || '',
+      paypal_client_id: getValue('paypal_client_id') || '',
+      social_login_enabled: getValue('social_login_enabled') || 'false'
+    })
+  }, [getValue])
 
   return (
     <Card>
@@ -1002,13 +1197,22 @@ function IntegrationsSettingsForm({ onSave }: { onSave: (key: string, value: str
       <CardContent className="space-y-4">
         <div>
           <Label>Stripe API Key (Optional)</Label>
-          <Input
-            type="password"
-            value={formData.stripe_api_key}
-            onChange={(e) => setFormData({ ...formData, stripe_api_key: e.target.value })}
-            placeholder="sk_live_..."
-            className="mt-2"
-          />
+          <div className="flex gap-2 items-center mt-2">
+            <Input
+              type="password"
+              value={formData.stripe_api_key}
+              onChange={(e) => setFormData({ ...formData, stripe_api_key: e.target.value })}
+              placeholder="sk_live_..."
+              className="flex-1"
+            />
+            {saveStatus['stripe_api_key'] === 'success' && (
+              <CheckCircle2 className="w-5 h-5 text-green-500" />
+            )}
+            {saveStatus['stripe_api_key'] === 'error' && (
+              <XCircle className="w-5 h-5 text-red-500" />
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">Stripe API key will be encrypted</p>
         </div>
         <div>
           <Label>PayPal Client ID (Optional)</Label>
@@ -1044,13 +1248,44 @@ function IntegrationsSettingsForm({ onSave }: { onSave: (key: string, value: str
 }
 
 // General Settings Form
-function GeneralSettingsForm({ onSave }: { onSave: (key: string, value: string, category: string, isEncrypted: boolean) => void }) {
+function GeneralSettingsForm({ 
+  onSave, 
+  getValue, 
+  saveStatus 
+}: { 
+  onSave: (key: string, value: string, category: string, isEncrypted: boolean) => void
+  getValue: (key: string) => string
+  saveStatus: { [key: string]: 'success' | 'error' | null }
+}) {
   const [formData, setFormData] = useState({
     site_name: 'SourceKom',
     site_url: '',
     maintenance_mode: 'false',
-    registration_enabled: 'true'
+    registration_enabled: 'true',
+    contact_email: '',
+    contact_phone: '',
+    support_email: '',
+    default_currency: 'SAR',
+    timezone: 'Asia/Riyadh',
+    date_format: 'DD/MM/YYYY',
+    items_per_page: '20'
   })
+
+  useEffect(() => {
+    setFormData({
+      site_name: getValue('site_name') || 'SourceKom',
+      site_url: getValue('site_url') || '',
+      maintenance_mode: getValue('maintenance_mode') || 'false',
+      registration_enabled: getValue('registration_enabled') || 'true',
+      contact_email: getValue('contact_email') || '',
+      contact_phone: getValue('contact_phone') || '',
+      support_email: getValue('support_email') || '',
+      default_currency: getValue('default_currency') || 'SAR',
+      timezone: getValue('timezone') || 'Asia/Riyadh',
+      date_format: getValue('date_format') || 'DD/MM/YYYY',
+      items_per_page: getValue('items_per_page') || '20'
+    })
+  }, [getValue])
 
   return (
     <Card>
@@ -1100,14 +1335,117 @@ function GeneralSettingsForm({ onSave }: { onSave: (key: string, value: string, 
             <option value="false">Disabled</option>
           </select>
         </div>
-        <Button onClick={() => {
-          onSave('site_name', formData.site_name, 'general', false)
-          onSave('site_url', formData.site_url, 'general', false)
-          onSave('maintenance_mode', formData.maintenance_mode, 'general', false)
-          onSave('registration_enabled', formData.registration_enabled, 'general', false)
-        }}>
-          Save General Settings
-        </Button>
+        <div>
+          <Label>Contact Email</Label>
+          <Input
+            type="email"
+            value={formData.contact_email}
+            onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
+            placeholder="info@sourcekom.com"
+            className="mt-2"
+          />
+        </div>
+        <div>
+          <Label>Contact Phone</Label>
+          <Input
+            type="tel"
+            value={formData.contact_phone}
+            onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })}
+            placeholder="+966 123 456 7890"
+            className="mt-2"
+          />
+        </div>
+        <div>
+          <Label>Support Email</Label>
+          <Input
+            type="email"
+            value={formData.support_email}
+            onChange={(e) => setFormData({ ...formData, support_email: e.target.value })}
+            placeholder="support@sourcekom.com"
+            className="mt-2"
+          />
+        </div>
+        <div>
+          <Label>Default Currency</Label>
+          <select
+            value={formData.default_currency}
+            onChange={(e) => setFormData({ ...formData, default_currency: e.target.value })}
+            className="w-full px-3 py-2 border rounded-md bg-background mt-2"
+          >
+            <option value="SAR">SAR (Saudi Riyal)</option>
+            <option value="USD">USD (US Dollar)</option>
+            <option value="EUR">EUR (Euro)</option>
+            <option value="AED">AED (UAE Dirham)</option>
+          </select>
+        </div>
+        <div>
+          <Label>Timezone</Label>
+          <Input
+            type="text"
+            value={formData.timezone}
+            onChange={(e) => setFormData({ ...formData, timezone: e.target.value })}
+            placeholder="Asia/Riyadh"
+            className="mt-2"
+          />
+        </div>
+        <div>
+          <Label>Date Format</Label>
+          <select
+            value={formData.date_format}
+            onChange={(e) => setFormData({ ...formData, date_format: e.target.value })}
+            className="w-full px-3 py-2 border rounded-md bg-background mt-2"
+          >
+            <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+            <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+            <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+            <option value="DD-MM-YYYY">DD-MM-YYYY</option>
+          </select>
+        </div>
+        <div>
+          <Label>Items Per Page</Label>
+          <Input
+            type="number"
+            value={formData.items_per_page}
+            onChange={(e) => setFormData({ ...formData, items_per_page: e.target.value })}
+            placeholder="20"
+            className="mt-2"
+          />
+        </div>
+        <div className="flex gap-2">
+          <Button onClick={() => {
+            onSave('site_name', formData.site_name, 'general', false)
+            onSave('site_url', formData.site_url, 'general', false)
+            onSave('maintenance_mode', formData.maintenance_mode, 'general', false)
+            onSave('registration_enabled', formData.registration_enabled, 'general', false)
+            if (formData.contact_email) onSave('contact_email', formData.contact_email, 'general', false)
+            if (formData.contact_phone) onSave('contact_phone', formData.contact_phone, 'general', false)
+            if (formData.support_email) onSave('support_email', formData.support_email, 'general', false)
+            onSave('default_currency', formData.default_currency, 'general', false)
+            onSave('timezone', formData.timezone, 'general', false)
+            onSave('date_format', formData.date_format, 'general', false)
+            onSave('items_per_page', formData.items_per_page, 'general', false)
+          }}>
+            <Settings className="w-4 h-4 mr-2" />
+            Save General Settings
+          </Button>
+          <Button variant="outline" onClick={() => {
+            setFormData({
+              site_name: getValue('site_name') || 'SourceKom',
+              site_url: getValue('site_url') || '',
+              maintenance_mode: getValue('maintenance_mode') || 'false',
+              registration_enabled: getValue('registration_enabled') || 'true',
+              contact_email: getValue('contact_email') || '',
+              contact_phone: getValue('contact_phone') || '',
+              support_email: getValue('support_email') || '',
+              default_currency: getValue('default_currency') || 'SAR',
+              timezone: getValue('timezone') || 'Asia/Riyadh',
+              date_format: getValue('date_format') || 'DD/MM/YYYY',
+              items_per_page: getValue('items_per_page') || '20'
+            })
+          }}>
+            Reset
+          </Button>
+        </div>
       </CardContent>
     </Card>
   )

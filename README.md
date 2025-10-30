@@ -1,141 +1,422 @@
-# 🚀 Welcome to Z.ai Code Scaffold
+# 🚀 SourceKom - Resource Management Platform
 
-A modern, production-ready web application scaffold powered by cutting-edge technologies, designed to accelerate your development with [Z.ai](https://chat.z.ai)'s AI-powered coding assistance.
+A comprehensive resource sharing and legal consultancy platform operating in Saudi Arabia. Built with Next.js 15, TypeScript, Tailwind CSS, and Prisma.
 
-## ✨ Technology Stack
+## 🌟 Overview
 
-This scaffold provides a robust foundation built with:
+SourceKom connects businesses to maximize potential and foster sustainable growth through resource optimization in logistics and supply chain management. The platform enables businesses to exchange underutilized resources and provides expert legal consultancy services.
 
-### 🎯 Core Framework
-- **⚡ Next.js 15** - The React framework for production with App Router
-- **📘 TypeScript 5** - Type-safe JavaScript for better developer experience
-- **🎨 Tailwind CSS 4** - Utility-first CSS framework for rapid UI development
+**Live Production**: https://sk-9see9mb7o-mirxa27s-projects.vercel.app  
+**GitHub Repository**: https://github.com/Mirxa27/sourcekom-app
 
-### 🧩 UI Components & Styling
-- **🧩 shadcn/ui** - High-quality, accessible components built on Radix UI
-- **🎯 Lucide React** - Beautiful & consistent icon library
-- **🌈 Framer Motion** - Production-ready motion library for React
-- **🎨 Next Themes** - Perfect dark mode in 2 lines of code
+## ✨ Key Features
 
-### 📋 Forms & Validation
-- **🎣 React Hook Form** - Performant forms with easy validation
-- **✅ Zod** - TypeScript-first schema validation
+### 🔐 User Management
+- User authentication (registration, login, logout, password reset)
+- Role-based access control (USER, CREATOR, ADMIN)
+- User profiles with verification status
+- Session management
 
-### 🔄 State Management & Data Fetching
-- **🐻 Zustand** - Simple, scalable state management
-- **🔄 TanStack Query** - Powerful data synchronization for React
-- **🌐 Axios** - Promise-based HTTP client
+### 📦 Resource Management
+- List and manage resources (office spaces, equipment, digital products)
+- Advanced search and filtering
+- Category management
+- Resource booking and sharing
+- Ratings and reviews
 
-### 🗄️ Database & Backend
-- **🗄️ Prisma** - Next-generation Node.js and TypeScript ORM
-- **🔐 NextAuth.js** - Complete open-source authentication solution
+### 💳 Payment Integration
+- MyFatoorah payment gateway integration
+- Secure checkout process
+- Invoice generation
+- Refund handling
+- SAR currency support with VAT compliance
 
-### 🎨 Advanced UI Features
-- **📊 TanStack Table** - Headless UI for building tables and datagrids
-- **🖱️ DND Kit** - Modern drag and drop toolkit for React
-- **📊 Recharts** - Redefined chart library built with React and D3
-- **🖼️ Sharp** - High performance image processing
+### 📊 Dashboard & Analytics
+- Personalized user dashboards
+- Performance metrics and statistics
+- Revenue tracking
+- Utilization rate monitoring
+- Activity feeds
 
-### 🌍 Internationalization & Utilities
-- **🌍 Next Intl** - Internationalization library for Next.js
-- **📅 Date-fns** - Modern JavaScript date utility library
-- **🪝 ReactUse** - Collection of essential React hooks for modern development
+### 🎨 CMS (Content Management System)
+- Complete admin panel with CMS
+- Content management (pages, posts, announcements, FAQs)
+- User management
+- Resource moderation
+- Category management
+- Analytics dashboard
 
-## 🎯 Why This Scaffold?
+### ⚙️ Admin Panel
+- **Settings Management**: Configure 3rd party integrations
+  - MyFatoorah payment gateway
+  - Email service (SMTP)
+  - SMS service
+  - Analytics (Google Analytics, Tag Manager, Facebook Pixel)
+  - Additional integrations (Stripe, PayPal)
+- **Content Management**: Full CMS for pages, posts, and announcements
+- **User Management**: View, edit, and manage users
+- **Resource Management**: Moderate and manage all platform resources
+- **Category Management**: Create and edit resource categories
+- **Analytics**: Platform-wide statistics and metrics
 
-- **🏎️ Fast Development** - Pre-configured tooling and best practices
-- **🎨 Beautiful UI** - Complete shadcn/ui component library with advanced interactions
-- **🔒 Type Safety** - Full TypeScript configuration with Zod validation
-- **📱 Responsive** - Mobile-first design principles with smooth animations
-- **🗄️ Database Ready** - Prisma ORM configured for rapid backend development
-- **🔐 Auth Included** - NextAuth.js for secure authentication flows
-- **📊 Data Visualization** - Charts, tables, and drag-and-drop functionality
-- **🌍 i18n Ready** - Multi-language support with Next Intl
-- **🚀 Production Ready** - Optimized build and deployment settings
-- **🤖 AI-Friendly** - Structured codebase perfect for AI assistance
+### 🌍 Internationalization
+- English and Arabic support
+- Right-to-left (RTL) layout for Arabic
+- Next Intl integration
 
-## 🚀 Quick Start
+### 🔒 Security
+- Input validation with Zod
+- Encrypted sensitive data storage
+- JWT authentication
+- Security headers
+- Rate limiting
 
-```bash
-# Install dependencies
-npm install
+## 🛠️ Technology Stack
 
-# Start development server
-npm run dev
+### Core Framework
+- **Next.js 15** - React framework with App Router
+- **TypeScript 5** - Type-safe development
+- **Tailwind CSS 4** - Utility-first styling
+- **Prisma** - Database ORM (PostgreSQL)
 
-# Build for production
-npm run build
+### UI Components
+- **shadcn/ui** - Accessible component library
+- **Lucide React** - Icon library
+- **Framer Motion** - Animations
+- **Next Themes** - Dark mode support
 
-# Start production server
-npm start
-```
+### Forms & Validation
+- **React Hook Form** - Form management
+- **Zod** - Schema validation
 
-Open [http://localhost:3000](http://localhost:3000) to see your application running.
+### State Management
+- **Zustand** - State management
+- **TanStack Query** - Data fetching
 
-## 🤖 Powered by Z.ai
+### Backend & Database
+- **PostgreSQL** - Database (Neon)
+- **Prisma** - ORM
+- **NextAuth.js** - Authentication
+- **MyFatoorah** - Payment gateway
 
-This scaffold is optimized for use with [Z.ai](https://chat.z.ai) - your AI assistant for:
-
-- **💻 Code Generation** - Generate components, pages, and features instantly
-- **🎨 UI Development** - Create beautiful interfaces with AI assistance  
-- **🔧 Bug Fixing** - Identify and resolve issues with intelligent suggestions
-- **📝 Documentation** - Auto-generate comprehensive documentation
-- **🚀 Optimization** - Performance improvements and best practices
-
-Ready to build something amazing? Start chatting with Z.ai at [chat.z.ai](https://chat.z.ai) and experience the future of AI-powered development!
+### Additional Features
+- **Socket.IO** - Real-time updates (simulated)
+- **Sharp** - Image optimization
+- **Recharts** - Data visualization
 
 ## 📁 Project Structure
 
 ```
 src/
-├── app/                 # Next.js App Router pages
-├── components/          # Reusable React components
-│   └── ui/             # shadcn/ui components
-├── hooks/              # Custom React hooks
-└── lib/                # Utility functions and configurations
+├── app/                    # Next.js App Router pages
+│   ├── admin/            # Admin panel
+│   ├── api/              # API routes
+│   ├── about/            # About page
+│   ├── approach/         # Our Approach page
+│   ├── browse/           # Resource browsing
+│   ├── contact/          # Contact page
+│   ├── dashboard/        # User dashboard
+│   ├── resources/        # Resource pages
+│   └── ...
+├── components/           # React components
+│   ├── layout/          # Layout components (Navbar, Footer)
+│   ├── payment/         # Payment components
+│   ├── testimonials/    # Testimonial modals
+│   └── ui/              # shadcn/ui components
+├── lib/                  # Utilities and configurations
+│   ├── db.ts            # Prisma client
+│   └── myfatoorah.ts    # Payment service
+└── ...
+public/                   # Static assets
+├── logo.png             # Main logo
+├── logo.svg             # SVG logo fallback
+├── images/              # Image assets
+│   ├── avatars/        # User avatars
+│   ├── logos/          # Logo variants
+│   ├── placeholders/   # Placeholder images
+│   └── ...
+└── robots.txt           # SEO robots file
 ```
 
-## 🎨 Available Features & Components
+## 🚀 Quick Start
 
-This scaffold includes a comprehensive set of modern web development tools:
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- PostgreSQL database (Neon or similar)
 
-### 🧩 UI Components (shadcn/ui)
-- **Layout**: Card, Separator, Aspect Ratio, Resizable Panels
-- **Forms**: Input, Textarea, Select, Checkbox, Radio Group, Switch
-- **Feedback**: Alert, Toast (Sonner), Progress, Skeleton
-- **Navigation**: Breadcrumb, Menubar, Navigation Menu, Pagination
-- **Overlay**: Dialog, Sheet, Popover, Tooltip, Hover Card
-- **Data Display**: Badge, Avatar, Calendar
+### Installation
 
-### 📊 Advanced Data Features
-- **Tables**: Powerful data tables with sorting, filtering, pagination (TanStack Table)
-- **Charts**: Beautiful visualizations with Recharts
-- **Forms**: Type-safe forms with React Hook Form + Zod validation
+```bash
+# Clone the repository
+git clone https://github.com/Mirxa27/sourcekom-app.git
+cd sourcekom-app
 
-### 🎨 Interactive Features
-- **Animations**: Smooth micro-interactions with Framer Motion
-- **Drag & Drop**: Modern drag-and-drop functionality with DND Kit
-- **Theme Switching**: Built-in dark/light mode support
+# Install dependencies
+npm install
 
-### 🔐 Backend Integration
-- **Authentication**: Ready-to-use auth flows with NextAuth.js
-- **Database**: Type-safe database operations with Prisma
-- **API Client**: HTTP requests with Axios + TanStack Query
-- **State Management**: Simple and scalable with Zustand
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
 
-### 🌍 Production Features
-- **Internationalization**: Multi-language support with Next Intl
-- **Image Optimization**: Automatic image processing with Sharp
-- **Type Safety**: End-to-end TypeScript with Zod validation
-- **Essential Hooks**: 100+ useful React hooks with ReactUse for common patterns
+# Set up database
+npx prisma generate
+npx prisma db push
 
-## 🤝 Get Started with Z.ai
+# Start development server
+npm run dev
+```
 
-1. **Clone this scaffold** to jumpstart your project
-2. **Visit [chat.z.ai](https://chat.z.ai)** to access your AI coding assistant
-3. **Start building** with intelligent code generation and assistance
-4. **Deploy with confidence** using the production-ready setup
+Open [http://localhost:3000](http://localhost:3000) to see your application.
+
+## 🔧 Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+# Database
+DATABASE_URL="postgresql://user:password@host/database"
+
+# Authentication
+JWT_SECRET="your-super-secret-jwt-key-change-this-in-production"
+
+# MyFatoorah Payment Gateway
+MYFATOORAH_API_KEY="your-myfatoorah-api-key"
+MYFATOORAH_TEST_MODE="true"  # Set to "false" for production
+
+# Application URLs
+NEXT_PUBLIC_BASE_URL="http://localhost:3000"  # Production: https://your-domain.vercel.app
+
+# Node Environment
+NODE_ENV="development"  # or "production"
+```
+
+## 📦 Database Setup
+
+### Using Neon PostgreSQL
+
+1. Create a Neon account at https://neon.tech
+2. Create a new project
+3. Copy the connection string
+4. Update `DATABASE_URL` in `.env`
+5. Run migrations:
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+### Database Schema
+
+The application uses Prisma ORM with PostgreSQL. Key models:
+
+- **User** - User accounts and authentication
+- **Resource** - Resources and digital products
+- **Category** - Resource categories
+- **Purchase** - Purchase transactions
+- **Payment** - Payment gateway records
+- **Review** - User reviews and ratings
+- **Content** - CMS content (pages, posts)
+- **Setting** - Platform configuration
+- **SupportTicket** - Support system
+- And more...
+
+## 🚀 Deployment
+
+### Vercel Deployment
+
+The application is configured for Vercel deployment:
+
+1. **Connect GitHub Repository**
+   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
+   - Import your GitHub repository
+   - Vercel will auto-detect Next.js configuration
+
+2. **Set Environment Variables**
+   In Vercel dashboard → Settings → Environment Variables:
+   ```
+   DATABASE_URL=your-postgresql-connection-string
+   JWT_SECRET=your-jwt-secret
+   MYFATOORAH_API_KEY=your-api-key
+   MYFATOORAH_TEST_MODE=true
+   NEXT_PUBLIC_BASE_URL=https://your-app.vercel.app
+   NODE_ENV=production
+   ```
+
+3. **Deploy**
+   - Push to `main` branch
+   - Vercel automatically deploys on every push
+   - Or use: `vercel --prod`
+
+### Database Migration
+
+After deployment, run migrations:
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+### Production Build
+
+```bash
+npm run build
+npm start
+```
+
+## 🎯 Key Features & Pages
+
+### Public Pages
+- **Home** (`/`) - Landing page with hero, stats, and featured resources
+- **About** (`/about`) - Company overview, founder information
+- **Services** (`/services`) - Service offerings
+- **Our Approach** (`/approach`) - Process and methodology
+- **Resources** (`/resources`) - Browse and search resources
+- **Legal** (`/legal`) - Legal services information
+- **Contact** (`/contact`) - Contact forms and information
+
+### User Pages
+- **Dashboard** (`/dashboard`) - User dashboard with stats and management
+- **Browse** (`/browse`) - Advanced resource browsing with filters
+- **Upload** (`/upload`) - Upload new resources
+
+### Admin Pages
+- **Admin Panel** (`/admin`) - Complete admin interface
+  - Overview dashboard
+  - User management
+  - Resource management
+  - CMS content management
+  - Category management
+  - Settings for 3rd party integrations
+
+## 🔐 Admin Access
+
+To access the admin panel, create a user with `ADMIN` role:
+
+```bash
+# Option 1: Through the database
+# Use Prisma Studio or direct SQL
+
+# Option 2: Use the seed script (if available)
+npm run db:seed
+```
+
+Or manually update user role in database:
+```sql
+UPDATE users SET role = 'ADMIN' WHERE email = 'your-email@example.com';
+```
+
+## 📝 API Endpoints
+
+### Public APIs
+- `GET /api/resources` - List resources
+- `GET /api/resources/[slug]` - Get resource details
+- `GET /api/categories` - List categories
+- `POST /api/contact` - Submit contact form
+- `POST /api/newsletter` - Newsletter subscription
+
+### Authentication Required
+- `GET /api/dashboard` - User dashboard data
+- `POST /api/purchases` - Create purchase
+- `GET /api/purchases` - User purchases
+
+### Admin APIs
+- `GET /api/admin/stats` - Platform statistics
+- `GET /api/admin/users` - User management
+- `GET /api/admin/resources` - Resource management
+- `GET /api/admin/content` - CMS content
+- `GET /api/admin/categories` - Category management
+- `GET /api/admin/settings` - Platform settings
+
+### Payment APIs
+- `POST /api/payments/initiate` - Initiate payment
+- `GET /api/payments/callback` - MyFatoorah callback
+- `GET /api/payments/status/[paymentId]` - Payment status
+
+## 🎨 Admin Panel Features
+
+### Settings Management
+- **Payment Gateway**: Configure MyFatoorah API keys and settings
+- **Email Service**: SMTP configuration for notifications
+- **SMS Service**: SMS provider configuration
+- **Analytics**: Google Analytics, Tag Manager, Facebook Pixel
+- **Integrations**: Stripe, PayPal, social login
+- **General**: Site name, URL, maintenance mode, registration
+
+### CMS Features
+- Create/edit/delete content (pages, posts, announcements, FAQs)
+- Content status management (draft, published, archived)
+- SEO optimization (meta titles, descriptions)
+- Featured content toggle
+
+### User Management
+- View all users with search and filters
+- Filter by role (USER, CREATOR, ADMIN)
+- Edit user information
+- Activate/deactivate users
+
+### Resource Management
+- View all resources
+- Filter by status, category
+- Publish/unpublish resources
+- Feature resources
+- Edit and delete resources
+
+## 🐛 Troubleshooting
+
+### Logo/Images Not Loading
+- Ensure `public/` folder is committed to Git
+- Check that images are in `public/images/` directory
+- Verify image paths in code match actual file locations
+
+### Database Connection Issues
+- Verify `DATABASE_URL` is correct
+- Ensure database is accessible from your deployment environment
+- Run `npx prisma generate` after schema changes
+
+### Build Errors
+- Run `npx prisma generate` before building
+- Check for TypeScript errors: `npm run build`
+- Verify all environment variables are set
+
+### Payment Integration Issues
+- Verify MyFatoorah API key is correct
+- Check callback URLs match your deployment URL
+- Ensure test mode is enabled during development
+
+## 📚 Documentation
+
+- **Deployment**: See `DEPLOYMENT.md` for detailed deployment instructions
+- **Payment Integration**: See `docs/MYFATOORAH_INTEGRATION.md` for payment setup
+- **Admin Panel**: Access `/admin` after logging in as admin user
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is proprietary software. All rights reserved.
+
+## 🆘 Support
+
+For support and inquiries:
+- Email: info@sourcekom.com
+- Phone: +966 123 456 7890
+- Website: https://sourcekom.com
+
+## 🎉 Acknowledgments
+
+- Built with Next.js and TypeScript
+- UI components from shadcn/ui
+- Icons from Lucide React
+- Payment integration with MyFatoorah
+- Database hosted on Neon
 
 ---
 
-Built with ❤️ for the developer community. Supercharged by [Z.ai](https://chat.z.ai) 🚀
+**SourceKom** - Adding strength to businesses, businesses to strengths 💪
