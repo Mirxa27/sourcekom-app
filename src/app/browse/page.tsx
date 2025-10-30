@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -12,7 +12,7 @@ import { Search, Filter, Grid, List, Star, Download, Heart, ExternalLink } from 
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
-export default function BrowsePage() {
+function BrowseContent() {
   const searchParams = useSearchParams()
   const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || '')
   const [resources, setResources] = useState([])
@@ -395,5 +395,20 @@ export default function BrowsePage() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function BrowsePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    }>
+      <BrowseContent />
+    </Suspense>
   )
 }
