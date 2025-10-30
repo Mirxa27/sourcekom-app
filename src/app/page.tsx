@@ -116,52 +116,56 @@ export default function Home() {
       />
       {/* Hero Section */}
       <section className="py-20 px-4 bg-gradient-to-br from-blue-50/50 via-white to-yellow-50/50">
-        <div className="container mx-auto text-center">
-          <Badge className="mb-6 bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200">
-            Welcome to the Future of Resource Management
-          </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-yellow-600 bg-clip-text text-transparent">
-            Revolutionizing Resource Management in Saudi Arabia
-          </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            SourceKom connects businesses to maximize potential and foster sustainable growth through resource optimization in logistics and supply chain management.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white" asChild>
-              <Link href="/register">
-                Get Started
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/approach">
-                Our Approach
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
-            </Button>
-          </div>
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center">
+            <Badge className="mb-6 inline-block bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200 px-4 py-2">
+              Welcome to the Future of Resource Management
+            </Badge>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-yellow-600 bg-clip-text text-transparent leading-tight">
+              Revolutionizing Resource Management<br className="hidden md:block" />
+              <span className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
+                in Saudi Arabia
+              </span>
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
+              SourceKom connects businesses to maximize potential and foster sustainable growth through resource optimization in logistics and supply chain management.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8" asChild>
+                <Link href="/register">
+                  Get Started
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="px-8" asChild>
+                <Link href="/approach">
+                  Our Approach
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </div>
 
-          {/* Trust Indicators */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+            {/* Trust Indicators */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-4xl mx-auto">
             <button
               onClick={() => setShowTestimonialModal(true)}
-              className="text-center hover:scale-105 transition-transform cursor-pointer"
+              className="text-center hover:scale-105 transition-transform cursor-pointer group"
             >
-              <div className="text-3xl font-bold text-blue-600 mb-2">500+</div>
-              <div className="text-muted-foreground">Trusted Businesses</div>
+              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2 group-hover:text-blue-700 transition-colors">500+</div>
+              <div className="text-sm md:text-base text-muted-foreground">Trusted Businesses</div>
             </button>
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">30%</div>
-              <div className="text-muted-foreground">Cost Reduction</div>
+              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">30%</div>
+              <div className="text-sm md:text-base text-muted-foreground">Cost Reduction</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">100%</div>
-              <div className="text-muted-foreground">Secure Platform</div>
+              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">100%</div>
+              <div className="text-sm md:text-base text-muted-foreground">Secure Platform</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600 mb-2">24/7</div>
-              <div className="text-muted-foreground">Support</div>
+              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">24/7</div>
+              <div className="text-sm md:text-base text-muted-foreground">Support</div>
             </div>
           </div>
         </div>
@@ -169,24 +173,24 @@ export default function Home() {
 
       {/* Search Section */}
       <section className="py-16 px-4 bg-muted/20">
-        <div className="container mx-auto">
-          <div className="max-w-2xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Find the Resources You Need</h2>
-            <p className="text-muted-foreground">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Find the Resources You Need</h2>
+            <p className="text-muted-foreground text-lg">
               Search through our extensive database of verified resources and services
             </p>
           </div>
           
           <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Input
                 type="text"
                 placeholder="Search for resources, services, or categories..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1"
+                className="flex-1 h-12 text-base"
               />
-              <Button type="submit" size="lg">
+              <Button type="submit" size="lg" className="h-12 px-8">
                 <Search className="w-4 h-4 mr-2" />
                 Search
               </Button>
@@ -197,8 +201,8 @@ export default function Home() {
 
       {/* Resource Overview */}
       <section className="py-16 px-4">
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">Resource Overview</h2>
+        <div className="container mx-auto max-w-7xl">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Resource Overview</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader>

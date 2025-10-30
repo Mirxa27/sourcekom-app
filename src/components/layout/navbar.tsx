@@ -181,12 +181,41 @@ export function Navbar() {
 
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center space-x-2">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/login">Sign In</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link href="/register">Get Started</Link>
-            </Button>
+            {user?.role === 'ADMIN' && (
+              <Button variant="outline" size="sm" asChild className="border-blue-600 text-blue-600 hover:bg-blue-50">
+                <Link href="/admin">
+                  <Shield className="w-4 h-4 mr-2" />
+                  Admin
+                </Link>
+              </Button>
+            )}
+            {user ? (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/dashboard">
+                    <User className="w-4 h-4 mr-2" />
+                    Dashboard
+                  </Link>
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => {
+                  localStorage.removeItem('user')
+                  localStorage.removeItem('token')
+                  window.location.href = '/'
+                }}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/login">Sign In</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/register">Get Started</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Navigation */}
@@ -243,17 +272,47 @@ export function Navbar() {
                 ))}
 
                 <div className="border-t pt-4 space-y-2">
-                  <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
-                    <Link href="/login" onClick={() => setIsOpen(false)}>
-                      <User className="mr-2 h-4 w-4" />
-                      Sign In
-                    </Link>
-                  </Button>
-                  <Button size="sm" className="w-full" asChild>
-                    <Link href="/register" onClick={() => setIsOpen(false)}>
-                      Get Started
-                    </Link>
-                  </Button>
+                  {user?.role === 'ADMIN' && (
+                    <Button variant="outline" size="sm" className="w-full justify-start border-blue-600 text-blue-600 hover:bg-blue-50" asChild>
+                      <Link href="/admin" onClick={() => setIsOpen(false)}>
+                        <Shield className="mr-2 h-4 w-4" />
+                        Admin Panel
+                      </Link>
+                    </Button>
+                  )}
+                  {user ? (
+                    <>
+                      <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+                        <Link href="/dashboard" onClick={() => setIsOpen(false)}>
+                          <User className="mr-2 h-4 w-4" />
+                          Dashboard
+                        </Link>
+                      </Button>
+                      <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => {
+                        localStorage.removeItem('user')
+                        localStorage.removeItem('token')
+                        setIsOpen(false)
+                        window.location.href = '/'
+                      }}>
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Logout
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
+                        <Link href="/login" onClick={() => setIsOpen(false)}>
+                          <User className="mr-2 h-4 w-4" />
+                          Sign In
+                        </Link>
+                      </Button>
+                      <Button size="sm" className="w-full" asChild>
+                        <Link href="/register" onClick={() => setIsOpen(false)}>
+                          Get Started
+                        </Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </SheetContent>
