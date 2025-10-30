@@ -297,6 +297,11 @@ export default function ResourceDetailPage() {
                   src={resource.thumbnail}
                   alt={resource.title}
                   className="w-full rounded-lg"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.src = '/images/placeholders/digital-product.svg'
+                    target.onerror = null
+                  }}
                 />
               </CardContent>
             </Card>

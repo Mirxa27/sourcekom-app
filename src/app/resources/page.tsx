@@ -298,6 +298,11 @@ export default function ResourcesPage() {
                                   src={resource.thumbnail}
                                   alt={resource.title}
                                   className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement
+                                    target.src = '/images/placeholders/digital-product.svg'
+                                    target.onerror = null
+                                  }}
                                 />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
