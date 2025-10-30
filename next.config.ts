@@ -30,6 +30,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Skip static generation for error pages
+  generateBuildId: async () => {
+    return 'build-' + Date.now()
+  },
 };
 
 export default nextConfig;

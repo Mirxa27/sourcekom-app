@@ -1,7 +1,11 @@
+'use client'
+
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Home, Search, ArrowLeft } from 'lucide-react'
+import { Home, Search } from 'lucide-react'
+
+export const dynamic = 'force-dynamic'
 
 export default function NotFound() {
   return (
