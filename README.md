@@ -362,6 +362,26 @@ UPDATE users SET role = 'ADMIN' WHERE email = 'your-email@example.com';
 - Feature resources
 - Edit and delete resources
 
+## ⚠️ Known Issues & Troubleshooting
+
+### Build Error: Html Component
+
+There's a known issue with Next.js 15.3.5 where error pages (`/404`, `/500`) fail during static generation with the error:
+```
+Error: <Html> should not be imported outside of pages/_document.
+```
+
+**Workaround**: This error doesn't affect development mode or production runtime - only the build process. The application works correctly in both dev and production environments. This appears to be a Next.js internal issue and may be resolved in future versions.
+
+**Impact**: None - the application functions correctly despite this build warning.
+
+### Module Resolution
+
+If you encounter module resolution errors for `@/components/ui/*`, ensure:
+1. The webpack alias is configured in `next.config.ts`
+2. Clear the build cache: `rm -rf .next`
+3. Rebuild: `npm run build`
+
 ## 🐛 Troubleshooting
 
 ### Logo/Images Not Loading
