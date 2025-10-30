@@ -362,6 +362,39 @@ UPDATE users SET role = 'ADMIN' WHERE email = 'your-email@example.com';
 - Feature resources
 - Edit and delete resources
 
+## 🧪 Testing
+
+### E2E Testing with Playwright
+
+We use Playwright for end-to-end testing:
+
+```bash
+# Run all E2E tests locally
+npm run test:e2e
+
+# Run tests against deployed URL
+npm run test:e2e:deploy
+
+# Run with interactive UI
+npm run test:e2e:ui
+
+# Run in headed mode (see browser)
+npm run test:e2e:headed
+```
+
+**Test Coverage:**
+- ✅ Homepage loading and functionality
+- ✅ Navigation and routing
+- ✅ Authentication flows
+- ✅ Resource browsing
+- ✅ Responsive design
+- ✅ Error handling (404)
+- ✅ Form accessibility
+- ✅ Image loading
+- ✅ Deployment verification
+
+See `E2E_TESTING.md` for detailed testing documentation.
+
 ## ⚠️ Known Issues & Troubleshooting
 
 ### Build Error: Html Component
