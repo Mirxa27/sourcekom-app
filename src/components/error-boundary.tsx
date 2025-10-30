@@ -44,6 +44,7 @@ export class ErrorBoundary extends Component<Props, State> {
     // Log the error
     if (typeof window !== 'undefined') {
       try {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { logger } = require('@/lib/logger')
         logger.error('React Error Boundary caught an error', {
           errorId: this.state.errorId,
@@ -161,6 +162,7 @@ export function useErrorHandler() {
   return (error: Error, errorInfo?: string) => {
     if (typeof window !== 'undefined') {
       try {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { logger } = require('@/lib/logger')
         logger.error('Error caught by useErrorHandler', {
           error: error.message,
