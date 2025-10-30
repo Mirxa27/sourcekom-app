@@ -1,12 +1,13 @@
 {
-  "buildCommand": "prisma generate && npm run build",
+  "buildCommand": "prisma generate && next build",
   "devCommand": "npm run dev",
   "framework": "nextjs",
   "installCommand": "npm install",
   "outputDirectory": ".next",
   "regions": ["iad1"],
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "NEXT_TELEMETRY_DISABLED": "1"
   },
   "functions": {
     "src/app/api/**/*.ts": {
@@ -41,5 +42,6 @@
         }
       ]
     }
-  ]
+  ],
+  "ignoreCommand": "if [ \"$VERCEL_ENV\" == \"production\" ] && git diff HEAD^ HEAD --quiet -- ':(exclude).vercelignore' ':(exclude)vercel.json'; then exit 0; else exit 1; fi"
 }

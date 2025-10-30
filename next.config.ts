@@ -34,6 +34,8 @@ const nextConfig: NextConfig = {
   generateBuildId: async () => {
     return 'build-' + Date.now()
   },
+  // Output configuration for Vercel
+  output: 'standalone',
 };
 
 export default nextConfig;
