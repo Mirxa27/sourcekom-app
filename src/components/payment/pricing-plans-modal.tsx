@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import { useToast } from '@/hooks/use-toast'
 import {
   Dialog,
   DialogContent,
@@ -97,6 +98,7 @@ const plans = [
 export function PricingPlansModal({ isOpen, onClose, onSubscribe }: PricingPlansModalProps) {
   const [selectedPlan, setSelectedPlan] = useState<'FREE' | 'BASIC' | 'PREMIUM' | null>(null)
   const [isSubscribing, setIsSubscribing] = useState(false)
+  const { toast } = useToast()
 
   const handleSubscribe = async (plan: 'FREE' | 'BASIC' | 'PREMIUM') => {
     setSelectedPlan(plan)
@@ -106,7 +108,11 @@ export function PricingPlansModal({ isOpen, onClose, onSubscribe }: PricingPlans
       // Check if user is logged in
       const token = localStorage.getItem('token')
       if (!token && plan !== 'FREE') {
-        alert('Please login to subscribe to a plan')
+        toast({
+          title: 'Login required',
+          description: 'Please sign in before selecting a paid plan.',
+          variant: 'destructive'
+        })
         setIsSubscribing(false)
         return
       }
@@ -116,6 +122,10 @@ export function PricingPlansModal({ isOpen, onClose, onSubscribe }: PricingPlans
         if (onSubscribe) {
           onSubscribe(plan)
         }
+        toast({
+          title: 'Free plan activated',
+          description: 'You now have access to the SourceKom free tier.'
+        })
         setIsSubscribing(false)
         onClose()
         return
@@ -145,13 +155,25 @@ export function PricingPlansModal({ isOpen, onClose, onSubscribe }: PricingPlans
           if (onSubscribe) {
             onSubscribe(plan)
           }
+          toast({
+            title: 'Subscription confirmed',
+            description: `Your ${plan.toLowerCase()} plan is now active.`
+          })
           onClose()
         }
       } else {
-        alert(data.error || 'Failed to subscribe')
+        toast({
+          title: 'Subscription failed',
+          description: data.error || 'Please try again.',
+          variant: 'destructive'
+        })
       }
     } catch (error: any) {
-      alert(error.message || 'An error occurred')
+      toast({
+        title: 'Unexpected error',
+        description: error?.message || 'Please try again later.',
+        variant: 'destructive'
+      })
     } finally {
       setIsSubscribing(false)
     }

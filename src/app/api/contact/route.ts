@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { rateLimit } from '@/lib/rate-limit'
 import jwt from 'jsonwebtoken'
 import { sendContactNotificationToAdmin } from '@/lib/email'
+import { emailService } from '@/lib/email'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
 
@@ -148,6 +149,13 @@ export async function POST(request: NextRequest) {
 
       return newInquiry
     })
+
+    // Send confirmation email to user
+    try {
+      await emailService.sendContactConfirmation(email, name, type)
+    } catch (emailError) {
+      console.error('Failed to send confirmation email:', emailError)
+    }
 
     // Send notification email to admin
     try {

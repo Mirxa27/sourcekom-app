@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
+import { useToast } from '@/hooks/use-toast'
 import { 
   MessageCircle, 
   Send, 
@@ -33,12 +34,14 @@ import {
   Reply,
   MoreHorizontal,
   BookOpen,
-  Users
+  Users,
+  Loader2
 } from 'lucide-react'
 import Link from 'next/link'
 
 interface SupportTicket {
   id: string
+  ticketId: string
   subject: string
   category: string
   priority: 'low' | 'medium' | 'high' | 'urgent'
@@ -124,26 +127,97 @@ const statusIcons = {
 }
 
 export default function ContactSupport() {
+  const { toast } = useToast()
   const [activeTab, setActiveTab] = useState('new')
-  const [tickets, setTickets] = useState<SupportTicket[]>(mockTickets)
+  const [tickets, setTickets] = useState<SupportTicket[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
   const [filterCategory, setFilterCategory] = useState('all')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<any>(null)
   
   // Form state
   const [formData, setFormData] = useState({
     subject: '',
     category: '',
-    priority: 'medium',
+    priority: 'medium' as 'low' | 'medium' | 'high' | 'urgent',
     description: '',
     attachments: [] as File[]
   })
 
+  useEffect(() => {
+    // Check if user is logged in
+    const userData = localStorage.getItem('user')
+    if (userData) {
+      try {
+        setUser(JSON.parse(userData))
+      } catch (e) {
+        console.error('Failed to parse user data:', e)
+      }
+    }
+    
+    // Load tickets if user is logged in
+    if (userData) {
+      loadTickets()
+    } else {
+      setLoading(false)
+    }
+  }, [])
+
+  const loadTickets = async () => {
+    try {
+      setLoading(true)
+      const userData = localStorage.getItem('user')
+      const token = localStorage.getItem('token')
+      
+      if (!userData || !token) {
+        setLoading(false)
+        return
+      }
+      
+      const user = JSON.parse(userData)
+      const response = await fetch(`/api/support/tickets`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        const formattedTickets = (data.tickets || []).map((ticket: any) => ({
+          id: ticket.id,
+          ticketId: ticket.ticketId,
+          subject: ticket.subject,
+          category: ticket.category,
+          priority: ticket.priority,
+          status: ticket.status,
+          description: ticket.description,
+          createdAt: ticket.createdAt,
+          updatedAt: ticket.updatedAt,
+          lastReply: ticket.replies && ticket.replies.length > 0 
+            ? ticket.replies[ticket.replies.length - 1].message 
+            : undefined,
+          replies: ticket.replies ? ticket.replies.length : 0,
+          attachments: ticket.attachments ? (typeof ticket.attachments === 'string' ? JSON.parse(ticket.attachments).length : ticket.attachments.length) : 0
+        }))
+        setTickets(formattedTickets)
+      } else {
+        // If API fails, use empty array instead of mock data
+        setTickets([])
+      }
+    } catch (error) {
+      console.error('Failed to load tickets:', error)
+      setTickets([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const filteredTickets = tickets.filter(ticket => {
     const matchesSearch = ticket.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          ticket.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         ticket.id.toLowerCase().includes(searchQuery.toLowerCase())
+                         ticket.ticketId.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesStatus = filterStatus === 'all' || ticket.status === filterStatus
     const matchesCategory = filterCategory === 'all' || ticket.category === filterCategory
     return matchesSearch && matchesStatus && matchesCategory
@@ -153,35 +227,69 @@ export default function ContactSupport() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate API call
-    setTimeout(() => {
-      const newTicket: SupportTicket = {
-        id: `TK-${Date.now()}`,
-        subject: formData.subject,
-        category: formData.category,
-        priority: formData.priority as any,
-        status: 'open',
-        description: formData.description,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        replies: 0,
-        attachments: formData.attachments.length
+    try {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        toast({
+          title: 'Authentication required',
+          description: 'Please log in to submit a support ticket.',
+          variant: 'destructive'
+        })
+        setIsSubmitting(false)
+        return
       }
 
-      setTickets([newTicket, ...tickets])
-      setFormData({
-        subject: '',
-        category: '',
-        priority: 'medium',
-        description: '',
-        attachments: []
+      // Send as JSON for now (file uploads would need separate handling)
+      const requestBody = {
+        subject: formData.subject,
+        category: formData.category,
+        priority: formData.priority,
+        description: formData.description,
+        attachments: formData.attachments.map(file => file.name) // Store filenames for now
+      }
+
+      const response = await fetch('/api/support/tickets', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
       })
+
+      if (response.ok) {
+        const data = await response.json()
+        toast({
+          title: 'Ticket submitted',
+          description: `Your support ticket ${data.ticket.ticketId} has been created successfully.`,
+        })
+        setFormData({
+          subject: '',
+          category: '',
+          priority: 'medium',
+          description: '',
+          attachments: []
+        })
+        setActiveTab('tickets')
+        loadTickets() // Reload tickets to show the new one
+      } else {
+        const errorData = await response.json()
+        toast({
+          title: 'Failed to submit ticket',
+          description: errorData.error || 'Please try again.',
+          variant: 'destructive'
+        })
+      }
+    } catch (error) {
+      console.error('Failed to submit ticket:', error)
+      toast({
+        title: 'Network error',
+        description: 'Failed to submit ticket. Please try again.',
+        variant: 'destructive'
+      })
+    } finally {
       setIsSubmitting(false)
-      setActiveTab('tickets')
-      
-      // Show success message
-      alert('Support ticket created successfully! We\'ll respond within 24 hours.')
-    }, 1500)
+    }
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -394,7 +502,10 @@ export default function ContactSupport() {
 
                       <Button type="submit" disabled={isSubmitting} className="w-full">
                         {isSubmitting ? (
-                          <>Creating ticket...</>
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Creating ticket...
+                          </>
                         ) : (
                           <>
                             <Send className="w-4 h-4 mr-2" />
@@ -532,7 +643,29 @@ export default function ContactSupport() {
 
             {/* Tickets List */}
             <div className="space-y-4">
-              {filteredTickets.length === 0 ? (
+              {loading ? (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-muted-foreground" />
+                    <p className="text-muted-foreground">Loading tickets...</p>
+                  </CardContent>
+                </Card>
+              ) : !user ? (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <Ticket className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold mb-2">Login Required</h3>
+                    <p className="text-muted-foreground mb-6">
+                      Please log in to view and manage your support tickets.
+                    </p>
+                    <Button asChild>
+                      <Link href="/login?redirect=/help/support">
+                        Login to Continue
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              ) : filteredTickets.length === 0 ? (
                 <Card>
                   <CardContent className="p-12 text-center">
                     <Ticket className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
@@ -571,7 +704,7 @@ export default function ContactSupport() {
                             <div className="flex items-center space-x-6 text-sm text-muted-foreground">
                               <div className="flex items-center space-x-1">
                                 <Ticket className="w-4 h-4" />
-                                <span>{ticket.id}</span>
+                                <span>{ticket.ticketId}</span>
                               </div>
                               <div className="flex items-center space-x-1">
                                 <Calendar className="w-4 h-4" />

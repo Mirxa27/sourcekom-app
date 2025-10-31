@@ -154,6 +154,20 @@ const faqData = [
         answer: 'Consultation fees vary based on complexity and duration: Initial consultation (30 minutes): SAR 200, Standard consultation (1 hour): SAR 350, Extended consultation (2 hours): SAR 600. Package deals are available for ongoing legal support. Corporate clients can request custom pricing.',
         helpful: 39,
         views: 765
+      },
+      {
+        id: 26,
+        question: 'Can I get legal help for business registration?',
+        answer: 'Yes! SourceKom offers comprehensive business registration assistance in Saudi Arabia. Our legal experts help with company formation, licensing, compliance documentation, and regulatory requirements. We provide step-by-step guidance and can handle the entire registration process on your behalf.',
+        helpful: 56,
+        views: 1123
+      },
+      {
+        id: 27,
+        question: 'What legal documents can SourceKom help prepare?',
+        answer: 'Our legal team can help prepare various documents including: Partnership agreements, Employment contracts, Service agreements, Non-disclosure agreements (NDAs), Terms of service, Privacy policies, Vendor contracts, and compliance documentation. We specialize in Saudi Arabian business law.',
+        helpful: 48,
+        views: 890
       }
     ]
   },
@@ -183,6 +197,27 @@ const faqData = [
         answer: 'To delete your account: Go to Account Settings > "Privacy & Security" > "Delete Account." Please note this action is irreversible. We\'ll ask you to confirm via email. Any remaining credits or active subscriptions will be forfeited. Your purchased resources will remain accessible for 30 days after deletion.',
         helpful: 28,
         views: 567
+      },
+      {
+        id: 28,
+        question: 'How do I update my profile information?',
+        answer: 'You can update your profile from Dashboard > "Account Settings" > "Profile." Edit your name, bio, avatar, company information, and contact details. Changes are saved immediately. Email changes require verification. Your profile information is visible to other users when you list resources.',
+        helpful: 61,
+        views: 1456
+      },
+      {
+        id: 29,
+        question: 'Can I have multiple accounts?',
+        answer: 'No, SourceKom allows one account per email address. If you need multiple accounts for different businesses, you can use different email addresses. However, we recommend using one account and organizing resources by category or using tags to distinguish between different business activities.',
+        helpful: 34,
+        views: 723
+      },
+      {
+        id: 30,
+        question: 'How do I enable two-factor authentication?',
+        answer: 'Two-factor authentication (2FA) is available in Account Settings > "Security." Enable 2FA using an authenticator app (Google Authenticator, Authy, etc.) or SMS. Once enabled, you\'ll need both your password and the verification code to log in. This significantly enhances account security.',
+        helpful: 82,
+        views: 2341
       }
     ]
   },
@@ -207,11 +242,74 @@ const faqData = [
         views: 1890
       },
       {
+        id: 31,
+        question: 'How do I contact technical support?',
+        answer: 'You can contact technical support through multiple channels: 1) Create a support ticket at /help/support 2) Email support@sourcekom.sa 3) Live chat (available 24/7) 4) Phone: +966 11 234 5678 (Mon-Fri, 9AM-6PM AST). For urgent issues, mark your ticket as "urgent" for faster response.',
+        helpful: 89,
+        views: 2678
+      },
+      {
+        id: 32,
+        question: 'What system requirements are needed?',
+        answer: 'SourceKom works on all modern browsers (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+). JavaScript must be enabled. For file uploads, you need a stable internet connection. Recommended: 5 Mbps upload speed for files up to 100MB. Mobile apps require iOS 13+ or Android 8+.',
+        helpful: 55,
+        views: 1567
+      },
+      {
+        id: 33,
+        question: 'Are there any API rate limits?',
+        answer: 'Yes, API rate limits apply to prevent abuse: Free tier: 100 requests/hour, Creator tier: 500 requests/hour, Enterprise tier: Unlimited. Rate limit headers are included in API responses. Exceeding limits results in 429 status codes. Contact support to request higher limits.',
+        helpful: 42,
+        views: 890
+      },
+      {
+        id: 34,
+        question: 'How do I integrate SourceKom API?',
+        answer: 'API integration requires: 1) Register for API access in Dashboard > "API Settings" 2) Generate API keys 3) Review documentation at /help/docs/api 4) Use REST endpoints for resources, purchases, and user management 5) Implement webhooks for real-time updates. Full documentation includes code examples.',
+        helpful: 51,
+        views: 756
+      },
+      {
         id: 20,
         question: 'Is SourceKom mobile-friendly?',
         answer: 'Yes! SourceKom is fully responsive and works on all devices. We also offer mobile apps for iOS and Android with additional features like push notifications and offline access to purchased resources. Download from the App Store or Google Play Store.',
         helpful: 71,
         views: 2678
+      },
+      {
+        id: 21,
+        question: 'How do I become a Creator on SourceKom?',
+        answer: 'To become a Creator, you need to contact our support team or upgrade your account from your Dashboard. Creators can upload and sell resources, set their own pricing, and manage their resource listings. There\'s no additional fee to become a Creator - you just need to verify your identity and agree to our Creator terms.',
+        helpful: 58,
+        views: 1890
+      },
+      {
+        id: 22,
+        question: 'What commission does SourceKom take from sales?',
+        answer: 'SourceKom charges a 30% commission on all resource sales. This includes payment processing fees. Creators receive 70% of the net revenue after payment processing. For example, if a resource sells for SAR 100, the Creator receives SAR 70. Payment processing fees are deducted from our commission.',
+        helpful: 64,
+        views: 2341
+      },
+      {
+        id: 23,
+        question: 'Can I offer discounts or promotions on my resources?',
+        answer: 'Yes! Creators can set promotional prices and discounts on their resources. You can set an original price and a discounted price, and the discount percentage will be automatically calculated. Promotions can be scheduled for specific date ranges. Featured resources get additional visibility in search results.',
+        helpful: 52,
+        views: 1567
+      },
+      {
+        id: 24,
+        question: 'How do I track my resource performance?',
+        answer: 'Your Dashboard includes comprehensive analytics showing views, downloads, purchases, revenue, and ratings for each resource. You can filter by date range, category, and resource type. Analytics include trends, conversion rates, and customer demographics. Export reports are available for detailed analysis.',
+        helpful: 47,
+        views: 1234
+      },
+      {
+        id: 25,
+        question: 'What happens if a buyer requests a refund?',
+        answer: 'If a buyer requests a refund within 14 days of purchase, we review the request and process refunds on a case-by-case basis. Valid reasons include technical issues, incorrect resource description, or quality concerns. Refunds are processed within 5-7 business days. Once refunded, the buyer loses access to the resource.',
+        helpful: 43,
+        views: 987
       }
     ]
   }

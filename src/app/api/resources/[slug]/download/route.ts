@@ -1,126 +1,103 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import jwt from 'jsonwebtoken'
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+import { readFile } from 'fs/promises';
+import { join } from 'path';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
-
-export async function POST(
+export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
   try {
-    const { slug } = params
+    const { searchParams } = new URL(request.url);
+    const token = searchParams.get('token');
 
-    // Get token from Authorization header
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!token) {
       return NextResponse.json(
-        { error: 'Authorization token required' },
-        { status: 401 }
-      )
+        { error: 'Download token required' },
+        { status: 400 }
+      );
     }
 
-    const token = authHeader.substring(7)
-    
-    // Verify token
-    let decoded: any
+    // Decode and verify token
+    let tokenData;
     try {
-      decoded = jwt.verify(token, JWT_SECRET)
+      const decoded = Buffer.from(token, 'base64').toString();
+      tokenData = JSON.parse(decoded);
     } catch (error) {
       return NextResponse.json(
-        { error: 'Invalid token' },
-        { status: 401 }
-      )
+        { error: 'Invalid download token' },
+        { status: 400 }
+      );
     }
 
-    // Find resource by slug
-    const resource = await db.resource.findUnique({
-      where: { slug },
-      include: {
-        author: {
-          select: {
-            id: true,
-            name: true
-          }
-        }
-      }
-    })
-
-    if (!resource) {
+    // Check token expiry
+    if (Date.now() > tokenData.expires) {
       return NextResponse.json(
-        { error: 'Resource not found' },
-        { status: 404 }
-      )
-    }
-
-    if (!resource.isPublished) {
-      return NextResponse.json(
-        { error: 'Resource not available' },
-        { status: 404 }
-      )
-    }
-
-    // Check if user can download
-    const canDownload = resource.isFree || 
-                       resource.authorId === decoded.userId || 
-                       await hasPurchasedResource(decoded.userId, resource.id)
-
-    if (!canDownload) {
-      return NextResponse.json(
-        { error: 'You must purchase this resource to download it' },
+        { error: 'Download link expired' },
         { status: 403 }
-      )
+      );
     }
 
-    // Increment download count
-    await db.resource.update({
-      where: { id: resource.id },
-      data: { downloadCount: { increment: 1 } }
-    })
-
-    // Return download URLs
-    const downloadUrls: string[] = []
-    if (resource.fileUrl) downloadUrls.push(resource.fileUrl)
-    if (resource.fileUrl2) downloadUrls.push(resource.fileUrl2)
-    if (resource.fileUrl3) downloadUrls.push(resource.fileUrl3)
-
-    if (downloadUrls.length === 0 && resource.content) {
-      // For text-based resources, return content as downloadable file
-      return NextResponse.json({
-        downloadUrl: null,
-        content: resource.content,
-        filename: `${resource.slug}.txt`,
-        message: 'Content ready for download'
-      })
-    }
-
-    return NextResponse.json({
-      downloadUrls,
-      message: 'Download links generated successfully'
-    })
-
-  } catch (error) {
-    console.error('Download error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
-  }
-}
-
-async function hasPurchasedResource(userId: string, resourceId: string): Promise<boolean> {
-  try {
-    const purchase = await db.purchase.findFirst({
-      where: {
-        userId,
-        resourceId,
-        paymentStatus: 'COMPLETED'
+    // Get purchase and resource
+    const purchase = await db.purchase.findUnique({
+      where: { id: tokenData.purchaseId },
+      include: {
+        resource: true,
+        user: true
       }
-    })
+    });
+
+    if (!purchase) {
+      return NextResponse.json(
+        { error: 'Purchase not found' },
+        { status: 404 }
+      );
+    }
+
+    // Verify user ownership
+    if (purchase.userId !== tokenData.userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 403 }
+      );
+    }
+
+    // Check if license is active
+    if (purchase.licenseStatus !== 'ACTIVE') {
+      return NextResponse.json(
+        { error: 'License is not active' },
+        { status: 403 }
+      );
+    }
+
+    // Get file path
+    const filePath = join(process.cwd(), 'public', purchase.resource.fileUrl!);
     
-    return !!purchase
+    try {
+      const fileBuffer = await readFile(filePath);
+      
+      // Set appropriate headers
+      const response = new NextResponse(fileBuffer);
+      response.headers.set('Content-Type', 'application/octet-stream');
+      response.headers.set(
+        'Content-Disposition',
+        `attachment; filename="${purchase.resource.title}.${purchase.resource.fileFormat}"`
+      );
+      response.headers.set('Content-Length', fileBuffer.length.toString());
+
+      return response;
+    } catch (fileError) {
+      console.error('File read error:', fileError);
+      return NextResponse.json(
+        { error: 'File not found' },
+        { status: 404 }
+      );
+    }
   } catch (error) {
-    console.error('Error checking purchase status:', error)
-    return false
+    console.error('Download error:', error);
+    return NextResponse.json(
+      { error: 'Download failed' },
+      { status: 500 }
+    );
   }
 }

@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { AppLayout } from '@/components/layout/app-layout'
 import { useRouter } from 'next/navigation'
 
 export default function RegisterPage() {
@@ -55,10 +56,6 @@ export default function RegisterPage() {
       const data = await response.json()
 
       if (response.ok) {
-        // Store user data and token
-        localStorage.setItem('user', JSON.stringify(data.user))
-        localStorage.setItem('token', data.token)
-        
         // Redirect to dashboard
         router.push('/dashboard')
       } else {
@@ -72,8 +69,9 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <AppLayout>
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
         {/* Back to Home */}
         <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -135,7 +133,8 @@ export default function RegisterPage() {
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <Input
-                    id="password"
+                    id="register-password"
+                    name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Create a password"
                     value={registerData.password}
@@ -160,7 +159,8 @@ export default function RegisterPage() {
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <Input
-                    id="confirmPassword"
+                    id="register-confirmPassword"
+                    name="confirmPassword"
                     type={showPassword ? "text" : "password"}
                     placeholder="Confirm your password"
                     value={registerData.confirmPassword}
@@ -199,5 +199,6 @@ export default function RegisterPage() {
         </Card>
       </div>
     </div>
+    </AppLayout>
   )
 }

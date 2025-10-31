@@ -9,7 +9,10 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { AppLayout } from '@/components/layout/app-layout'
 import { useRouter } from 'next/navigation'
+
+export const dynamic = 'force-dynamic'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -44,10 +47,6 @@ export default function LoginPage() {
       const data = await response.json()
 
       if (response.ok) {
-        // Store user data and token
-        localStorage.setItem('user', JSON.stringify(data.user))
-        localStorage.setItem('token', data.token)
-        
         // Redirect to dashboard
         router.push('/dashboard')
       } else {
@@ -61,57 +60,14 @@ export default function LoginPage() {
   }
 
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-
-    if (registerData.password !== registerData.confirmPassword) {
-      setError('Passwords do not match')
-      setLoading(false)
-      return
-    }
-
-    if (registerData.password.length < 6) {
-      setError('Password must be at least 6 characters long')
-      setLoading(false)
-      return
-    }
-
-    try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: registerData.name,
-          email: registerData.email,
-          password: registerData.password
-        })
-      })
-
-      const data = await response.json()
-
-      if (response.ok) {
-        // Store user data and token
-        localStorage.setItem('user', JSON.stringify(data.user))
-        localStorage.setItem('token', data.token)
-        
-        // Redirect to dashboard
-        router.push('/dashboard')
-      } else {
-        setError(data.error || 'Registration failed')
-      }
-    } catch (error) {
-      setError('Network error. Please try again.')
-    } finally {
-      setLoading(false)
-    }
-  }
+    e.preventDefault();
+    router.push('/register');
+  };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <AppLayout>
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
         {/* Back to Home */}
         <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -164,7 +120,8 @@ export default function LoginPage() {
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                       <Input
-                        id="password"
+                        id="login-password"
+                        name="password"
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter your password"
                         value={loginData.password}
@@ -241,7 +198,8 @@ export default function LoginPage() {
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                       <Input
-                        id="register-password"
+                        id="login-register-password"
+                        name="registerPassword"
                         type={showPassword ? "text" : "password"}
                         placeholder="Create a password"
                         value={registerData.password}
@@ -266,7 +224,8 @@ export default function LoginPage() {
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                       <Input
-                        id="register-confirm-password"
+                        id="login-register-confirm-password"
+                        name="confirmPassword"
                         type={showPassword ? "text" : "password"}
                         placeholder="Confirm your password"
                         value={registerData.confirmPassword}
@@ -298,5 +257,6 @@ export default function LoginPage() {
         </Card>
       </div>
     </div>
+    </AppLayout>
   )
 }

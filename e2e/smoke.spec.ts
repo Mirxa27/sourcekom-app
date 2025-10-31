@@ -22,13 +22,29 @@ test.describe('Homepage Tests', () => {
 
   test('should navigate to About page', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.waitForLoadState('networkidle').catch(() => {});
     
-    // Find and click About link
-    const aboutLink = page.locator('a:has-text("About"), a[href*="/about"]').first();
-    if (await aboutLink.isVisible({ timeout: 5000 }).catch(() => false)) {
+    // Check if we're on mobile viewport by checking if mobile menu button is visible
+    const mobileMenuButton = page.locator('[data-testid="mobile-menu-button"]').first();
+    const isMobile = await mobileMenuButton.isVisible({ timeout: 3000 }).catch(() => false);
+    
+    if (isMobile) {
+      // On mobile: open mobile menu first
+      await mobileMenuButton.click();
+      await page.waitForTimeout(500);
+      
+      // Click About link in mobile menu
+      const mobileAboutLink = page.locator('[data-testid="mobile-nav-about"]').first();
+      await expect(mobileAboutLink).toBeVisible({ timeout: 5000 });
+      await mobileAboutLink.click();
+    } else {
+      // On desktop: click About link in nav
+      const aboutLink = page.locator('[data-testid="nav-about"]').first();
+      await expect(aboutLink).toBeVisible({ timeout: 10000 });
       await aboutLink.click();
-      await expect(page).toHaveURL(/\/about/, { timeout: 10000 });
     }
+    
+    await expect(page).toHaveURL(/\/about/, { timeout: 10000 });
   });
 });
 

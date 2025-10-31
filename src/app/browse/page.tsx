@@ -10,6 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Slider } from '@/components/ui/slider'
 import { Search, Filter, Grid, List, Star, Download, Heart, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
+import { AppLayout } from '@/components/layout/app-layout'
 import { useSearchParams } from 'next/navigation'
 
 function BrowseContent() {
@@ -97,138 +98,139 @@ function BrowseContent() {
   ].filter(Boolean).length
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col lg:flex-row gap-4 items-center">
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="flex-1 max-w-2xl">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                <Input
-                  type="text"
-                  placeholder="Search for resources..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 h-12 text-base"
-                />
-              </div>
-            </form>
-
-            {/* View Mode Toggle */}
-            <div className="flex items-center gap-2">
-              <Button
-                variant={viewMode === 'grid' ? 'default' : 'outline'}
-                size="icon"
-                onClick={() => setViewMode('grid')}
-              >
-                <Grid className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'outline'}
-                size="icon"
-                onClick={() => setViewMode('list')}
-              >
-                <List className="w-4 h-4" />
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setShowFilters(!showFilters)}
-                className="relative"
-              >
-                <Filter className="w-4 h-4 mr-2" />
-                Filters
-                {activeFiltersCount > 0 && (
-                  <Badge variant="secondary" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
-                    {activeFiltersCount}
-                  </Badge>
-                )}
-              </Button>
-            </div>
-          </div>
-
-          {/* Filters */}
-          {showFilters && (
-            <div className="mt-4 p-4 border rounded-lg bg-muted/20">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* Category Filter */}
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Category</label>
-                  <Select value={filters.category} onValueChange={(value) => setFilters(prev => ({ ...prev, category: value }))}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="All categories" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="">All categories</SelectItem>
-                      {categories.map((category: any) => (
-                        <SelectItem key={category.id} value={category.slug}>
-                          <div className="flex items-center gap-2">
-                            <span>{categoryIcons[category.name as keyof typeof categoryIcons] || '📁'}</span>
-                            {category.name}
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Price Range */}
-                <div>
-                  <label className="text-sm font-medium mb-2 block">
-                    Price Range: SAR {filters.priceRange[0]} - {filters.priceRange[1]}
-                  </label>
-                  <Slider
-                    value={filters.priceRange}
-                    onValueChange={(value) => setFilters(prev => ({ ...prev, priceRange: value }))}
-                    max={200}
-                    step={5}
-                    className="mt-2"
+    <AppLayout>
+      <div className="min-h-screen bg-background">
+        {/* Search and Filters Section */}
+        <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="container mx-auto px-4 py-6">
+            <div className="flex flex-col lg:flex-row gap-4 items-center">
+              {/* Search Bar */}
+              <form onSubmit={handleSearch} className="flex-1 max-w-2xl">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  <Input
+                    type="text"
+                    placeholder="Search for resources..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 h-12 text-base"
                   />
                 </div>
+              </form>
 
-                {/* Free Only */}
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="free-only"
-                    checked={filters.isFree}
-                    onCheckedChange={(checked) => setFilters(prev => ({ ...prev, isFree: !!checked }))}
-                  />
-                  <label htmlFor="free-only" className="text-sm font-medium">
-                    Free resources only
-                  </label>
-                </div>
-
-                {/* Sort By */}
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Sort by</label>
-                  <Select value={filters.sortBy} onValueChange={(value) => setFilters(prev => ({ ...prev, sortBy: value }))}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="newest">Newest first</SelectItem>
-                      <SelectItem value="oldest">Oldest first</SelectItem>
-                      <SelectItem value="price-low">Price: Low to high</SelectItem>
-                      <SelectItem value="price-high">Price: High to low</SelectItem>
-                      <SelectItem value="popular">Most popular</SelectItem>
-                      <SelectItem value="rating">Highest rated</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="mt-4 flex justify-end">
-                <Button variant="outline" onClick={clearFilters}>
-                  Clear all filters
+              {/* View Mode Toggle */}
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'outline'}
+                  size="icon"
+                  onClick={() => setViewMode('grid')}
+                >
+                  <Grid className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'outline'}
+                  size="icon"
+                  onClick={() => setViewMode('list')}
+                >
+                  <List className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="relative"
+                >
+                  <Filter className="w-4 h-4 mr-2" />
+                  Filters
+                  {activeFiltersCount > 0 && (
+                    <Badge variant="secondary" className="ml-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                      {activeFiltersCount}
+                    </Badge>
+                  )}
                 </Button>
               </div>
             </div>
-          )}
-        </div>
-      </div>
 
-      {/* Results */}
+            {/* Filters */}
+            {showFilters && (
+              <div className="mt-4 p-4 border rounded-lg bg-muted/20">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {/* Category Filter */}
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Category</label>
+                    <Select value={filters.category} onValueChange={(value) => setFilters(prev => ({ ...prev, category: value }))}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="All categories" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">All categories</SelectItem>
+                        {categories.map((category: any) => (
+                          <SelectItem key={category.id} value={category.slug}>
+                            <div className="flex items-center gap-2">
+                              <span>{categoryIcons[category.name as keyof typeof categoryIcons] || '📁'}</span>
+                              {category.name}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Price Range */}
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">
+                      Price Range: SAR {filters.priceRange[0]} - {filters.priceRange[1]}
+                    </label>
+                    <Slider
+                      value={filters.priceRange}
+                      onValueChange={(value) => setFilters(prev => ({ ...prev, priceRange: value }))}
+                      max={200}
+                      step={5}
+                      className="mt-2"
+                    />
+                  </div>
+
+                  {/* Free Only */}
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="free-only"
+                      checked={filters.isFree}
+                      onCheckedChange={(checked) => setFilters(prev => ({ ...prev, isFree: !!checked }))}
+                    />
+                    <label htmlFor="free-only" className="text-sm font-medium">
+                      Free resources only
+                    </label>
+                  </div>
+
+                  {/* Sort By */}
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Sort by</label>
+                    <Select value={filters.sortBy} onValueChange={(value) => setFilters(prev => ({ ...prev, sortBy: value }))}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="newest">Newest first</SelectItem>
+                        <SelectItem value="oldest">Oldest first</SelectItem>
+                        <SelectItem value="price-low">Price: Low to high</SelectItem>
+                        <SelectItem value="price-high">Price: High to low</SelectItem>
+                        <SelectItem value="popular">Most popular</SelectItem>
+                        <SelectItem value="rating">Highest rated</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex justify-end">
+                  <Button variant="outline" onClick={clearFilters}>
+                    Clear all filters
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Results */}
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">
@@ -287,7 +289,7 @@ function BrowseContent() {
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <span className="text-4xl">
-                              {categoryIcons[resource.category?.name as keyof typeof categoryIcons] || '📁'}
+                              📁
                             </span>
                           </div>
                         )}
@@ -330,7 +332,7 @@ function BrowseContent() {
                             by {resource.author?.name || 'Anonymous'}
                           </span>
                           <Badge variant="outline" className="text-xs">
-                            {resource.category?.name}
+                            {resource.category?.name || 'Uncategorized'}
                           </Badge>
                         </div>
                       </CardContent>
@@ -353,7 +355,7 @@ function BrowseContent() {
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
                               <span className="text-2xl">
-                                {categoryIcons[resource.category?.name as keyof typeof categoryIcons] || '📁'}
+                                📁
                               </span>
                             </div>
                           )}
@@ -390,7 +392,7 @@ function BrowseContent() {
                                 by {resource.author?.name || 'Anonymous'}
                               </span>
                               <Badge variant="outline" className="text-xs">
-                                {resource.category?.name}
+                                {resource.category?.name || 'Uncategorized'}
                               </Badge>
                             </div>
                           </div>
@@ -405,18 +407,21 @@ function BrowseContent() {
         )}
       </div>
     </div>
+  </AppLayout>
   )
 }
 
 export default function BrowsePage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
+      <AppLayout>
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading...</p>
+          </div>
         </div>
-      </div>
+      </AppLayout>
     }>
       <BrowseContent />
     </Suspense>

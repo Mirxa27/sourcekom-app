@@ -95,11 +95,21 @@ export async function POST(request: NextRequest) {
     // Remove password from user object
     const { password: _, ...userWithoutPassword } = user
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       message: 'Login successful',
       user: userWithoutPassword,
-      token
     })
+
+    // Set the token in a secure, http-only cookie
+    response.cookies.set('auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: '/',
+    })
+
+    return response
 
   } catch (error) {
     console.error('Login error:', error)

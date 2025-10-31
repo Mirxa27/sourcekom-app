@@ -252,7 +252,7 @@ export default function ResourceDetailPage() {
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <Badge variant="outline">{resource.category?.name}</Badge>
+                  <Badge variant="outline">{resource.category?.name || 'Uncategorized'}</Badge>
                   {resource.isFree && <Badge variant="secondary">Free</Badge>}
                   {resource.isFeatured && <Badge>Featured</Badge>}
                 </div>
@@ -312,6 +312,16 @@ export default function ResourceDetailPage() {
                     Purchase - SAR {resource.price}
                   </>
                 )}
+              </Button>
+              <Button
+                type="button"
+                variant={isFavorite ? 'default' : 'outline'}
+                size="lg"
+                onClick={handleFavorite}
+                className="sm:flex-none"
+              >
+                <Heart className={`w-4 h-4 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
+                {isFavorite ? 'Favorited' : 'Add to Favorites'}
               </Button>
 
               {resource.previewUrl && (

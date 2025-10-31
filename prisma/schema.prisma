@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,190 +8,241 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  name          String?
-  password      String
-  avatar        String?
-  bio           String?
-  role          UserRole @default(USER)
-  isActive      Boolean  @default(true)
-  emailVerified DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
-  // Relations
-  resources     Resource[]
-  purchases     Purchase[]
-  payments      Payment[]
-  reviews       Review[]
-  subscriptions Subscription[]
-  notifications Notification[]
-  supportTickets SupportTicket[]
-  supportReplies SupportReply[]
-  contents       Content[]
-  
+  id                   String                 @id @default(cuid())
+  email                String                 @unique
+  name                 String?
+  password             String
+  avatar               String?
+  bio                  String?
+  role                 UserRole               @default(USER)
+  isActive             Boolean                @default(true)
+  emailVerified        DateTime?
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  contents             Content[]
+  favorites            Favorite[]
+  notifications        Notification[]
+  payments             Payment[]
+  purchases            Purchase[]
+  analytics            ResourceAnalytics[]
+  resources            Resource[]
+  reviews              Review[]
+  subscriptions        Subscription[]
+  supportReplies       SupportReply[]
+  supportTickets       SupportTicket[]
+  savedPaymentMethods  SavedPaymentMethod[]
+
   @@map("users")
 }
 
 model Category {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
+  id          String     @id @default(cuid())
+  name        String     @unique
+  slug        String     @unique
   description String?
   icon        String?
   color       String?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Relations
-  resources Resource[]
-  
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  resources   Resource[]
+
   @@map("categories")
 }
 
 model Resource {
-  id           String        @id @default(cuid())
-  title        String
-  description  String
-  slug         String        @unique
-  content      String?       // For text-based resources
-  fileUrl      String?       // For downloadable files
-  fileUrl2     String?       // Additional file
-  fileUrl3     String?       // Additional file
-  previewUrl   String?       // Preview image/video
-  thumbnail    String?       // Thumbnail image
-  price        Float         @default(0)
-  originalPrice Float?       // For showing discounts
-  isFree       Boolean       @default(false)
-  isPublished  Boolean       @default(false)
-  isFeatured   Boolean       @default(false)
-  downloadCount Int          @default(0)
-  viewCount    Int           @default(0)
-  tags         String?       // JSON array of tags
-  metadata     String?       // Additional metadata as JSON
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  
-  // Foreign keys
-  authorId     String
-  categoryId   String
-  
-  // Relations
-  author       User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  category     Category      @relation(fields: [categoryId], references: [id])
-  purchases    Purchase[]
-  payments     Payment[]
-  reviews      Review[]
-  
+  id            String              @id @default(cuid())
+  title         String
+  description   String
+  slug          String              @unique
+  content       String?
+  fileUrl       String?
+  fileUrl2      String?
+  fileUrl3      String?
+  previewUrl    String?
+  thumbnail     String?
+  price         Float               @default(0)
+  originalPrice Float?
+  isFree        Boolean             @default(false)
+  isPublished   Boolean             @default(false)
+  isFeatured    Boolean             @default(false)
+  downloadCount Int                 @default(0)
+  viewCount     Int                 @default(0)
+  tags          String?
+  metadata      String?
+  productType   ResourceType        @default(DIGITAL_PRODUCT)
+  pricingTier   PricingTier         @default(BASIC)
+  licenseType   LicenseType         @default(STANDARD)
+  version       String?             @default("1.0.0")
+  fileSize      Int?
+  fileFormat    String?
+  difficulty    String?
+  duration      String?
+  requirements  String?
+  features      String?
+  demoUrl       String?
+  supportLevel  SupportLevel        @default(STANDARD)
+  rating        Float               @default(0)
+  ratingCount   Int                 @default(0)
+  wishlistCount Int                 @default(0)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  authorId      String
+  categoryId    String
+  favorites     Favorite[]
+  payments      Payment[]
+  purchases     Purchase[]
+  analytics     ResourceAnalytics[]
+  templates     ResourceTemplate[]
+  author        User                @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category      Category            @relation(fields: [categoryId], references: [id])
+  reviews       Review[]
+
   @@map("resources")
 }
 
+model ResourceAnalytics {
+  id         String   @id @default(cuid())
+  resourceId String
+  userId     String?
+  eventType  String
+  sessionId  String?
+  ipAddress  String?
+  userAgent  String?
+  referrer   String?
+  metadata   String?
+  createdAt  DateTime @default(now())
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  user       User?    @relation(fields: [userId], references: [id])
+
+  @@map("resource_analytics")
+}
+
+model ResourceTemplate {
+  id           String   @id @default(cuid())
+  resourceId   String
+  templateType String
+  content      String
+  variables    String?
+  isPremium    Boolean  @default(false)
+  downloads    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  resource     Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@map("resource_templates")
+}
+
 model Purchase {
-  id               String           @id @default(cuid())
-  amount           Float
-  currency         String           @default("SAR")
-  paymentMethod    String
-  paymentId        String?          // References Payment.id
-  paymentStatus    PaymentStatus    @default(PENDING)
-  downloadUrl      String?          // Temporary download URL
-  downloadExpires  DateTime?        // Download link expiration
-  refundStatus     RefundStatus?    @default(NONE)
-  refundReason     String?
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  
-  // Foreign keys
-  userId           String
-  resourceId       String
-  
-  // Relations
-  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  resource         Resource         @relation(fields: [resourceId], references: [id], onDelete: Cascade)
-  payment          Payment?         @relation(fields: [paymentId], references: [id])
-  
+  id              String        @id @default(cuid())
+  amount          Float
+  currency        String        @default("SAR")
+  paymentMethod   String
+  paymentId       String?
+  paymentStatus   PaymentStatus @default(PENDING)
+  downloadUrl     String?
+  downloadExpires DateTime?
+  licenseKey      String?       // Generated license key
+  licenseStatus   String?       @default("ACTIVE") // ACTIVE, REVOKED, EXPIRED
+  activationLimit Int?          @default(1) // How many times can be activated
+  activationCount Int?          @default(0) // Current activation count
+  refundStatus    RefundStatus? @default(NONE)
+  refundReason    String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  userId          String
+  resourceId      String
+  payment         Payment?      @relation(fields: [paymentId], references: [id])
+  resource        Resource      @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([userId, resourceId])
   @@map("purchases")
 }
 
 model Payment {
-  id               String           @id @default(cuid())
-  amount           Float
-  currency         String           @default("SAR")
-  paymentMethod    String           @default("myfatoorah")
-  paymentStatus    PaymentStatus    @default(PENDING)
-  externalId       String?          // MyFatoorah InvoiceId
-  paymentUrl       String?          // Payment gateway redirect URL
-  customerReference String?         // Customer reference for tracking
-  customerInfo     String?          // JSON string with customer details
-  metadata         String?          // JSON string with additional payment data
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  
-  // Foreign keys
-  userId           String
-  resourceId       String
-  
-  // Relations
-  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  resource         Resource         @relation(fields: [resourceId], references: [id], onDelete: Cascade)
-  purchases        Purchase[]
-  
+  id                String        @id @default(cuid())
+  amount            Float
+  currency          String        @default("SAR")
+  paymentMethod     String        @default("myfatoorah")
+  paymentStatus     PaymentStatus @default(PENDING)
+  externalId        String?
+  paymentUrl        String?
+  customerReference String?
+  customerInfo      String?
+  metadata          String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  userId            String
+  resourceId        String
+  resource          Resource      @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purchases         Purchase[]
+
   @@map("payments")
 }
 
+model SavedPaymentMethod {
+  id              String   @id @default(cuid())
+  userId          String
+  cardToken       String   @unique
+  cardNumber      String   // Last 4 digits
+  cardBrand       String?  // Visa, Mastercard, etc.
+  expiryMonth     String
+  expiryYear      String
+  cardHolderName  String
+  isDefault       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("saved_payment_methods")
+}
+
 model Review {
-  id        String   @id @default(cuid())
-  rating    Int      // 1-5 stars
-  comment   String?
-  isVerified Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  // Foreign keys
-  userId    String
+  id         String   @id @default(cuid())
+  rating     Int
+  comment    String?
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  userId     String
   resourceId String
-  
-  // Relations
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  resource  Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
-  
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([userId, resourceId])
   @@map("reviews")
 }
 
 model Subscription {
-  id             String            @id @default(cuid())
-  plan           SubscriptionPlan
-  status         SubscriptionStatus @default(ACTIVE)
-  startDate      DateTime          @default(now())
-  endDate        DateTime?
-  amount         Float
-  currency       String            @default("SAR")
-  paymentMethod  String
-  paymentId      String?
-  features       String?           // JSON array of features
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
-  
-  // Foreign keys
-  userId         String
-  
-  // Relations
-  user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id            String             @id @default(cuid())
+  plan          SubscriptionPlan
+  status        SubscriptionStatus @default(ACTIVE)
+  startDate     DateTime           @default(now())
+  endDate       DateTime?
+  amount        Float
+  currency      String             @default("SAR")
+  paymentMethod String
+  paymentId     String?
+  features      String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  userId        String
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("subscriptions")
 }
 
 model NewsletterSubscription {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  isActive    Boolean  @default(true)
+  id           String   @id @default(cuid())
+  email        String   @unique
+  isActive     Boolean  @default(true)
   subscribedAt DateTime @default(now())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
   @@map("newsletter_subscriptions")
 }
 
@@ -207,11 +252,11 @@ model ContactInquiry {
   email     String
   company   String?
   message   String
-  type      String   @default("general") // general, resource_inquiry, legal_consultation
-  status    String   @default("PENDING") // PENDING, RESOLVED, CLOSED
+  type      String   @default("general")
+  status    String   @default("PENDING")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@map("contact_inquiries")
 }
 
@@ -219,113 +264,180 @@ model Notification {
   id         String   @id @default(cuid())
   title      String
   message    String
-  type       String   @default("info") // info, success, warning, error, purchase, download, system
+  type       String   @default("info")
   isRead     Boolean  @default(false)
   isGlobal   Boolean  @default(false)
   actionUrl  String?
   actionText String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  
-  // Foreign keys
   userId     String?
-  
-  // Relations
   user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@map("notifications")
 }
 
 model AnalyticsEvent {
   id        String   @id @default(cuid())
-  eventType String   // page_view, resource_download, purchase, user_registration, etc.
-  eventData String?  // JSON string with additional event data
+  eventType String
+  eventData String?
   userId    String?
   sessionId String?
   ipAddress String?
   userAgent String?
   createdAt DateTime @default(now())
-  
+
   @@map("analytics_events")
 }
 
 model SupportTicket {
-  id          String   @id @default(cuid())
-  ticketId    String   @unique // TK-000001 format
+  id          String         @id @default(cuid())
+  ticketId    String         @unique
   userId      String
   subject     String
-  category    String   // technical, billing, account, resources, legal, feature, other
-  priority    String   @default("medium") // low, medium, high, urgent
-  status      String   @default("open") // open, in_progress, resolved, closed
+  category    String
+  priority    String         @default("medium")
+  status      String         @default("open")
   description String
-  attachments String?  // JSON array of attachment URLs
-  assignedTo  String?  // ID of support agent assigned to this ticket
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Relations
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attachments String?
+  assignedTo  String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
   replies     SupportReply[]
-  
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("support_tickets")
 }
 
 model SupportReply {
-  id         String   @id @default(cuid())
+  id         String        @id @default(cuid())
   ticketId   String
-  userId     String   // Can be 'system' for automated replies
+  userId     String
   message    String
-  isInternal Boolean  @default(false) // true for internal notes, false for customer-visible replies
-  createdAt  DateTime @default(now())
-  
-  // Relations
+  isInternal Boolean       @default(false)
+  createdAt  DateTime      @default(now())
   ticket     SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
   user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@map("support_replies")
 }
 
 model Setting {
   id          String   @id @default(cuid())
   key         String   @unique
-  value       String   // JSON string for complex values
-  category    String   @default("general") // general, payment, email, sms, analytics, integrations
+  value       String
+  category    String   @default("general")
   description String?
   isEncrypted Boolean  @default(false)
-  updatedBy   String?  // User ID who last updated
+  updatedBy   String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   @@map("settings")
 }
 
+model PaymentSettings {
+  id                    String   @id @default(cuid())
+  // MyFatoorah API Configuration
+  apiKey                String
+  countryCode           String   @default("SAU")
+  isTest                Boolean  @default(false)
+  
+  // Webhook Configuration
+  webhookEnabled        Boolean  @default(true)
+  webhookEndpoint       String?
+  webhookSecretEnabled  Boolean  @default(true)
+  webhookSecretKey      String?
+  
+  // Webhook Events (stored as JSON array)
+  webhookEvents         String   @default("[]")
+  
+  // Retry Configuration
+  signingVersion        String   @default("v2")
+  numberOfRetries       Int      @default(5)
+  delayBetweenRetries   Int      @default(180) // seconds
+  
+  // Payment Gateway Settings
+  enabledGateways       String   @default("[]") // JSON array of enabled gateway IDs
+  
+  // Styling Configuration (JSON)
+  cardPaymentStyle      String?  @db.Text
+  stcPayStyle           String?  @db.Text
+  
+  updatedBy             String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@map("payment_settings")
+}
+
 model Content {
-  id          String   @id @default(cuid())
-  title       String
-  slug        String   @unique
-  content     String   // Markdown or HTML content
-  excerpt     String?
-  type        String   @default("page") // page, post, announcement, faq
-  status      String   @default("draft") // draft, published, archived
-  featured    Boolean  @default(false)
-  seoTitle    String?
+  id             String    @id @default(cuid())
+  title          String
+  slug           String    @unique
+  content        String
+  excerpt        String?
+  type           String    @default("page")
+  status         String    @default("draft")
+  featured       Boolean   @default(false)
+  seoTitle       String?
   seoDescription String?
-  authorId    String
-  publishedAt DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Relations
-  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  
+  authorId       String
+  publishedAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  author         User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
   @@map("contents")
 }
 
-// Enums
+model Favorite {
+  id         String   @id @default(cuid())
+  userId     String
+  resourceId String
+  createdAt  DateTime @default(now())
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, resourceId])
+  @@map("favorites")
+}
+
 enum UserRole {
   USER
   CREATOR
   ADMIN
+}
+
+enum ResourceType {
+  PHYSICAL_RESOURCE
+  DIGITAL_PRODUCT
+  TEMPLATE
+  GUIDE
+  SOFTWARE
+  DOCUMENTATION
+}
+
+enum PricingTier {
+  BASIC
+  PROFESSIONAL
+  ENTERPRISE
+  CUSTOM
+}
+
+enum LicenseType {
+  STANDARD
+  COMMERCIAL
+  ENTERPRISE
+  WHITE_LABEL
+  CUSTOM
+}
+
+enum SupportLevel {
+  BASIC
+  STANDARD
+  PREMIUM
+  ENTERPRISE
 }
 
 enum PaymentStatus {

@@ -1,23 +1,14 @@
-import { Metadata } from 'next'
-import { MainLayout } from '@/components/layout/main-layout'
+import { ReactNode } from 'react'
+import { AppLayout } from '@/components/layout/app-layout'
 
-export const metadata: Metadata = {
-  title: 'Dashboard - SourceKom',
-  description: 'Manage your resources, bookings, and account settings.',
-  robots: {
-    index: false,
-    follow: false,
-  },
+interface DashboardLayoutProps {
+  children: ReactNode
 }
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <MainLayout showBreadcrumbs={true} showMobileFooter={false}>
+    <AppLayout showFooter={false} showChat={false}>
       {children}
-    </MainLayout>
+    </AppLayout>
   )
 }

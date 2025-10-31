@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { StructuredData } from '@/components/layout/structured-data'
+import { useToast } from '@/hooks/use-toast'
 import { 
   Search, 
   Users, 
@@ -22,17 +23,31 @@ import {
   Zap,
   ArrowRight,
   Star,
-  Download
+  Loader2
 } from 'lucide-react'
 import Link from 'next/link'
 import { TestimonialModal } from '@/components/testimonials/testimonial-modal'
 
+type FeaturedResource = {
+  id: string
+  title: string
+  description: string
+  price: number
+  category: { id: string; name: string; slug: string } | string | null
+  averageRating?: number
+  rating?: number
+  reviewCount?: number
+  slug: string
+}
+
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [featuredResources, setFeaturedResources] = useState([])
-  const [categories, setCategories] = useState([])
+  const [featuredResources, setFeaturedResources] = useState<FeaturedResource[]>([])
+  const [isLoadingFeatured, setIsLoadingFeatured] = useState(true)
+  const [categories, setCategories] = useState<any[]>([])
   const [email, setEmail] = useState('')
   const [showTestimonialModal, setShowTestimonialModal] = useState(false)
+  const { toast } = useToast()
 
   const categoryIcons = {
     'Office Space': Building,
@@ -51,24 +66,41 @@ export default function Home() {
   const fetchFeaturedResources = async () => {
     try {
       const response = await fetch('/api/resources/featured')
-      if (response.ok) {
-        const data = await response.json()
-        setFeaturedResources(data)
+      if (!response.ok) {
+        throw new Error('Failed to load featured resources')
       }
+
+      const data: FeaturedResource[] = await response.json()
+      setFeaturedResources(Array.isArray(data) ? data : [])
     } catch (error) {
       console.error('Failed to fetch featured resources:', error)
+      setFeaturedResources([])
+      toast({
+        title: 'Unable to load featured resources',
+        description: 'Please try again shortly. Our team has been notified.',
+        variant: 'destructive'
+      })
+    } finally {
+      setIsLoadingFeatured(false)
     }
   }
 
   const fetchCategories = async () => {
     try {
       const response = await fetch('/api/categories')
-      if (response.ok) {
-        const data = await response.json()
-        setCategories(data)
+      if (!response.ok) {
+        throw new Error('Failed to load categories')
       }
+
+      const data = await response.json()
+      setCategories(Array.isArray(data) ? data : [])
     } catch (error) {
       console.error('Failed to fetch categories:', error)
+      toast({
+        title: 'Unable to load categories',
+        description: 'Refresh the page or try again later.',
+        variant: 'destructive'
+      })
     }
   }
 
@@ -92,14 +124,25 @@ export default function Home() {
         })
 
         if (response.ok) {
-          alert('Thank you for subscribing! You will receive updates at: ' + email)
+          toast({
+            title: 'Subscription confirmed',
+            description: `Updates will be sent to ${email}.`
+          })
           setEmail('')
         } else {
           const data = await response.json()
-          alert(data.error || 'Subscription failed. Please try again.')
+          toast({
+            title: 'Subscription failed',
+            description: data.error || 'Please try again.',
+            variant: 'destructive'
+          })
         }
       } catch (error) {
-        alert('Subscription failed. Please try again.')
+        toast({
+          title: 'Subscription failed',
+          description: 'Please check your connection and try again.',
+          variant: 'destructive'
+        })
       }
     }
   }
@@ -115,30 +158,30 @@ export default function Home() {
         }}
       />
       {/* Hero Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-blue-50/50 via-white to-yellow-50/50">
+      <section className="py-20 px-4 bg-gradient-to-br from-brand/10 via-app to-brand-secondary/10">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center">
-            <Badge className="mb-6 inline-block bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200 px-4 py-2">
+            <Badge className="mb-6 inline-block bg-brand/15 text-brand hover:bg-brand/25 border-brand/30 px-4 py-2">
               Welcome to the Future of Resource Management
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-yellow-600 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-brand bg-clip-text text-transparent leading-tight">
               Revolutionizing Resource Management<br className="hidden md:block" />
-              <span className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
+              <span className="text-4xl md:text-6xl font-bold bg-gradient-secondary bg-clip-text text-transparent">
                 in Saudi Arabia
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-app-muted mb-8 max-w-3xl mx-auto leading-relaxed">
               SourceKom connects businesses to maximize potential and foster sustainable growth through resource optimization in logistics and supply chain management.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8" asChild>
+              <Button size="lg" variant="brand" className="px-8" asChild>
                 <Link href="/register">
                   Get Started
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="px-8" asChild>
+              <Button size="lg" variant="outline" className="px-8 border-2 border-brand text-brand hover:bg-brand hover:text-app transition-all" asChild>
                 <Link href="/approach">
                   Our Approach
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -152,20 +195,20 @@ export default function Home() {
                 onClick={() => setShowTestimonialModal(true)}
                 className="text-center hover:scale-105 transition-transform cursor-pointer group"
               >
-                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2 group-hover:text-blue-700 transition-colors">500+</div>
-                <div className="text-sm md:text-base text-muted-foreground">Trusted Businesses</div>
+                <div className="text-3xl md:text-4xl font-bold text-brand mb-2 group-hover:text-brand-deep transition-colors">500+</div>
+                <div className="text-sm md:text-base text-app-muted">Trusted Businesses</div>
               </button>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">30%</div>
-                <div className="text-sm md:text-base text-muted-foreground">Cost Reduction</div>
+                <div className="text-3xl md:text-4xl font-bold text-brand mb-2">30%</div>
+                <div className="text-sm md:text-base text-app-muted">Cost Reduction</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">100%</div>
-                <div className="text-sm md:text-base text-muted-foreground">Secure Platform</div>
+                <div className="text-3xl md:text-4xl font-bold text-brand mb-2">100%</div>
+                <div className="text-sm md:text-base text-app-muted">Secure Platform</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">24/7</div>
-                <div className="text-sm md:text-base text-muted-foreground">Support</div>
+                <div className="text-3xl md:text-4xl font-bold text-brand mb-2">24/7</div>
+                <div className="text-sm md:text-base text-app-muted">Support</div>
               </div>
             </div>
           </div>
@@ -205,55 +248,55 @@ export default function Home() {
         <div className="container mx-auto max-w-7xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Resource Overview</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer">
+            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer border-2 border-transparent hover:border-brand/30">
               <CardHeader>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Building className="w-6 h-6 text-blue-600" />
+                <div className="w-12 h-12 bg-brand/15 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Building className="w-6 h-6 text-brand" />
                 </div>
-                <CardTitle className="text-2xl font-bold text-blue-600">247</CardTitle>
+                <CardTitle className="text-2xl font-bold text-brand">247</CardTitle>
                 <CardDescription>Active Available Resources</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-xs text-muted-foreground">Click to view your listed resources</p>
+                <p className="text-xs text-app-muted">Click to view your listed resources</p>
               </CardContent>
             </Card>
-            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer">
+            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer border-2 border-transparent hover:border-brand-secondary/30">
               <CardHeader>
-                <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Handshake className="w-6 h-6 text-yellow-600" />
+                <div className="w-12 h-12 bg-brand-secondary/15 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Handshake className="w-6 h-6 text-brand-secondary" />
                 </div>
-                <CardTitle className="text-2xl font-bold text-yellow-600">89</CardTitle>
+                <CardTitle className="text-2xl font-bold text-brand-secondary">89</CardTitle>
                 <CardDescription>Active Bookings</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-xs text-muted-foreground">Click to view booking history</p>
+                <p className="text-xs text-app-muted">Click to view booking history</p>
               </CardContent>
             </Card>
-            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer">
+            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer border-2 border-transparent hover:border-brand/30">
               <CardHeader>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="w-6 h-6 text-purple-600" />
+                <div className="w-12 h-12 bg-brand/15 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <TrendingUp className="w-6 h-6 text-brand" />
                 </div>
-                <CardTitle className="text-2xl font-bold text-purple-600">SAR 458K</CardTitle>
+                <CardTitle className="text-2xl font-bold text-brand">SAR 458K</CardTitle>
                 <CardDescription>Total Revenue</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-xs text-muted-foreground">Click to view financial reports</p>
+                <p className="text-xs text-app-muted">Click to view financial reports</p>
               </CardContent>
             </Card>
-            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer">
+            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer border-2 border-transparent hover:border-brand-secondary/30">
               <CardHeader>
-                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <BarChart3 className="w-6 h-6 text-orange-600" />
+                <div className="w-12 h-12 bg-brand-secondary/15 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <BarChart3 className="w-6 h-6 text-brand-secondary" />
                 </div>
-                <CardTitle className="text-2xl font-bold text-orange-600">78%</CardTitle>
+                <CardTitle className="text-2xl font-bold text-brand-secondary">78%</CardTitle>
                 <CardDescription>Utilization Rate</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                  <div className="bg-orange-600 h-2 rounded-full" style={{ width: '78%' }}></div>
-                </div>
-                <p className="text-xs text-muted-foreground">Resource utilization efficiency</p>
+                <Badge className="mb-2 bg-brand-secondary/15 text-brand-secondary">
+                  78% utilization
+                </Badge>
+                <p className="text-xs text-app-muted">Resource utilization efficiency</p>
               </CardContent>
             </Card>
           </div>
@@ -265,19 +308,19 @@ export default function Home() {
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge className="mb-4 bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200">
+              <Badge className="mb-4 bg-brand/15 text-brand hover:bg-brand/25 border-brand/30">
                 About SourceKom
               </Badge>
               <h2 className="text-3xl font-bold mb-6">
                 Adding strength to businesses, businesses to strengths
               </h2>
-              <p className="text-muted-foreground mb-6">
+              <p className="text-app-muted mb-6">
                 SourceKom is an innovative resource sharing and legal consultancy platform operating in Saudi Arabia. The name "SourceKom" combines the English word "source" with "Kom," which means "Yours" in Arabic, expressing the company's concept of being the ideal resource partner clients can count on.
               </p>
-              <p className="text-muted-foreground mb-8">
+              <p className="text-app-muted mb-8">
                 Founded by Abdullah Mirza, a motivated entrepreneur with over a decade of experience in business development, SourceKom is transforming the Saudi Arabian market by enabling businesses to exchange underutilized resources and providing expert legal consultancy, fostering a new era of efficiency and sustainability.
               </p>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white" asChild>
+              <Button variant="brand" asChild>
                 <Link href="/about">
                   Learn More About Us
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -285,31 +328,39 @@ export default function Home() {
               </Button>
             </div>
             <div className="grid grid-cols-2 gap-6">
-              <Card className="text-center p-6">
-                <Target className="w-8 h-8 text-blue-600 mx-auto mb-4" />
+              <Card className="text-center p-6 hover:shadow-md transition-shadow border-2 border-transparent hover:border-brand/30">
+                <div className="w-12 h-12 bg-brand/15 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Target className="w-6 h-6 text-brand" />
+                </div>
                 <h3 className="font-semibold mb-2">Our Vision</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-app-muted">
                   Revolutionizing the Saudi market through resource optimization and legal expertise
                 </p>
               </Card>
-              <Card className="text-center p-6">
-                <Lightbulb className="w-8 h-8 text-yellow-600 mx-auto mb-4" />
+              <Card className="text-center p-6 hover:shadow-md transition-shadow border-2 border-transparent hover:border-brand-secondary/30">
+                <div className="w-12 h-12 bg-brand-secondary/15 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Lightbulb className="w-6 h-6 text-brand-secondary" />
+                </div>
                 <h3 className="font-semibold mb-2">Our Mission</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-app-muted">
                   Empowering businesses with strength and connectivity for sustainable growth
                 </p>
               </Card>
-              <Card className="text-center p-6">
-                <Shield className="w-8 h-8 text-purple-600 mx-auto mb-4" />
+              <Card className="text-center p-6 hover:shadow-md transition-shadow border-2 border-transparent hover:border-brand/30">
+                <div className="w-12 h-12 bg-brand/15 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-6 h-6 text-brand" />
+                </div>
                 <h3 className="font-semibold mb-2">Legal Expertise</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-app-muted">
                   Comprehensive legal guidance for Saudi market operations
                 </p>
               </Card>
-              <Card className="text-center p-6">
-                <Zap className="w-8 h-8 text-orange-600 mx-auto mb-4" />
+              <Card className="text-center p-6 hover:shadow-md transition-shadow border-2 border-transparent hover:border-brand-secondary/30">
+                <div className="w-12 h-12 bg-brand-secondary/15 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Zap className="w-6 h-6 text-brand-secondary" />
+                </div>
                 <h3 className="font-semibold mb-2">Resource Sharing</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-app-muted">
                   Optimize resource utilization across businesses
                 </p>
               </Card>
@@ -319,57 +370,92 @@ export default function Home() {
       </section>
 
       {/* Featured Resources */}
-      {featuredResources.length > 0 && (
-        <section className="py-16 px-4">
-          <div className="container mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Featured Resources</h2>
-              <p className="text-muted-foreground">
-                Discover our most popular and highly-rated resources
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredResources.slice(0, 6).map((resource: any) => (
-                <Card key={resource.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-2">
-                      <Badge variant="secondary">{resource.category}</Badge>
-                      <div className="flex items-center">
-                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                        <span className="text-sm ml-1">{resource.rating}</span>
-                      </div>
-                    </div>
-                    <CardTitle className="text-lg">{resource.title}</CardTitle>
-                    <CardDescription>{resource.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between">
-                      <span className="text-lg font-semibold text-blue-600">
-                        SAR {resource.price}
-                      </span>
-                      <Button size="sm" variant="outline" asChild>
-                        <Link href={`/resources/${resource.slug}`}>
-                          View Details
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-            
-            <div className="text-center mt-8">
-              <Button variant="outline" size="lg" asChild>
-                <Link href="/resources">
-                  View All Resources
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
-              </Button>
-            </div>
+      <section className="py-16 px-4">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Featured Resources</h2>
+            <p className="text-muted-foreground">
+              Discover our most popular and highly-rated resources
+            </p>
           </div>
-        </section>
-      )}
+
+          {isLoadingFeatured ? (
+            <div className="flex justify-center py-12">
+              <div className="flex items-center gap-3 text-muted-foreground">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                Loading featured resources...
+              </div>
+            </div>
+          ) : featuredResources.length === 0 ? (
+            <div className="text-center py-12">
+              <h3 className="text-xl font-semibold mb-2">No featured resources yet</h3>
+              <p className="text-muted-foreground">
+                Check back soon as we add new premium resources for SourceKom members.
+              </p>
+              <div className="mt-6 flex justify-center">
+                <Button variant="brand" asChild>
+                  <Link href="/browse">
+                    Explore Marketplace
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featuredResources.slice(0, 6).map((resource) => {
+                const categoryLabel = typeof resource.category === 'string'
+                  ? resource.category
+                  : resource.category?.name || 'Uncategorized'
+
+                const ratingValue = typeof resource.averageRating === 'number'
+                  ? resource.averageRating
+                  : resource.rating
+
+                return (
+                  <Card key={resource.id} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge variant="secondary">{categoryLabel}</Badge>
+                        {typeof ratingValue === 'number' && ratingValue > 0 ? (
+                          <div className="flex items-center">
+                            <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                            <span className="text-sm ml-1">{ratingValue.toFixed(1)}</span>
+                          </div>
+                        ) : null}
+                      </div>
+                      <CardTitle className="text-lg">{resource.title}</CardTitle>
+                      <CardDescription>{resource.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center justify-between">
+                        <span className="text-lg font-semibold text-brand">
+                          SAR {resource.price}
+                        </span>
+                        <Button variant="brand" asChild>
+                          <Link href={`/resources/${resource.slug}`}>
+                            View Detail
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </Link>
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      </section>
+
+      <div className="text-center mt-8">
+        <Button variant="outline" size="lg" asChild>
+          <Link href="/resources">
+            View All Resources
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Link>
+        </Button>
+      </div>
 
       {/* Categories */}
       {categories.length > 0 && (
@@ -391,12 +477,12 @@ export default function Home() {
                     href={`/browse?category=${category.slug}`}
                     className="group"
                   >
-                    <Card className="text-center p-6 hover:shadow-md transition-all hover:scale-105">
-                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
-                        <Icon className="w-6 h-6 text-blue-600" />
+                    <Card className="text-center p-6 hover:shadow-md transition-all hover:scale-105 border-2 border-transparent hover:border-brand/30">
+                      <div className="w-12 h-12 bg-brand/15 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:bg-brand/25 transition-colors">
+                        <Icon className="w-6 h-6 text-brand" />
                       </div>
                       <h3 className="font-semibold text-sm">{category.name}</h3>
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="text-xs text-app-muted mt-1">
                         {category.resourceCount} resources
                       </p>
                     </Card>
@@ -409,10 +495,10 @@ export default function Home() {
       )}
 
       {/* Newsletter Section */}
-      <section className="py-16 px-4 bg-blue-600 text-white">
+      <section className="py-16 px-4 bg-gradient-brand text-app">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
-          <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-app/90 mb-8 max-w-2xl mx-auto">
             Subscribe to our newsletter to receive the latest updates on new resources, 
             services, and exclusive offers tailored for your business needs.
           </p>
@@ -424,10 +510,10 @@ export default function Home() {
                 placeholder="Enter your email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
+                className="bg-app/10 border-app/20 text-app placeholder:text-app/60 focus:border-app/40"
                 required
               />
-              <Button type="submit" variant="secondary">
+              <Button type="submit" variant="secondary" className="bg-app text-brand hover:bg-app/90 shadow-app-lg transition-all">
                 Subscribe
               </Button>
             </div>

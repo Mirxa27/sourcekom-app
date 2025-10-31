@@ -29,6 +29,7 @@ import {
   AlertTriangle
 } from 'lucide-react'
 import Link from 'next/link'
+import { AppLayout } from '@/components/layout/app-layout'
 
 export default function CookiesPage() {
   const [cookiePreferences, setCookiePreferences] = useState({
@@ -72,9 +73,10 @@ export default function CookiesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-[var(--sourcekom-blue)] to-[var(--sourcekom-blue-light)] text-white">
+    <AppLayout>
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-[var(--sourcekom-blue)] to-[var(--sourcekom-blue-light)] text-white">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center max-w-4xl mx-auto">
             <Badge className="mb-4 bg-white/20 text-white hover:bg-white/30 border-white/30">
@@ -625,5 +627,6 @@ export default function CookiesPage() {
         </Card>
       </div>
     </div>
+  </AppLayout>
   )
 }

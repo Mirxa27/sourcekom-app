@@ -41,35 +41,62 @@ export async function POST(request: NextRequest, { params }: { params: { slug: s
     }
 
     // Check if favorite already exists
-    const existingFavorite = await db.user.findUnique({
-      where: { id: auth.userId! },
-      include: {
-        favorites: {
-          where: { resourceId: resource.id }
+    const existingFavorite = await db.favorite.findUnique({
+      where: {
+        userId_resourceId: {
+          userId: auth.userId!,
+          resourceId: resource.id
         }
       }
     })
 
     if (action === 'favorite') {
-      // Add to favorites (using a user metadata approach since we don't have a favorites table yet)
-      // For now, we'll store it in user preferences or use a separate Favorite model
-      // Since we don't have a Favorite model, we'll implement a simple solution
-      return NextResponse.json({ 
-        message: 'Resource favorited successfully',
-        favorited: true 
-      })
+      if (existingFavorite) {
+        return NextResponse.json({ message: 'Already favorited', favorited: true })
+      }
+
+      await db.$transaction([
+        db.favorite.create({
+          data: {
+            userId: auth.userId!,
+            resourceId: resource.id
+          }
+        }),
+        db.resource.update({
+          where: { id: resource.id },
+          data: { wishlistCount: { increment: 1 } }
+        })
+      ])
+
+      return NextResponse.json({ message: 'Resource favorited successfully', favorited: true })
     } else {
-      // Remove from favorites
-      return NextResponse.json({ 
-        message: 'Resource unfavorited successfully',
-        favorited: false 
-      })
+      if (!existingFavorite) {
+        return NextResponse.json({ message: 'Not in favorites', favorited: false })
+      }
+
+      await db.$transaction([
+        db.favorite.delete({
+          where: {
+            userId_resourceId: {
+              userId: auth.userId!,
+              resourceId: resource.id
+            }
+          }
+        }),
+        db.resource.update({
+          where: { id: resource.id },
+          data: { wishlistCount: { decrement: 1 } }
+        })
+      ])
+
+      return NextResponse.json({ message: 'Resource unfavorited successfully', favorited: false })
     }
   } catch (error: any) {
-    return NextResponse.json(
-      { error: 'Failed to update favorite status' },
-      { status: 500 }
-    )
+    // If Favorite model is not migrated yet, signal configuration error clearly
+    if (error?.code === 'P2021' || /favorites/i.test(String(error?.message))) {
+      return NextResponse.json({ error: 'Favorites feature not available (database migration pending).' }, { status: 503 })
+    }
+    return NextResponse.json({ error: 'Failed to update favorite status' }, { status: 500 })
   }
 }
 
@@ -89,11 +116,14 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
       return NextResponse.json({ favorited: false })
     }
 
-    // Check if user has favorited this resource
-    // For now, return false as we don't have a favorites table
-    // This can be implemented when Favorite model is added to schema
-    return NextResponse.json({ favorited: false })
+    const existing = await db.favorite.findFirst({
+      where: { userId: auth.userId!, resourceId: resource.id }
+    })
+    return NextResponse.json({ favorited: !!existing })
   } catch (error: any) {
+    if (error?.code === 'P2021' || /favorites/i.test(String(error?.message))) {
+      return NextResponse.json({ favorited: false })
+    }
     return NextResponse.json({ favorited: false })
   }
 }

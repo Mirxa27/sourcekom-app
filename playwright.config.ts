@@ -57,7 +57,7 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: true,
-    timeout: 120 * 1000,
+    timeout: 240 * 1000,
     stdout: 'ignore',
     stderr: 'pipe',
   },

@@ -109,7 +109,43 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    // Calculate category metrics
+    // Calculate category metrics with real growth calculation
+    const previousPeriodStart = new Date(startDate)
+    const periodDays = (now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+    previousPeriodStart.setDate(previousPeriodStart.getDate() - periodDays)
+    
+    // Get previous period category performance for growth calculation
+    const previousCategoryPerformance = await db.category.findMany({
+      include: {
+        resources: {
+          where: {
+            isPublished: true,
+            createdAt: {
+              gte: previousPeriodStart,
+              lt: startDate
+            }
+          },
+          include: {
+            purchases: {
+              where: {
+                paymentStatus: 'COMPLETED'
+              }
+            }
+          }
+        }
+      }
+    })
+
+    const previousRevenueMap = new Map<string, number>()
+    previousCategoryPerformance.forEach(category => {
+      const revenue = category.resources.reduce((sum, resource) => {
+        return sum + resource.purchases.reduce((resourceSum, purchase) => {
+          return resourceSum + purchase.amount
+        }, 0)
+      }, 0)
+      previousRevenueMap.set(category.id, revenue)
+    })
+
     const categoryStats = categoryPerformance.map(category => {
       const categoryRevenue = category.resources.reduce((sum, resource) => {
         const resourceRevenue = resource.purchases.reduce((resourceSum, purchase) => {
@@ -122,11 +158,21 @@ export async function GET(request: NextRequest) {
         return sum + resource.downloadCount
       }, 0)
 
+      // Calculate real growth percentage
+      const previousRevenue = previousRevenueMap.get(category.id) || 0
+      let growth = '0%'
+      if (previousRevenue > 0) {
+        const growthPercent = ((categoryRevenue - previousRevenue) / previousRevenue) * 100
+        growth = `${growthPercent >= 0 ? '+' : ''}${growthPercent.toFixed(1)}%`
+      } else if (categoryRevenue > 0) {
+        growth = '+100%' // New category with revenue
+      }
+
       return {
         name: category.name,
         revenue: `SAR ${categoryRevenue.toLocaleString()}`,
         downloads: categoryDownloads,
-        growth: `+${Math.floor(Math.random() * 25) + 5}%` // Mock growth data
+        growth: growth
       }
     })
 
@@ -186,18 +232,89 @@ export async function GET(request: NextRequest) {
       const revenue = resource.purchases.reduce((sum, purchase) => sum + purchase.amount, 0)
       return {
         title: resource.title,
-        revenue: `SAR ${revenue.toLocaleString()}`
+        revenue: parseFloat(revenue.toFixed(2)),
+        revenueFormatted: `SAR ${revenue.toLocaleString()}`
       }
     })
 
+    // Get time-series revenue data for charts (optimized batch query)
+    const daysInRange = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : timeRange === '90d' ? 90 : 365
+    
+    // Batch query all purchases in range
+    const allPurchases = await db.purchase.findMany({
+      where: {
+        createdAt: {
+          gte: startDate
+        },
+        paymentStatus: 'COMPLETED'
+      },
+      select: {
+        amount: true,
+        createdAt: true
+      }
+    })
+
+    // Batch query all users in range
+    const allUsers = await db.user.findMany({
+      where: {
+        createdAt: {
+          gte: startDate
+        }
+      },
+      select: {
+        createdAt: true
+      }
+    })
+
+    // Aggregate data by day
+    const revenueDataMap = new Map<string, number>()
+    const userGrowthDataMap = new Map<string, number>()
+
+    // Initialize all days with 0
+    for (let i = 0; i < daysInRange; i++) {
+      const date = new Date(startDate)
+      date.setDate(date.getDate() + i)
+      const dateKey = date.toISOString().split('T')[0]
+      revenueDataMap.set(dateKey, 0)
+      userGrowthDataMap.set(dateKey, 0)
+    }
+
+    // Aggregate purchases by day
+    allPurchases.forEach(purchase => {
+      const dateKey = purchase.createdAt.toISOString().split('T')[0]
+      const current = revenueDataMap.get(dateKey) || 0
+      revenueDataMap.set(dateKey, current + purchase.amount)
+    })
+
+    // Aggregate users by day
+    allUsers.forEach(user => {
+      const dateKey = user.createdAt.toISOString().split('T')[0]
+      const current = userGrowthDataMap.get(dateKey) || 0
+      userGrowthDataMap.set(dateKey, current + 1)
+    })
+
+    // Convert maps to arrays
+    const revenueData = Array.from(revenueDataMap.entries()).map(([date, revenue]) => ({
+      date,
+      revenue
+    })).sort((a, b) => a.date.localeCompare(b.date))
+
+    const userGrowthData = Array.from(userGrowthDataMap.entries()).map(([date, users]) => ({
+      date,
+      users
+    })).sort((a, b) => a.date.localeCompare(b.date))
+
     const analytics = {
       revenue: `SAR ${(totalRevenue._sum.amount || 0).toLocaleString()}`,
+      revenueRaw: totalRevenue._sum.amount || 0,
       activeResources,
       downloads: totalDownloads._sum.downloadCount || 0,
       activeUsers,
       categoryPerformance: categoryStats,
       recentActivity,
       topPerformingResources,
+      revenueData,
+      userGrowthData,
       timeRange
     }
 

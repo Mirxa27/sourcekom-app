@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { myfatoorahService } from '@/lib/myfatoorah'
 import { db } from '@/lib/db'
 import { z } from 'zod'
+import jwt from 'jsonwebtoken'
 
 const purchaseSchema = z.object({
   resourceId: z.string().min(1, 'Resource ID is required'),
@@ -28,13 +29,14 @@ export async function POST(request: NextRequest) {
 
     const token = authHeader.substring(7)
     
-    // Verify token (simplified for now)
+    // Verify token using JWT
+    const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'
     let decoded: any
     try {
-      decoded = JSON.parse(atob(token.split('.')[1]))
+      decoded = jwt.verify(token, JWT_SECRET)
     } catch (error) {
       return NextResponse.json(
-        { error: 'Invalid token' },
+        { error: 'Invalid or expired token' },
         { status: 401 }
       )
     }
@@ -94,7 +96,7 @@ export async function POST(request: NextRequest) {
       where: {
         userId: user.id,
         resourceId: resource.id,
-        status: 'completed'
+        paymentStatus: 'COMPLETED'
       }
     })
 

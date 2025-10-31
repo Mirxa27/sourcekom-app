@@ -56,7 +56,7 @@ export default function ResourcesPage() {
       const response = await fetch(`/api/resources?${params}`)
       if (response.ok) {
         const data = await response.json()
-        setResources(data)
+        setResources(data.resources || [])
       }
     } catch (error) {
       console.error('Failed to fetch resources:', error)
@@ -84,41 +84,13 @@ export default function ResourcesPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                <Building className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-bold text-xl">SourceKom</span>
-            </Link>
-            <div className="hidden md:flex items-center space-x-6">
-              <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
-                About
-              </Link>
-              <Link href="/services" className="text-muted-foreground hover:text-foreground transition-colors">
-                Services
-              </Link>
-              <Link href="/resources" className="text-foreground font-medium">
-                Resources
-              </Link>
-              <Link href="/legal" className="text-muted-foreground hover:text-foreground transition-colors">
-                Legal Services
-              </Link>
-              <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
-                Contact
-              </Link>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Button variant="outline" asChild>
-              <Link href="/upload">List Resource</Link>
-            </Button>
-            <Button className="bg-emerald-600 hover:bg-emerald-700" asChild>
-              <Link href="/register">Get Started</Link>
-            </Button>
+      {/* Breadcrumb */}
+      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4 py-2">
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
+            <span className="mx-2">/</span>
+            <span className="text-foreground">Resources</span>
           </div>
         </div>
       </div>
@@ -191,9 +163,8 @@ export default function ResourcesPage() {
                 <SelectContent>
                   <SelectItem value="newest">Newest</SelectItem>
                   <SelectItem value="popular">Most Popular</SelectItem>
-                  <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  <SelectItem value="rating">Highest Rated</SelectItem>
+                  <SelectItem value="price_low">Price: Low to High</SelectItem>
+                  <SelectItem value="price_high">Price: High to Low</SelectItem>
                 </SelectContent>
               </Select>
               
@@ -331,7 +302,7 @@ export default function ResourcesPage() {
                                     <span>{resource.downloadCount}</span>
                                   </div>
                                 </div>
-                                <Badge variant="outline">{resource.category?.name}</Badge>
+                                <Badge variant="outline">{resource.category?.name || 'Uncategorized'}</Badge>
                               </div>
                             </div>
                           </div>

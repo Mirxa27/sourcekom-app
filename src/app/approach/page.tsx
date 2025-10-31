@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { 
-  ArrowLeft, 
   Search,
   Network,
   CheckCircle,
@@ -120,29 +119,6 @@ export default function ApproachPage() {
 
   return (
     <AppLayout>
-      {/* Header */}
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Link>
-            <div className="flex items-center space-x-2">
-              <img 
-                src="/logo.png" 
-                alt="SourceKom" 
-                className="h-10 w-auto"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement
-                  target.src = '/images/logos/logo-light.svg'
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Hero Section */}
       <section className="py-20 px-4 bg-gradient-to-br from-blue-50/50 via-white to-yellow-50/50">
         <div className="container mx-auto">

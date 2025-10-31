@@ -51,7 +51,8 @@ export default function HelpCenter() {
       readTime: '5 min read',
       views: 1234,
       rating: 4.8,
-      featured: true
+      featured: true,
+      slug: 'getting-started-guide'
     },
     {
       id: 2,
@@ -61,7 +62,8 @@ export default function HelpCenter() {
       readTime: '8 min read',
       views: 892,
       rating: 4.7,
-      featured: true
+      featured: true,
+      slug: 'upload-sell-resources'
     },
     {
       id: 3,
@@ -71,7 +73,8 @@ export default function HelpCenter() {
       readTime: '6 min read',
       views: 756,
       rating: 4.6,
-      featured: false
+      featured: false,
+      slug: 'payment-processing'
     },
     {
       id: 4,
@@ -81,7 +84,8 @@ export default function HelpCenter() {
       readTime: '7 min read',
       views: 623,
       rating: 4.9,
-      featured: true
+      featured: true,
+      slug: 'legal-consultation-services'
     },
     {
       id: 5,
@@ -91,7 +95,8 @@ export default function HelpCenter() {
       readTime: '4 min read',
       views: 445,
       rating: 4.5,
-      featured: false
+      featured: false,
+      slug: 'account-settings'
     },
     {
       id: 6,
@@ -101,7 +106,140 @@ export default function HelpCenter() {
       readTime: '10 min read',
       views: 1567,
       rating: 4.4,
-      featured: false
+      featured: false,
+      slug: 'troubleshooting-guide'
+    },
+    {
+      id: 7,
+      title: 'Creating Your First Resource Listing',
+      category: 'resources',
+      description: 'Step-by-step guide to creating an effective resource listing that attracts buyers.',
+      readTime: '6 min read',
+      views: 1123,
+      rating: 4.7,
+      featured: false,
+      slug: 'create-resource-listing'
+    },
+    {
+      id: 8,
+      title: 'Payment Methods Explained',
+      category: 'payments',
+      description: 'Detailed overview of all available payment methods including MyFatoorah integration.',
+      readTime: '5 min read',
+      views: 987,
+      rating: 4.6,
+      featured: false,
+      slug: 'payment-methods'
+    },
+    {
+      id: 9,
+      title: 'Understanding VAT and Tax Compliance',
+      category: 'legal',
+      description: 'Learn about VAT requirements and tax compliance for Saudi Arabia businesses.',
+      readTime: '9 min read',
+      views: 756,
+      rating: 4.8,
+      featured: false,
+      slug: 'vat-tax-compliance'
+    },
+    {
+      id: 10,
+      title: 'Resource Categories and Organization',
+      category: 'resources',
+      description: 'How to properly categorize and organize your resources for better visibility.',
+      readTime: '4 min read',
+      views: 654,
+      rating: 4.5,
+      featured: false,
+      slug: 'resource-categories'
+    },
+    {
+      id: 11,
+      title: 'Security Best Practices',
+      category: 'account',
+      description: 'Essential security tips to protect your account and transactions.',
+      readTime: '7 min read',
+      views: 1456,
+      rating: 4.9,
+      featured: true,
+      slug: 'security-best-practices'
+    },
+    {
+      id: 12,
+      title: 'Refund and Cancellation Policy',
+      category: 'payments',
+      description: 'Complete guide to our refund and cancellation policies for digital products.',
+      readTime: '5 min read',
+      views: 823,
+      rating: 4.5,
+      featured: false,
+      slug: 'refund-cancellation-policy'
+    },
+    {
+      id: 13,
+      title: 'Digital Product Licensing',
+      category: 'resources',
+      description: 'Understanding different license types and usage rights for digital products.',
+      readTime: '8 min read',
+      views: 567,
+      rating: 4.7,
+      featured: false,
+      slug: 'digital-product-licensing'
+    },
+    {
+      id: 14,
+      title: 'Business Registration Assistance',
+      category: 'legal',
+      description: 'How SourceKom can help with business registration and licensing in Saudi Arabia.',
+      readTime: '10 min read',
+      views: 445,
+      rating: 4.8,
+      featured: false,
+      slug: 'business-registration'
+    },
+    {
+      id: 15,
+      title: 'Analytics and Reporting Dashboard',
+      category: 'account',
+      description: 'How to use analytics to track your resource performance and earnings.',
+      readTime: '6 min read',
+      views: 723,
+      rating: 4.6,
+      featured: false,
+      slug: 'analytics-dashboard'
+    },
+    {
+      id: 16,
+      title: 'Mobile App Usage Guide',
+      category: 'technical',
+      description: 'Complete guide to using SourceKom mobile app on iOS and Android devices.',
+      readTime: '5 min read',
+      views: 934,
+      rating: 4.5,
+      featured: false,
+      slug: 'mobile-app-guide'
+    },
+    {
+      id: 17,
+      title: 'Privacy and Data Protection',
+      category: 'account',
+      description: 'How we protect your data and what privacy controls are available.',
+      readTime: '6 min read',
+      views: 1123,
+      rating: 4.7,
+      featured: false,
+      slug: 'privacy-data-protection'
+    },
+    {
+      id: 18,
+      title: 'API Integration Guide',
+      category: 'technical',
+      description: 'Developer guide for integrating SourceKom API into your applications.',
+      readTime: '12 min read',
+      views: 456,
+      rating: 4.8,
+      featured: false,
+      slug: 'api-integration-guide'
     }
   ]
 
@@ -357,8 +495,10 @@ export default function HelpCenter() {
                               </div>
                             </div>
                           </div>
-                          <Button variant="ghost" className="ml-4 group-hover:bg-[var(--sourcekom-blue)] group-hover:text-white transition-colors">
-                            <ArrowRight className="w-5 h-5" />
+                          <Button variant="ghost" className="ml-4 group-hover:bg-[var(--sourcekom-blue)] group-hover:text-white transition-colors" asChild>
+                            <Link href={`/help/articles/${article.slug}`}>
+                              <ArrowRight className="w-5 h-5" />
+                            </Link>
                           </Button>
                         </div>
                       </CardContent>

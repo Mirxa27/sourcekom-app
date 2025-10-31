@@ -32,6 +32,7 @@ import {
   MessageCircle
 } from 'lucide-react'
 import Link from 'next/link'
+import { AppLayout } from '@/components/layout/app-layout'
 
 interface Service {
   id: string
@@ -216,18 +217,52 @@ export default function SystemStatus() {
   const [lastUpdated, setLastUpdated] = useState(new Date())
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [selectedTimeRange, setSelectedTimeRange] = useState('24h')
+  const [health, setHealth] = useState<any>(null)
+  const [serviceStatuses, setServiceStatuses] = useState<Service[]>(services)
 
-  const operationalServices = services.filter(s => s.status === 'operational').length
-  const totalServices = services.length
+  const operationalServices = serviceStatuses.filter(s => s.status === 'operational').length
+  const totalServices = serviceStatuses.length
   const overallStatus = operationalServices === totalServices ? 'operational' : 
                         operationalServices >= totalServices * 0.8 ? 'degraded' : 'partial_outage'
 
-  const refreshStatus = () => {
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch('/api/health', { cache: 'no-store' })
+        const data = await res.json()
+        setHealth(data)
+        // Map API health into UI services
+        setServiceStatuses(prev => prev.map(s => {
+          let status: Service['status'] = s.status
+          if (s.id === 'database') status = data.checks.database.status === 'pass' ? 'operational' : 'major_outage'
+          if (s.id === 'api') status = Object.values(data.checks.api.components || {}).every((c: any) => c.status === 'pass') ? 'operational' : 'degraded'
+          if (s.id === 'web-app') status = data.status === 'healthy' ? 'operational' : 'degraded'
+          if (s.id === 'payment') status = (data.checks.api.components?.payment?.status === 'pass') ? 'operational' : 'degraded'
+          if (s.id === 'auth') status = (data.checks.api.components?.auth?.status === 'pass') ? 'operational' : 'degraded'
+          if (s.id === 'storage') status = (data.checks.api.components?.storage?.status === 'pass') ? 'operational' : 'degraded'
+          if (s.id === 'email') status = (data.checks.api.components?.email?.status === 'pass') ? 'operational' : 'degraded'
+          return { ...s, status, lastChecked: data.timestamp }
+        }))
+        setLastUpdated(new Date())
+      } catch (e) {
+        // keep previous
+      }
+    }
+    load()
+    const id = setInterval(load, 30000)
+    return () => clearInterval(id)
+  }, [])
+
+  const refreshStatus = async () => {
     setIsRefreshing(true)
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/health', { cache: 'no-store' })
+      const data = await res.json()
+      setHealth(data)
       setLastUpdated(new Date())
+    } finally {
       setIsRefreshing(false)
-    }, 2000)
+    }
   }
 
   const formatUptime = (uptime: number) => {
@@ -260,9 +295,10 @@ export default function SystemStatus() {
   const OverallStatusIcon = getOverallStatusIcon()
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-[var(--sourcekom-blue)] to-[var(--sourcekom-blue-light)] text-white">
+    <AppLayout>
+      <div className="min-h-screen bg-background">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-[var(--sourcekom-blue)] to-[var(--sourcekom-blue-light)] text-white">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center max-w-3xl mx-auto">
             <Badge className="mb-4 bg-white/20 text-white hover:bg-white/30 border-white/30">
@@ -628,5 +664,6 @@ export default function SystemStatus() {
         </div>
       </div>
     </div>
+  </AppLayout>
   )
 }

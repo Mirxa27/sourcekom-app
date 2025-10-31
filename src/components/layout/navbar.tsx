@@ -21,7 +21,10 @@ import {
   Target,
   Shield
 } from 'lucide-react'
+import { Logo } from './logo'
 import { cn } from '@/lib/utils'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
+import { useIsClient } from '@/hooks/useIsClient'
 
 const navigation = [
   {
@@ -56,7 +59,13 @@ const navigation = [
   {
     name: 'Resources',
     href: '/resources',
-    icon: FileText
+    icon: FileText,
+    children: [
+      { name: 'Resource Library', href: '/resources' },
+      { name: 'Digital Products', href: '/digital-products' },
+      { name: 'Browse Marketplace', href: '/browse' },
+      { name: 'Search Resources', href: '/search' }
+    ]
   },
   {
     name: 'Legal',
@@ -77,7 +86,8 @@ const navigation = [
     children: [
       { name: 'Help Center', href: '/help' },
       { name: 'FAQ', href: '/help/faq' },
-      { name: 'Support', href: '/help/support' }
+      { name: 'Support', href: '/help/support' },
+      { name: 'System Status', href: '/status' }
     ]
   },
   {
@@ -92,14 +102,17 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [user, setUser] = useState<any>(null)
   const pathname = usePathname()
+  const isClient = useIsClient()
 
   useEffect(() => {
+    if (!isClient) return
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 10)
     }
     window.addEventListener('scroll', handleScroll)
     
-    // Check if user is logged in
+    // Check if user is logged in - only on client side
     const userData = localStorage.getItem('user')
     if (userData) {
       try {
@@ -110,13 +123,28 @@ export function Navbar() {
     }
     
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [isClient])
 
   const isActive = (href: string) => {
     if (href === '/') {
       return pathname === '/'
     }
     return pathname.startsWith(href)
+  }
+
+  const handleLogout = () => {
+    if (!isClient) return
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
+    window.location.href = '/'
+  }
+
+  const handleMobileLogout = () => {
+    if (!isClient) return
+    localStorage.removeItem('user')
+    localStorage.removeItem('token')
+    setIsOpen(false)
+    window.location.href = '/'
   }
 
   return (
@@ -127,24 +155,15 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <img 
-              src="/logo.png" 
-              alt="SourceKom" 
-              className="h-10 w-auto transition-transform hover:scale-105"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement
-                target.src = '/images/logos/logo-light.svg'
-              }}
-            />
-          </Link>
+          <Logo height={40} />
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-1">
             {navigation.map((item) => (
               <div key={item.name} className="relative group">
                 <Link
                   href={item.href}
+                  data-testid={`nav-${item.name.toLowerCase()}`}
                   className={cn(
                     "flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
                     isActive(item.href)
@@ -184,16 +203,17 @@ export function Navbar() {
           </div>
 
           {/* Desktop Actions */}
-          <div className="hidden lg:flex items-center space-x-2">
-            {user?.role === 'ADMIN' && (
-              <Button variant="outline" size="sm" asChild className="border-blue-600 text-blue-600 hover:bg-blue-50">
+          <div className="hidden md:flex items-center space-x-2">
+            <ThemeToggle />
+            {isClient && user?.role === 'ADMIN' && (
+              <Button variant="outline" size="sm" asChild className="border-brand text-brand hover:bg-brand hover:text-app transition-all">
                 <Link href="/admin">
                   <Shield className="w-4 h-4 mr-2" />
                   Admin
                 </Link>
               </Button>
             )}
-            {user ? (
+            {isClient && user ? (
               <>
                 <Button variant="ghost" size="sm" asChild>
                   <Link href="/dashboard">
@@ -201,21 +221,17 @@ export function Navbar() {
                     Dashboard
                   </Link>
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => {
-                  localStorage.removeItem('user')
-                  localStorage.removeItem('token')
-                  window.location.href = '/'
-                }}>
+                <Button variant="ghost" size="sm" onClick={handleLogout}>
                   <LogOut className="w-4 h-4 mr-2" />
                   Logout
                 </Button>
               </>
             ) : (
               <>
-                <Button variant="ghost" size="sm" asChild>
+                <Button variant="ghost" size="sm" asChild data-testid="nav-signin">
                   <Link href="/login">Sign In</Link>
                 </Button>
-                <Button size="sm" asChild>
+                <Button size="sm" variant="brand" asChild data-testid="nav-getstarted">
                   <Link href="/register">Get Started</Link>
                 </Button>
               </>
@@ -228,8 +244,9 @@ export function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="lg:hidden"
+                className="md:hidden"
                 aria-label="Open menu"
+                data-testid="mobile-menu-button"
               >
                 <Menu className="h-5 w-5" />
               </Button>
@@ -241,6 +258,7 @@ export function Navbar() {
                     <Link
                       href={item.href}
                       onClick={() => setIsOpen(false)}
+                      data-testid={`mobile-nav-${item.name.toLowerCase()}`}
                       className={cn(
                         "flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
                         isActive(item.href)
@@ -276,15 +294,18 @@ export function Navbar() {
                 ))}
 
                 <div className="border-t pt-4 space-y-2">
-                  {user?.role === 'ADMIN' && (
-                    <Button variant="outline" size="sm" className="w-full justify-start border-blue-600 text-blue-600 hover:bg-blue-50" asChild>
+                  <div className="px-3 py-2">
+                    <ThemeToggle />
+                  </div>
+                  {isClient && user?.role === 'ADMIN' && (
+                    <Button variant="outline" size="sm" className="w-full justify-start border-brand text-brand hover:bg-brand hover:text-app" asChild>
                       <Link href="/admin" onClick={() => setIsOpen(false)}>
                         <Shield className="mr-2 h-4 w-4" />
                         Admin Panel
                       </Link>
                     </Button>
                   )}
-                  {user ? (
+                  {isClient && user ? (
                     <>
                       <Button variant="ghost" size="sm" className="w-full justify-start" asChild>
                         <Link href="/dashboard" onClick={() => setIsOpen(false)}>
@@ -292,12 +313,7 @@ export function Navbar() {
                           Dashboard
                         </Link>
                       </Button>
-                      <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => {
-                        localStorage.removeItem('user')
-                        localStorage.removeItem('token')
-                        setIsOpen(false)
-                        window.location.href = '/'
-                      }}>
+                      <Button variant="ghost" size="sm" className="w-full justify-start" onClick={handleMobileLogout}>
                         <LogOut className="mr-2 h-4 w-4" />
                         Logout
                       </Button>
@@ -310,7 +326,7 @@ export function Navbar() {
                           Sign In
                         </Link>
                       </Button>
-                      <Button size="sm" className="w-full" asChild>
+                      <Button size="sm" variant="brand" className="w-full" asChild>
                         <Link href="/register" onClick={() => setIsOpen(false)}>
                           Get Started
                         </Link>

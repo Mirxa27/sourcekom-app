@@ -4,13 +4,19 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current",
+  "relative w-full rounded-xl2 border border-app px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current",
   {
     variants: {
       variant: {
-        default: "bg-card text-card-foreground",
+        default: "bg-app text-app",
         destructive:
-          "text-destructive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-destructive/90",
+          "text-state-error bg-state-error/10 border-state-error/30 [&>svg]:text-current *:data-[slot=alert-description]:text-state-error/90",
+        success:
+          "text-state-success bg-state-success/10 border-state-success/30 [&>svg]:text-current *:data-[slot=alert-description]:text-state-success/90",
+        warning:
+          "text-state-warning bg-state-warning/10 border-state-warning/30 [&>svg]:text-current *:data-[slot=alert-description]:text-state-warning/90",
+        info:
+          "text-state-info bg-state-info/10 border-state-info/30 [&>svg]:text-current *:data-[slot=alert-description]:text-state-info/90",
       },
     },
     defaultVariants: {

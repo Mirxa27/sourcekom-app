@@ -17,10 +17,46 @@ import {
   ArrowDown,
   Building,
   Truck,
-  FileText,
-  Settings
+  FileText
 } from 'lucide-react'
-import Link from 'next/link'
+import { AppLayout } from '@/components/layout/app-layout'
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
+} from 'recharts'
+import { cn } from '@/lib/utils'
+
+const statStyles = {
+  success: {
+    iconBg: 'bg-state-success/10',
+    iconText: 'text-state-success'
+  },
+  info: {
+    iconBg: 'bg-state-info/10',
+    iconText: 'text-state-info'
+  },
+  highlight: {
+    iconBg: 'bg-brand-highlight/15',
+    iconText: 'text-brand-highlight'
+  },
+  warning: {
+    iconBg: 'bg-state-warning/10',
+    iconText: 'text-state-warning'
+  }
+} as const
+
+type StatTone = keyof typeof statStyles
 
 export default function AnalyticsPage() {
   const [timeRange, setTimeRange] = useState('30d')
@@ -49,60 +85,64 @@ export default function AnalyticsPage() {
   const stats = [
     {
       title: "Total Revenue",
-      value: analytics?.revenue || "SAR 458K",
+      value: analytics?.revenue || "SAR 0",
       change: "+12.5%",
       trend: "up",
       icon: DollarSign,
-      color: "emerald"
+      tone: "success"
     },
     {
       title: "Active Resources",
-      value: analytics?.activeResources || 247,
+      value: analytics?.activeResources || 0,
       change: "+8.2%",
       trend: "up", 
       icon: Building,
-      color: "blue"
+      tone: "info"
     },
     {
       title: "Total Downloads",
-      value: analytics?.downloads || "1,234",
+      value: analytics?.downloads?.toLocaleString() || "0",
       change: "+23.1%",
       trend: "up",
       icon: Download,
-      color: "purple"
+      tone: "highlight"
     },
     {
       title: "Active Users",
-      value: analytics?.activeUsers || "892",
+      value: analytics?.activeUsers || 0,
       change: "+5.4%",
       trend: "up",
       icon: Users,
-      color: "orange"
+      tone: "warning"
     }
+  ] as const
+
+  const categoryPerformance = analytics?.categoryPerformance || [
+    { name: "Office Space", revenue: "SAR 0", downloads: 0, growth: "+0%" },
+    { name: "Equipment", revenue: "SAR 0", downloads: 0, growth: "+0%" }
   ]
 
-  const categoryPerformance = [
-    { name: "Office Space", revenue: "SAR 125K", downloads: 342, growth: "+15%" },
-    { name: "Equipment", revenue: "SAR 98K", downloads: 256, growth: "+8%" },
-    { name: "Personnel", revenue: "SAR 87K", downloads: 189, growth: "+12%" },
-    { name: "Storage", revenue: "SAR 76K", downloads: 145, growth: "+6%" },
-    { name: "Vehicles", revenue: "SAR 52K", downloads: 98, growth: "+18%" },
-    { name: "Legal Services", revenue: "SAR 20K", downloads: 67, growth: "+22%" }
-  ]
+  const recentActivity = analytics?.recentActivity || []
 
-  const recentActivity = [
-    { id: 1, type: "download", resource: "Office Space - Riyadh Plaza", user: "Ahmed Company", time: "2 hours ago", amount: "SAR 2,500" },
-    { id: 2, type: "upload", resource: "Warehouse Equipment Set", user: "Logistics Pro", time: "4 hours ago", amount: "-" },
-    { id: 3, type: "download", resource: "Legal Contract Template", user: "StartUp Hub", time: "6 hours ago", amount: "SAR 500" },
-    { id: 4, type: "download", resource: "Delivery Truck Rental", user: "FastMove Co", time: "8 hours ago", amount: "SAR 1,200" },
-    { id: 5, type: "upload", resource: "Meeting Room Package", user: "Business Center", time: "12 hours ago", amount: "-" }
-  ]
+  const topPerformingResources = analytics?.topPerformingResources || []
+
+  const CHART_COLORS = [
+    'var(--success)',
+    'var(--info)',
+    'var(--brand-highlight)',
+    'var(--warning)',
+    'var(--error)'
+  ] as const
+
+  const formatCurrency = (value: number) => {
+    return `SAR ${value.toLocaleString()}`
+  }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand mx-auto"></div>
           <p className="text-muted-foreground mt-4">Loading analytics...</p>
         </div>
       </div>
@@ -110,52 +150,11 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                <Building className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-bold text-xl">SourceKom</span>
-            </Link>
-            <div className="hidden md:flex items-center space-x-6">
-              <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
-                About
-              </Link>
-              <Link href="/services" className="text-muted-foreground hover:text-foreground transition-colors">
-                Services
-              </Link>
-              <Link href="/resources" className="text-muted-foreground hover:text-foreground transition-colors">
-                Resources
-              </Link>
-              <Link href="/legal" className="text-muted-foreground hover:text-foreground transition-colors">
-                Legal Services
-              </Link>
-              <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
-                Contact
-              </Link>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/dashboard">
-                <Settings className="w-4 h-4 mr-2" />
-                Dashboard
-              </Link>
-            </Button>
-            <Button className="bg-emerald-600 hover:bg-emerald-700" asChild>
-              <Link href="/upload">Upload Resource</Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-8">
-        {/* Page Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+    <AppLayout>
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 py-8">
+          {/* Page Header */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold">Analytics Dashboard</h1>
             <p className="text-muted-foreground">
@@ -184,25 +183,26 @@ export default function AnalyticsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => {
             const IconComponent = stat.icon
+            const tone = statStyles[stat.tone as StatTone]
             return (
               <Card key={index}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
                     {stat.title}
                   </CardTitle>
-                  <div className={`w-8 h-8 bg-${stat.color}-100 rounded-lg flex items-center justify-center`}>
-                    <IconComponent className={`w-4 h-4 text-${stat.color}-600`} />
+                  <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center", tone.iconBg)}>
+                    <IconComponent className={cn("w-4 h-4", tone.iconText)} />
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{stat.value}</div>
                   <div className="flex items-center space-x-2 text-xs text-muted-foreground">
                     {stat.trend === "up" ? (
-                      <ArrowUp className="w-3 h-3 text-emerald-600" />
+                      <ArrowUp className="w-3 h-3 text-state-success" />
                     ) : (
-                      <ArrowDown className="w-3 h-3 text-red-600" />
+                      <ArrowDown className="w-3 h-3 text-state-error" />
                     )}
-                    <span className={stat.trend === "up" ? "text-emerald-600" : "text-red-600"}>
+                    <span className={stat.trend === "up" ? "text-state-success" : "text-state-error"}>
                       {stat.change}
                     </span>
                     <span>from last period</span>
@@ -213,7 +213,7 @@ export default function AnalyticsPage() {
           })}
         </div>
 
-        <Tabs defaultValue="overview" className="space-y-6">
+          <Tabs defaultValue="overview" className="space-y-6">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="resources">Resources</TabsTrigger>
@@ -228,14 +228,49 @@ export default function AnalyticsPage() {
                 <CardHeader>
                   <CardTitle>Revenue Overview</CardTitle>
                   <CardDescription>
-                    Monthly revenue breakdown
+                    Daily revenue breakdown
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-64 flex items-center justify-center text-muted-foreground">
-                    <BarChart3 className="w-8 h-8 mr-2" />
-                    Revenue chart visualization
-                  </div>
+                  {analytics?.revenueData && analytics.revenueData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={256}>
+                      <LineChart data={analytics.revenueData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="date" 
+                          tick={{ fontSize: 12 }}
+                          tickFormatter={(value) => {
+                            const date = new Date(value)
+                            return `${date.getMonth() + 1}/${date.getDate()}`
+                          }}
+                        />
+                        <YAxis 
+                          tick={{ fontSize: 12 }}
+                          tickFormatter={(value) => `SAR ${value}`}
+                        />
+                        <Tooltip 
+                          formatter={(value: number) => formatCurrency(value)}
+                          labelFormatter={(value) => {
+                            const date = new Date(value)
+                            return date.toLocaleDateString()
+                          }}
+                        />
+                        <Legend />
+                        <Line 
+                          type="monotone" 
+                          dataKey="revenue" 
+                          stroke="var(--success)" 
+                          strokeWidth={2}
+                          name="Revenue"
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="h-64 flex items-center justify-center text-muted-foreground">
+                      <BarChart3 className="w-8 h-8 mr-2" />
+                      No revenue data available
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -249,28 +284,31 @@ export default function AnalyticsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {recentActivity.map((activity) => (
+                    {recentActivity.map((activity: any) => (
                       <div key={activity.id} className="flex items-center space-x-4 p-3 border rounded-lg">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                          activity.type === 'download' ? 'bg-emerald-100' : 'bg-blue-100'
+                          activity.type === 'download' ? 'bg-state-success/10' : 'bg-state-info/10'
                         }`}>
                           {activity.type === 'download' ? (
-                            <Download className="w-4 h-4 text-emerald-600" />
+                            <Download className="w-4 h-4 text-state-success" />
                           ) : (
-                            <ArrowUp className="w-4 h-4 text-blue-600" />
+                            <ArrowUp className="w-4 h-4 text-state-info" />
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">{activity.resource}</p>
                           <p className="text-xs text-muted-foreground">
-                            {activity.user} • {activity.time}
+                            {activity.user || 'Unknown'} • {activity.time}
                           </p>
                         </div>
-                        {activity.amount !== "-" && (
+                        {activity.amount && activity.amount !== "-" && (
                           <Badge variant="secondary">{activity.amount}</Badge>
                         )}
                       </div>
                     ))}
+                    {recentActivity.length === 0 && (
+                      <p className="text-center text-muted-foreground py-4">No recent activity</p>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -285,29 +323,42 @@ export default function AnalyticsPage() {
                   How different resource categories are performing
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {categoryPerformance.map((category, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                          <Building className="w-5 h-5 text-emerald-600" />
+                <CardContent>
+                  {analytics?.categoryPerformance && analytics.categoryPerformance.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={analytics.categoryPerformance}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                        <YAxis tick={{ fontSize: 12 }} />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="downloads" fill="var(--success)" name="Downloads" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="space-y-4">
+                      {categoryPerformance.map((category: any, index: number) => (
+                        <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-10 h-10 bg-state-success/10 rounded-lg flex items-center justify-center">
+                              <Building className="w-5 h-5 text-state-success" />
+                            </div>
+                            <div>
+                              <p className="font-medium">{category.name}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {category.downloads} downloads
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-medium">{category.revenue}</p>
+                            <p className="text-sm text-state-success">{category.growth}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-medium">{category.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {category.downloads} downloads
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-medium">{category.revenue}</p>
-                        <p className="text-sm text-emerald-600">{category.growth}</p>
-                      </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </CardContent>
+                  )}
+                </CardContent>
             </Card>
           </TabsContent>
 
@@ -321,10 +372,41 @@ export default function AnalyticsPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-64 flex items-center justify-center text-muted-foreground">
-                    <TrendingUp className="w-8 h-8 mr-2" />
-                    User growth chart
-                  </div>
+                  {analytics?.userGrowthData && analytics.userGrowthData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={256}>
+                      <LineChart data={analytics.userGrowthData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis 
+                          dataKey="date" 
+                          tick={{ fontSize: 12 }}
+                          tickFormatter={(value) => {
+                            const date = new Date(value)
+                            return `${date.getMonth() + 1}/${date.getDate()}`
+                          }}
+                        />
+                        <YAxis tick={{ fontSize: 12 }} />
+                        <Tooltip 
+                          labelFormatter={(value) => {
+                            const date = new Date(value)
+                            return date.toLocaleDateString()
+                          }}
+                        />
+                        <Legend />
+                        <Line 
+                          type="monotone" 
+                          dataKey="users" 
+                          stroke="var(--info)" 
+                          strokeWidth={2}
+                          name="New Users"
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="h-64 flex items-center justify-center text-muted-foreground">
+                      <TrendingUp className="w-8 h-8 mr-2" />
+                      No user growth data available
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -369,10 +451,36 @@ export default function AnalyticsPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-64 flex items-center justify-center text-muted-foreground">
-                    <DollarSign className="w-8 h-8 mr-2" />
-                    Revenue breakdown chart
-                  </div>
+                  {analytics?.categoryPerformance && analytics.categoryPerformance.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={256}>
+                      <PieChart>
+                        <Pie
+                          data={analytics.categoryPerformance.map((cat: any) => ({
+                            name: cat.name,
+                            value: parseFloat(cat.revenue.replace(/[^0-9.]/g, '')) || 0
+                          }))}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                          outerRadius={80}
+                          fill="var(--brand-highlight)"
+                          dataKey="value"
+                        >
+                          {analytics.categoryPerformance.map((_: any, index: number) => (
+                            <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="h-64 flex items-center justify-center text-muted-foreground">
+                      <DollarSign className="w-8 h-8 mr-2" />
+                      No revenue breakdown data available
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -384,30 +492,42 @@ export default function AnalyticsPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span>Premium Office Space</span>
-                      <Badge>SAR 45K</Badge>
+                  {topPerformingResources.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={topPerformingResources} layout="vertical">
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" tick={{ fontSize: 12 }} />
+                        <YAxis 
+                          dataKey="title" 
+                          type="category" 
+                          tick={{ fontSize: 12 }}
+                          width={150}
+                        />
+                        <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                        <Legend />
+                        <Bar dataKey="revenue" fill="var(--success)" name="Revenue" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="space-y-4">
+                      {topPerformingResources.map((resource: any, index: number) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <span className="truncate">{resource.title}</span>
+                          <Badge>{resource.revenueFormatted || resource.revenue}</Badge>
+                        </div>
+                      ))}
+                      {topPerformingResources.length === 0 && (
+                        <p className="text-center text-muted-foreground py-4">No data available</p>
+                      )}
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span>Equipment Package Pro</span>
-                      <Badge>SAR 32K</Badge>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Legal Consultation Bundle</span>
-                      <Badge>SAR 28K</Badge>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span>Warehouse Solutions</span>
-                      <Badge>SAR 24K</Badge>
-                    </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
           </TabsContent>
-        </Tabs>
+          </Tabs>
+        </div>
       </div>
-    </div>
+    </AppLayout>
   )
 }

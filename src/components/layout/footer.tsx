@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { Logo } from './logo'
 import { 
   Mail, 
   Phone, 
@@ -16,40 +17,33 @@ import {
   HelpCircle,
   Cookie,
   Shield,
-  CreditCard
+  ArrowRight
 } from 'lucide-react'
-import { PricingPlansModal } from '@/components/payment/pricing-plans-modal'
 import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
-const footerLinks = {
-  company: [
-    { name: 'About Us', href: '/about' },
-    { name: 'Services', href: '/services' },
-    { name: 'Resources', href: '/resources' },
-    { name: 'Legal Services', href: '/legal' },
-    { name: 'Contact', href: '/contact' }
-  ],
-  services: [
-    { name: 'Consulting', href: '/services/consulting' },
-    { name: 'Market Entry', href: '/services/market-entry' },
-    { name: 'Logistics', href: '/services/logistics' },
-    { name: 'Efficiency', href: '/services/efficiency' },
-    { name: 'Sustainability', href: '/services/sustainability' }
-  ],
-  legal: [
-    { name: 'Corporate Law', href: '/legal/corporate' },
-    { name: 'Contracts', href: '/legal/contracts' },
-    { name: 'Compliance', href: '/legal/compliance' },
-    { name: 'Consultation', href: '/legal/consultation' }
-  ],
-  support: [
-    { name: 'Help Center', href: '/help' },
-    { name: 'FAQ', href: '/help/faq' },
-    { name: 'Support', href: '/help/support' },
-    { name: 'Terms of Service', href: '/terms' },
-    { name: 'Privacy Policy', href: '/privacy' }
-  ]
-}
+const companyLinks = [
+  { name: 'About Us', href: '/about' },
+  { name: 'Our Approach', href: '/approach' },
+  { name: 'Services', href: '/services' },
+  { name: 'Contact', href: '/contact' }
+]
+
+const serviceLinks = [
+  { name: 'Resource Sharing', href: '/resources' },
+  { name: 'Legal Services', href: '/legal' },
+  { name: 'Consulting', href: '/services/consulting' },
+  { name: 'Market Entry', href: '/services/market-entry' }
+]
+
+const supportLinks = [
+  { name: 'Help Center', href: '/help' },
+  { name: 'FAQ', href: '/help/faq' },
+  { name: 'Support', href: '/help/support' },
+  { name: 'Terms of Service', href: '/terms' },
+  { name: 'Privacy Policy', href: '/privacy' },
+  { name: 'Cookie Policy', href: '/cookies' }
+]
 
 const socialLinks = [
   { name: 'Facebook', href: '#', icon: Facebook },
@@ -68,18 +62,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Company Info */}
           <div className="lg:col-span-1">
-            <Link href="/" className="inline-block mb-4">
-              <img 
-                src="/logo.png" 
-                alt="SourceKom" 
-                className="h-10 w-auto"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement
-                  target.src = '/images/logos/logo-light.svg'
-                }}
-              />
-            </Link>
-            <p className="text-sm text-muted-foreground mb-4">
+            <Logo height={40} />
+            <p className="text-sm text-muted-foreground mb-4 mt-4">
               Adding strength to businesses, businesses to strengths. 
               Your trusted resource partner in Saudi Arabia.
             </p>
@@ -100,11 +84,11 @@ export function Footer() {
           {/* Company Links */}
           <div>
             <h3 className="font-semibold mb-4 flex items-center">
-              <Building className="h-4 w-4 mr-2" />
+              <Building className="w-4 h-4 mr-2" />
               Company
             </h3>
             <ul className="space-y-2">
-              {footerLinks.company.map((link) => (
+              {companyLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
@@ -117,14 +101,14 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Services Links */}
+          {/* Services */}
           <div>
             <h3 className="font-semibold mb-4 flex items-center">
-              <FileText className="h-4 w-4 mr-2" />
+              <FileText className="w-4 h-4 mr-2" />
               Services
             </h3>
             <ul className="space-y-2">
-              {footerLinks.services.map((link) => (
+              {serviceLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
@@ -137,14 +121,14 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Legal Links */}
+          {/* Support */}
           <div>
             <h3 className="font-semibold mb-4 flex items-center">
-              <FileText className="h-4 w-4 mr-2" />
-              Legal
+              <HelpCircle className="w-4 h-4 mr-2" />
+              Support
             </h3>
             <ul className="space-y-2">
-              {footerLinks.legal.map((link) => (
+              {supportLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
@@ -157,111 +141,97 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Resource Sharing Links */}
+          {/* Contact Info */}
           <div>
             <h3 className="font-semibold mb-4 flex items-center">
-              <Users className="h-4 w-4 mr-2" />
-              Resource Sharing
+              <Phone className="w-4 h-4 mr-2" />
+              Contact
             </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  href="/browse"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Browse Resources
-                </Link>
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              <li className="flex items-start">
+                <Mail className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+                <a href="mailto:info@sourcekom.com" className="hover:text-foreground transition-colors">
+                  info@sourcekom.com
+                </a>
               </li>
-              <li>
-                <Link
-                  href="/upload"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  List Your Resource
-                </Link>
+              <li className="flex items-start">
+                <Phone className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+                <a href="tel:+9661234567890" className="hover:text-foreground transition-colors">
+                  +966 123 456 7890
+                </a>
               </li>
-              <li>
-                <Link
-                  href="/dashboard"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Manage Bookings
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/analytics"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Analytics Dashboard
-                </Link>
-              </li>
-              <li>
-                <Button
-                  variant="link"
-                  className="text-sm text-muted-foreground hover:text-foreground p-0 h-auto font-normal"
-                  onClick={() => setShowPricingModal(true)}
-                >
-                  Pricing Plans
-                </Button>
+              <li className="flex items-start">
+                <MapPin className="w-4 h-4 mr-2 mt-0.5 flex-shrink-0" />
+                <span>
+                  King Fahd Road<br />
+                  Riyadh, Saudi Arabia
+                </span>
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Contact Info */}
-        <div className="border-t mt-8 pt-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="flex items-center space-x-3">
-              <Mail className="h-5 w-5 text-muted-foreground" />
-              <div>
-                <p className="text-sm font-medium">Email</p>
-                <p className="text-sm text-muted-foreground">info@sourcekom.com</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Phone className="h-5 w-5 text-muted-foreground" />
-              <div>
-                <p className="text-sm font-medium">Phone</p>
-                <p className="text-sm text-muted-foreground">+966 50 123 4567</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <MapPin className="h-5 w-5 text-muted-foreground" />
-              <div>
-                <p className="text-sm font-medium">Address</p>
-                <p className="text-sm text-muted-foreground">Riyadh, Saudi Arabia</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Copyright */}
-        <div className="border-t mt-8 pt-8 text-center">
+        {/* Bottom Bar */}
+        <div className="mt-12 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} SourceKom. All rights reserved. 
-            |{' '}
-            <Link href="/terms" className="hover:text-foreground transition-colors">
-              Terms of Service
-            </Link>
-            {' '}|{' '}
-            <Link href="/privacy" className="hover:text-foreground transition-colors">
-              Privacy Policy
-            </Link>
-            {' '}|{' '}
-            <Link href="/cookies" className="hover:text-foreground transition-colors">
-              Cookie Policy
-            </Link>
+            © {new Date().getFullYear()} SourceKom. All rights reserved.
           </p>
+          <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+            <Link href="/terms" className="hover:text-foreground transition-colors">
+              Terms
+            </Link>
+            <Link href="/privacy" className="hover:text-foreground transition-colors">
+              Privacy
+            </Link>
+            <Link href="/cookies" className="hover:text-foreground transition-colors">
+              Cookies
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
 
     {/* Pricing Modal */}
-    <PricingPlansModal
-      isOpen={showPricingModal}
-      onClose={() => setShowPricingModal(false)}
-    />
+    <Dialog open={showPricingModal} onOpenChange={setShowPricingModal}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Pricing Information</DialogTitle>
+          <DialogDescription>
+            Contact us for detailed pricing information tailored to your needs.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div>
+            <h4 className="font-semibold mb-2">Resource Sharing</h4>
+            <p className="text-sm text-muted-foreground">
+              Free to browse and list resources. Transaction fees apply only on successful exchanges.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-2">Legal Services</h4>
+            <p className="text-sm text-muted-foreground">
+              Consultation fees start from SAR 350. Custom packages available for enterprise clients.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-2">Consulting Services</h4>
+            <p className="text-sm text-muted-foreground">
+              Starting from SAR 3,000 per consultation. Project-based pricing available.
+            </p>
+          </div>
+          <Button 
+            className="w-full" 
+            onClick={() => {
+              setShowPricingModal(false)
+              window.location.href = '/contact'
+            }}
+          >
+            Contact Sales
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
     </>
   )
 }

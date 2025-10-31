@@ -105,6 +105,14 @@ SourceKom connects businesses to maximize potential and foster sustainable growt
 - **Sharp** - Image optimization
 - **Recharts** - Data visualization
 
+## ⚙️ Tailwind v4 + Next.js 15 Compatibility
+
+- **Tailwind runtime**: The project already targets Tailwind CSS v4 (`tailwindcss@^4`) and Next.js 15.3.5. V4 relies on the `@tailwindcss/postcss` runtime, which is enabled in `postcss.config.mjs` to keep the pipeline aligned with the latest Next.js compiler.
+- **Content scanning**: `tailwind.config.ts` scans `pages`, `components`, `app`, and `src` directories so that both App Router layouts and legacy components generate the correct styles during build.
+- **Globals setup**: `src/app/globals.css` uses the new `@import "tailwindcss";` entrypoint and defines tokens via `@theme inline`, which is the recommended pattern for Tailwind v4.
+- **Dark mode signal**: `darkMode` is set to `['class', '[data-theme="dark"]']`, allowing both Tailwind’s class strategy and the custom `data-theme` attribute used by the theme toggle to stay in sync without hydration issues.
+- **Build verification**: Running `npm run lint` after dependency installation (with `--legacy-peer-deps` due to `next-auth`/`nodemailer` peer constraints) validates that the Tailwind/PostCSS pipeline integrates cleanly with Next 15 without compiler warnings.
+
 ## 📁 Project Structure
 
 ```

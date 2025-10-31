@@ -275,3 +275,186 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
+// PUT update user
+export async function PUT(request: NextRequest) {
+  try {
+    const authHeader = request.headers.get('authorization')
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json(
+        { error: 'Authorization token required' },
+        { status: 401 }
+      )
+    }
+
+    const token = authHeader.substring(7)
+    let decoded: any
+    try {
+      decoded = jwt.verify(token, JWT_SECRET)
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Invalid or expired token' },
+        { status: 401 }
+      )
+    }
+
+    const adminUser = await db.user.findUnique({
+      where: { id: decoded.userId }
+    })
+
+    if (!adminUser || !adminUser.isActive || adminUser.role !== 'ADMIN') {
+      return NextResponse.json(
+        { error: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    const body = await request.json()
+    const { id, ...updateData } = body
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      )
+    }
+
+    // Don't allow updating admin users (except current admin)
+    const targetUser = await db.user.findUnique({
+      where: { id }
+    })
+
+    if (!targetUser) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      )
+    }
+
+    if (targetUser.role === 'ADMIN' && targetUser.id !== adminUser.id) {
+      return NextResponse.json(
+        { error: 'Cannot modify other admin users' },
+        { status: 403 }
+      )
+    }
+
+    const validatedData = userManagementSchema.partial().parse(updateData)
+
+    const updatedUser = await db.user.update({
+      where: { id },
+      data: validatedData,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        isActive: true,
+        updatedAt: true
+      }
+    })
+
+    return NextResponse.json({
+      message: 'User updated successfully',
+      user: updatedUser
+    })
+  } catch (error) {
+    console.error('User update error:', error)
+    
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: 'Validation failed', details: error.issues },
+        { status: 400 }
+      )
+    }
+
+    return NextResponse.json(
+      { error: 'Failed to update user' },
+      { status: 500 }
+    )
+  }
+}
+
+// DELETE user
+export async function DELETE(request: NextRequest) {
+  try {
+    const authHeader = request.headers.get('authorization')
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json(
+        { error: 'Authorization token required' },
+        { status: 401 }
+      )
+    }
+
+    const token = authHeader.substring(7)
+    let decoded: any
+    try {
+      decoded = jwt.verify(token, JWT_SECRET)
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Invalid or expired token' },
+        { status: 401 }
+      )
+    }
+
+    const adminUser = await db.user.findUnique({
+      where: { id: decoded.userId }
+    })
+
+    if (!adminUser || !adminUser.isActive || adminUser.role !== 'ADMIN') {
+      return NextResponse.json(
+        { error: 'Admin access required' },
+        { status: 403 }
+      )
+    }
+
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      )
+    }
+
+    // Don't allow deleting yourself or other admins
+    if (id === adminUser.id) {
+      return NextResponse.json(
+        { error: 'Cannot delete your own account' },
+        { status: 403 }
+      )
+    }
+
+    const targetUser = await db.user.findUnique({
+      where: { id }
+    })
+
+    if (!targetUser) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404 }
+      )
+    }
+
+    if (targetUser.role === 'ADMIN') {
+      return NextResponse.json(
+        { error: 'Cannot delete admin users' },
+        { status: 403 }
+      )
+    }
+
+    await db.user.delete({
+      where: { id }
+    })
+
+    return NextResponse.json({
+      message: 'User deleted successfully'
+    })
+  } catch (error) {
+    console.error('User delete error:', error)
+    return NextResponse.json(
+      { error: 'Failed to delete user' },
+      { status: 500 }
+    )
+  }
+}

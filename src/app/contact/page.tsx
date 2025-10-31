@@ -1,13 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useToast } from '@/hooks/use-toast'
 import { 
-  ArrowLeft, 
   Building, 
   Mail, 
   Phone, 
@@ -18,9 +19,11 @@ import {
   Calendar,
   Users,
   FileText,
-  MessageSquare
+  MessageSquare,
+  ArrowRight
 } from 'lucide-react'
 import Link from 'next/link'
+import { AppLayout } from '@/components/layout/app-layout'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -33,6 +36,17 @@ export default function ContactPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const { toast } = useToast()
+
+  const contactSchema = z.object({
+    name: z.string().min(2, 'Name is too short').max(100),
+    email: z.string().email('Invalid email'),
+    company: z.string().max(120).optional().or(z.literal('')),
+    phone: z.string().max(30).optional().or(z.literal('')),
+    service: z.string().max(60).optional().or(z.literal('')),
+    message: z.string().min(10, 'Please include more details').max(2000)
+  })
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -41,21 +55,35 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setErrors({})
     
     try {
+      // Validate client-side
+      const parsed = contactSchema.safeParse(formData)
+      if (!parsed.success) {
+        const map: Record<string, string> = {}
+        for (const issue of parsed.error.issues) {
+          const key = issue.path.join('.')
+          if (!map[key]) map[key] = issue.message
+        }
+        setErrors(map)
+        setIsSubmitting(false)
+        return
+      }
+
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          company: formData.company || undefined,
-          phone: formData.phone || undefined,
-          message: formData.message,
+          name: parsed.data.name,
+          email: parsed.data.email,
+          company: parsed.data.company || undefined,
+          phone: parsed.data.phone || undefined,
+          message: parsed.data.message,
           type: 'general',
-          service: formData.service || undefined
+          service: parsed.data.service || undefined
         })
       })
 
@@ -75,10 +103,18 @@ export default function ContactPage() {
           })
         }, 3000)
       } else {
-        alert(data.error || 'Failed to send message. Please try again.')
+        toast({
+          title: 'Message not sent',
+          description: data.error || 'Please try again.',
+          variant: 'destructive'
+        })
       }
     } catch (error) {
-      alert('Network error. Please try again.')
+      toast({
+        title: 'Network error',
+        description: 'Please check your connection and try again.',
+        variant: 'destructive'
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -109,13 +145,24 @@ export default function ContactPage() {
       const data = await response.json()
 
       if (response.ok) {
-        alert('Resource inquiry submitted successfully! We will contact you soon.')
+        toast({
+          title: 'Inquiry submitted',
+          description: 'We will contact you shortly with next steps.'
+        })
         form.reset()
       } else {
-        alert(data.error || 'Failed to submit inquiry. Please try again.')
+        toast({
+          title: 'Submission failed',
+          description: data.error || 'Please try again.',
+          variant: 'destructive'
+        })
       }
     } catch (error) {
-      alert('Network error. Please try again.')
+      toast({
+        title: 'Network error',
+        description: 'Please check your connection and try again.',
+        variant: 'destructive'
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -148,38 +195,31 @@ export default function ContactPage() {
       const data = await response.json()
 
       if (response.ok) {
-        alert('Legal consultation request submitted successfully! We will contact you to confirm your appointment.')
+        toast({
+          title: 'Consultation request received',
+          description: 'Our legal team will reach out to confirm your appointment.'
+        })
         form.reset()
       } else {
-        alert(data.error || 'Failed to submit consultation request. Please try again.')
+        toast({
+          title: 'Request failed',
+          description: data.error || 'Please try again.',
+          variant: 'destructive'
+        })
       }
     } catch (error) {
-      alert('Network error. Please try again.')
+      toast({
+        title: 'Network error',
+        description: 'Please check your connection and try again.',
+        variant: 'destructive'
+      })
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Link>
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                <Building className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-bold text-xl">SourceKom</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <AppLayout>
       {/* Hero Section */}
       <section className="py-20 px-4 bg-gradient-to-br from-emerald-50 via-white to-blue-50">
         <div className="container mx-auto">
@@ -284,6 +324,7 @@ export default function ContactPage() {
                             onChange={(e) => handleInputChange('name', e.target.value)}
                             required
                           />
+                        {errors.name && (<p className="text-sm text-red-600 mt-1">{errors.name}</p>)}
                         </div>
                         <div>
                           <label className="text-sm font-medium mb-2 block">Email Address *</label>
@@ -294,6 +335,7 @@ export default function ContactPage() {
                             onChange={(e) => handleInputChange('email', e.target.value)}
                             required
                           />
+                          {errors.email && (<p className="text-sm text-red-600 mt-1">{errors.email}</p>)}
                         </div>
                       </div>
                       
@@ -345,6 +387,7 @@ export default function ContactPage() {
                           onChange={(e) => handleInputChange('message', e.target.value)}
                           required
                         />
+                        {errors.message && (<p className="text-sm text-red-600 mt-1">{errors.message}</p>)}
                       </div>
 
                       <Button 
@@ -612,18 +655,18 @@ export default function ContactPage() {
             <Button variant="secondary" size="lg" asChild>
               <Link href="/services">
                 Explore Our Services
-                <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
+                <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
             <Button variant="outline" size="lg" className="text-white border-white hover:bg-white hover:text-emerald-600" asChild>
               <Link href="/about">
                 Learn About SourceKom
-                <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
+                <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
           </div>
         </div>
       </section>
-    </div>
+    </AppLayout>
   )
 }

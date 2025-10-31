@@ -49,62 +49,22 @@ export default function CorporateLawPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                <Building className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-bold text-xl">SourceKom</span>
-            </Link>
-            <div className="hidden md:flex items-center space-x-6">
-              <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
-                About
-              </Link>
-              <Link href="/services" className="text-muted-foreground hover:text-foreground transition-colors">
-                Services
-              </Link>
-              <Link href="/resources" className="text-muted-foreground hover:text-foreground transition-colors">
-                Resources
-              </Link>
-              <Link href="/legal" className="text-foreground font-medium">
-                Legal Services
-              </Link>
-              <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
-                Contact
-              </Link>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Button variant="outline" asChild>
-              <Link href="/legal">Back to Legal</Link>
-            </Button>
-            <Button className="bg-emerald-600 hover:bg-emerald-700" asChild>
-              <Link href="/legal/consultation">Book Consultation</Link>
-            </Button>
-          </div>
-        </div>
+    <div className="container mx-auto px-4 py-12">
+      {/* Page Header */}
+      <div className="text-center mb-12">
+        <Badge className="mb-4 bg-emerald-100 text-emerald-800 hover:bg-emerald-200">
+          Corporate Law
+        </Badge>
+        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          Corporate Law Services
+        </h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          Comprehensive legal guidance for company formation, governance, and corporate compliance in Saudi Arabia.
+        </p>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <Badge className="mb-4 bg-emerald-100 text-emerald-800 hover:bg-emerald-200">
-            Corporate Law
-          </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Corporate Law Services
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Comprehensive legal guidance for company formation, governance, and corporate compliance in Saudi Arabia.
-          </p>
-        </div>
-
-        {/* Main Content */}
-        <div className="grid lg:grid-cols-3 gap-8 mb-12">
+      {/* Main Content */}
+      <div className="grid lg:grid-cols-3 gap-8 mb-12">
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
@@ -266,7 +226,6 @@ export default function CorporateLawPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
     </div>
   )
 }

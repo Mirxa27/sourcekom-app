@@ -15,6 +15,29 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const themeInitScript = `
+(() => {
+  try {
+    const root = document.documentElement;
+    const stored = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+    const systemMode = prefersDark && prefersDark.matches ? 'dark' : 'light';
+    const mode = stored === 'light' || stored === 'dark'
+      ? stored
+      : stored === 'system'
+        ? systemMode
+        : systemMode;
+    root.setAttribute('data-theme', mode);
+    if (mode === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  } catch (error) {
+    // ignore - theme will fall back to system preference
+  }
+})();`;
+
 export const metadata: Metadata = {
   title: "SourceKom - Resource Management & Legal Consultancy in Saudi Arabia",
   description: "SourceKom is an innovative resource sharing and legal consultancy platform operating in Saudi Arabia. We connect businesses to maximize potential and foster sustainable growth through resource optimization.",
@@ -56,37 +79,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        {/* Security headers */}
-        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
-        <meta httpEquiv="X-Frame-Options" content="DENY" />
-        <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
-        <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        
-        {/* Preconnect to external domains */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://api.myfatoorah.com" />
-        
-        {/* DNS prefetch for likely navigation */}
-        <link rel="dns-prefetch" href="//sourcekom.com" />
-        
-        {/* Theme and color scheme */}
-        <meta name="theme-color" content="#2563eb" />
-        <meta name="color-scheme" content="light dark" />
-        
-        {/* Apple touch icon */}
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        
-        {/* Manifest */}
-        <link rel="manifest" href="/site.webmanifest" />
-      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-app text-app`}
       >
-        <StructuredData 
-          type="Organization" 
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <StructuredData
+          type="Organization"
           data={{
             foundingDate: "2024",
             founder: {

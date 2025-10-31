@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saudi Business Email Templates - Premium Collection</title>
+    <meta name="description" content="Professional email templates designed for Saudi Arabian business communications">
+    
+    <style>
+        :root {
+            --primary-saudi-green: #006C35;
+            --secondary-saudi-white: #FFFFFF;
+            --accent-gold: #FFD700;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --bg-light: #F9FAFB;
+            --border-color: #E5E7EB;
+            --hover-bg: #F3F4F6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--bg-light);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-saudi-green) 0%, #004d24 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .template-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+        
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .template-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .template-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary-saudi-green);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 24px;
+        }
+        
+        .template-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-saudi-green);
+        }
+        
+        .template-description {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        .template-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+        
+        .template-features li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px 0;
+        }
+        
+        .template-features li::before {
+            content: "✓";
+            color: var(--primary-saudi-green);
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        
+        .template-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--primary-saudi-green);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #004d24;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--primary-saudi-green);
+            border: 2px solid var(--primary-saudi-green);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary-saudi-green);
+            color: white;
+        }
+        
+        .template-preview {
+            background: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .template-preview pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .template-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .tag {
+            background: var(--bg-light);
+            color: var(--text-dark);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+        }
+        
+        .tag.saudi {
+            background: #F0FDF4;
+            color: var(--primary-saudi-green);
+            border-color: #86EFAC;
+        }
+        
+        .tag.urgent {
+            background: #FEF2F2;
+            color: #DC2626;
+            border-color: #FCA5A5;
+        }
+        
+        .tag.follow-up {
+            background: #EFF6FF;
+            color: #2563EB;
+            border-color: #93C5FD;
+        }
+        
+        .filter-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .filter-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+        
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: white;
+            color: var(--text-dark);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-saudi-green);
+            color: white;
+            border-color: var(--primary-saudi-green);
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .search-input:focus {
+            border-color: var(--primary-saudi-green);
+            box-shadow: 0 0 0 3px rgba(0, 108, 53, 0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-saudi-green);
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .template-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .template-actions {
+                flex-direction: column;
+            }
+            
+            .filter-buttons {
+                justify-content: center;
+            }
+        }
+        
+        /* Email Template Styles */
+        .email-template {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .email-header {
+            background: var(--primary-saudi-green);
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+        }
+        
+        .email-body {
+            padding: 30px;
+            background: white;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .email-footer {
+            background: var(--bg-light);
+            padding: 20px;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 12px;
+            border-radius: 0 0 8px 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <h1>Saudi Business Email Templates</h1>
+            <p>Professional email templates designed for Saudi Arabian business communications with cultural sensitivity and business etiquette</p>
+        </header>
+
+        <!-- Statistics Section -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">25+</div>
+                <div class="stat-label">Premium Templates</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Saudi Context</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div="stat-label">Ready to Use</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">A+</div>
+                <div="stat-label">Professional Quality</div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h2 class="filter-title">Find the Perfect Template</h2>
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search templates..." id="searchInput">
+                <button class="btn btn-primary" onclick="searchTemplates()">Search</button>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterTemplates('all')">All Templates</button>
+                <button class="filter-btn" onclick="filterTemplates('business')">Business</button>
+                <button class="filter-btn" onclick="filterTemplates('meeting')">Meetings</button>
+                <button class="filter-btn" onclick="filterTemplates('follow-up')">Follow-up</button>
+                <button class="filter-btn" onclick="filterTemplates('proposal')">Proposals</button>
+                <button class="filter-btn" onclick="filterTemplates('saudi')">Saudi Special</button>
+                <button class="filter-btn" onclick="filterTemplates('urgent')">Urgent</button>
+            </div>
+        </div>
+
+        <!-- Templates Grid -->
+        <div class="template-grid" id="templateGrid">
+            <!-- Template 1: Business Introduction -->
+            <div class="template-card" data-category="business saudi">
+                <div class="template-header">
+                    <div class="template-icon">🤝</div>
+                    <h3 class="template-title">Business Introduction</h3>
+                </div>
+                <div class="template-description">
+                    Professional email template for introducing your business to potential Saudi partners and clients with cultural sensitivity and proper business etiquette.
+                </div>
+                <div class="template-features">
+                    <li>Bilingual support (English/Arabic)</li>
+                    <li>Saudi business calendar consideration</li>
+                    <li>Professional greeting structure</li>
+                    <li>Company introduction format</li>
+                </div>
+                <div class="template-tags">
+                    <span class="tag saudi">Saudi Special</span>
+                    <span class="tag">First Contact</span>
+                    <span class="tag">Professional</span>
+                </div>
+                <div class="template-preview">
+                    <pre>Subject: Introduction - [Your Company Name]
+
+Dear [Recipient Name],
+
+Assalamu Alaikum wa Rahmatullahi wa Barakatuh
+
+I hope this email finds you well. My name is [Your Name] and I am the [Your Position] at [Your Company Name], a [brief description of your company].
+
+I am reaching out to introduce our company and explore potential business collaboration opportunities in the Saudi market. We specialize in [your main service/product] and have been serving the Saudi business community for [number] years.
+
+Our commitment to excellence and understanding of Saudi business culture makes us an ideal partner for companies looking to [specific benefit you provide].
+
+I would appreciate the opportunity to discuss how we might work together. Would you be available for a brief meeting in the coming weeks?
+
+Thank you for your time and consideration.
+
+Wassalam,
+[Your Name]
+[Your Position]
+[Company Name]
+[Contact Information]</pre>
+                </div>
+                <div class="template-actions">
+                    <button class="btn btn-primary" onclick="useTemplate('business-introduction')">
+                        <span>📧</span> Use Template
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyTemplate('business-introduction')">
+                        <span>📋</span> Copy Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- Template 2: Meeting Request -->
+            <div class="template-card" data-category="meeting">
+                <div class="template-header">
+                    <div class="template-icon">📅</div>
+                    <h3 class="template-title">Meeting Request</h3>
+                </div>
+                <div class="template-description">
+                    Professional meeting request template with Saudi business timing considerations and proper etiquette for scheduling business meetings.
+                </div>
+                <div class="template-features">
+                    <li>Saudi working hours awareness</li>
+                    <li>Prayer time consideration</li>
+                    <li>Professional scheduling</li>
+                    <li>Follow-up reminder system</li>
+                </div>
+                <div class="template-tags">
+                    <span class="tag saudi">Saudi Special</span>
+                    <span class="tag">Meeting</span>
+                    <span class="tag">Professional</span>
+                </div>
+                <div class="template-preview">
+                    <pre>Subject: Meeting Request - [Topic]
+
+Dear [Recipient Name],
+
+Assalamu Alaikum,
+
+I hope this email finds you in good health and spirits.
+
+Following up on our recent discussion about [topic], I would like to request a meeting to discuss [specific purpose] in more detail.
+
+I would like to propose the following times:
+- [Date] at [Time] (Riyadh time)
+- [Alternative Date] at [Alternative Time]
+- [Third Option] at [Time]
+
+Please let me know which of these times works best for you, or suggest an alternative time that would be more convenient. I am flexible with scheduling during Saudi business hours (Saturday - Thursday, 8:00 AM - 6:00 PM).
+
+I can accommodate virtual meetings via video conference or in-person meetings at your convenience.
+
+Thank you for your consideration. I look forward to our discussion.
+
+Best regards,
+[Your Name]
+[Your Position]</pre>
+                </div>
+                <div class="template-actions">
+                    <button class="btn btn-primary" onclick="useTemplate('meeting-request')">
+                        <span>📧</span> Use Template
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyTemplate('meeting-request')">
+                        <span>📋</span> Copy Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- Template 3: Proposal Submission -->
+            <div class="template-card" data-category="proposal">
+                <div class="template-header">
+                    <div class="template-icon">📄</div>
+                    <h3 class="template-title">Proposal Submission</h3>
+                </div>
+                <div class="template-description">
+                    Comprehensive proposal submission template for presenting business proposals to Saudi companies with professional structure and cultural considerations.
+                </div>
+                <div class="template-features">
+                    <li>Professional proposal structure</li>
+                    <li>Saudi market focus</li>
+                    <li>Value proposition emphasis</li>
+                    <li>Follow-up timeline</li>
+                </div>
+                <div class="template-tags">
+                    <span class="tag">Proposal</span>
+                    <span class="tag">Business</span>
+                    <span class="tag">Formal</span>
+                </div>
+                <div class="template-preview">
+                    <pre>Subject: Business Proposal - [Project/Service Name]
+
+Dear [Recipient Name],
+
+Assalamu Alaikum wa Rahmatullahi wa Barakatuh,
+
+Following our recent discussion regarding [opportunity], I am pleased to submit our comprehensive proposal for [project/service].
+
+## Executive Summary
+[Concise overview of your proposal - 2-3 sentences]
+
+## Proposed Solution
+[Detailed description of your solution with Saudi market benefits]
+
+## Investment
+- Total Investment: SAR [Amount]
+- Expected ROI: [ROI Percentage]
+- Implementation Timeline: [Timeline]
+
+## Next Steps
+We would appreciate the opportunity to present this proposal in detail and answer any questions you may have.
+
+Thank you for your time and consideration. We look forward to your positive response.
+
+Wassalam,
+[Your Name]
+[Company Name]
+[Contact Information]</pre>
+                </div>
+                <div class="template-actions">
+                    <button class="btn btn-primary" onclick="useTemplate('proposal-submission')">
+                        <span>📧</span> Use Template
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyTemplate('proposal-submission')">
+                        <span>📋</span> Copy Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- Template 4: Follow-up -->
+            <div class="template-card" data-category="follow-up">
+                <div class="template-header">
+                    <div class="template-icon">🔄</div>
+                    <h3 class="template-title">Professional Follow-up</h3>
+                </div>
+                <div class="template-description">
+                    Gentle follow-up template with Saudi business etiquette, perfect for maintaining professional relationships without appearing pushy.
+                </div>
+                <div class="template-features">
+                    <li>Polite follow-up tone</li>
+                    <li>Value reminder focus</li>
+                    <li>Respectful timing</li>
+                    <li>Multiple follow-up options</li>
+                </div>
+                <div class="template-tags">
+                    <span class="tag follow-up">Follow-up</span>
+                    <span class="tag">Professional</span>
+                    <span class="tag">Gentle</span>
+                </div>
+                <div class="template-preview">
+                    <pre>Subject: Following up on [Previous Discussion]
+
+Dear [Recipient Name],
+
+Assalamu Alaikum,
+
+I hope you are having a productive week.
+
+I wanted to gently follow up on our recent discussion regarding [topic]. Your insights were valuable, and I believe there's significant potential for [specific benefit].
+
+Since our last conversation on [date], I've been thinking about how [additional value or insight] could benefit your organization.
+
+Is this still a priority for you? If so, I'd be happy to schedule a brief call to discuss further. Alternatively, if the timing isn't right, please let me know what would work better for your schedule.
+
+Thank you for your continued consideration.
+
+Best regards,
+[Your Name]</pre>
+                </div>
+                <div class="template-actions">
+                    <button class="btn btn-primary" onclick="useTemplate('professional-followup')">
+                        <span>📧</span> Use Template
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyTemplate('professional-followup')">
+                        <span>📋</span> Copy Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- Template 5: Thank You -->
+            <div class="template-card" data-category="business follow-up">
+                <div class="template-header">
+                    <div class="template-icon">🙏</div>
+                    <h3 class="template-title">Gratitude & Thank You</h3>
+                </div>
+                <div class="template-template-description">
+                    Warm thank you template with Saudi hospitality traditions, perfect for expressing appreciation and strengthening business relationships.
+                </div>
+                <div class="template-features">
+                    <li>Warm gratitude expression</li>
+                    <li>Saudi hospitality traditions</li>
+                    <li>Relationship building focus</li>
+                    <li>Future engagement</li>
+                </div>
+                <div class="template-tags">
+                    <span class="tag saudi">Saudi Special</span>
+                    <span class="tag">Follow-up</span>
+                    <span class="tag">Relationship</span>
+                </div>
+                <div class="template-preview">
+                    <pre>Subject: Thank You - [Specific Occasion]
+
+Dear [Recipient Name],
+
+Assalamu Alaikum wa Rahmatullahi wa Barakatuh,
+
+I wanted to express my sincere gratitude for [specific reason]:
+
+[Specific details of what you're thankful for]
+
+Your [generosity/time/insight/support] has been instrumental in [positive outcome]. It's a pleasure working with someone who demonstrates such professionalism and [positive quality].
+
+I look forward to our continued collaboration and the success we will achieve together.
+
+In the spirit of Saudi hospitality, if there's anything I can do to assist you, please don't hesitate to ask.
+
+Thank you again for your [kindness/support/partnership].
+
+Wassalam,
+[Your Name]
+[Company Name]</pre>
+                </div>
+                <div class="template-actions">
+                    <button class="btn btn-primary" onclick="useTemplate('gratitude-thankyou')">
+                        <span>📧</span> Use Template
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyTemplate('gratitude-thankyou')">
+                        <span>📋</span> Copy Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- Template 6: Urgent Request -->
+            <div class="template-card" data-category="urgent">
+                <div class="template-header">
+                    <div class="template-icon">⚡</div>
+                    <h3 class="template-title">Urgent Request</h3>
+                </div>
+                <div class="template-description">
+                    Professional urgent request template with clear priority indicators and respectful urgency communication suitable for Saudi business contexts.
+                </div>
+                <div class="template-features">
+                    <li>Clear urgency indicator</li>
+                    <li>Professional tone maintained</li>
+                    <li>Action-oriented messaging</li>
+                    <li>Response time requirements</li>
+                </div>
+                <div class="template-tags">
+                    <span class="tag urgent">Urgent</span>
+                    <span class="tag">Time-Sensitive</span>
+                    <span class="tag">Professional</span>
+                </div>
+                <div class="template-preview">
+                    <pre>Subject: URGENT: [Brief Description]
+
+Dear [Recipient Name],
+
+Assalamu Alaikum,
+
+I hope this email finds you well.
+
+I am writing to request your urgent attention regarding [urgent matter]. This requires your prompt response as [reason for urgency].
+
+[Urgent details and context]
+
+I would greatly appreciate your response by [specific time/deadline]. Your immediate attention to this matter would be highly valued.
+
+If you need any additional information or clarification, please don't hesitate to contact me at [phone number].
+
+Thank you for your understanding and prompt attention to this urgent matter.
+
+Best regards,
+[Your Name]
+[Company Name]
+[Direct Phone: [Number]]</pre>
+                </div>
+                <div class="template-actions">
+                    <button class="btn btn-primary" onclick="useTemplate('urgent-request')">
+                        <span>📧</span> Use Template
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyTemplate('urgent-request')">
+                        <span>📋</span> Copy Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- Template 7: Holiday Greetings -->
+            <div class="template-card" data-category="saudi">
+                <div class="template-header">
+                    <div class="template-icon">🌙</div>
+                    <h3 class="template-title">Eid Greetings</h3>
+                </div>
+                <div class="template-description">
+                    Traditional Eid greeting template with Islamic traditions and Saudi cultural sensitivity for maintaining business relationships during holidays.
+                </div>
+                <div class="template-features">
+                    <li>Islamic Eid traditions</li>
+                    <li>Saudi cultural context</li>
+                    <li>Relationship focus</li>
+                    <li>Professional boundaries</li>
+                </div>
+                <div class="template-tags">
+                    <span class="tag saudi">Saudi Special</span>
+                    <span class="tag">Holiday</span>
+                    <span class="tag">Cultural</span>
+                </div>
+                <div class="template-preview">
+                    <pre>Subject: Eid Mubarak - Holiday Greetings
+
+Dear [Recipient Name],
+
+Assalamu Alaikum wa Rahmatullahi wa Barakatuh,
+
+On this joyous occasion of Eid, I wanted to extend my warmest greetings to you and your family.
+
+May Allah accept our fasts and prayers, and bless us with happiness, peace, and prosperity. Eid Mubarak!
+
+I hope you enjoy this special time with your loved ones. We will resume normal business operations on [date of return].
+
+Wishing you and your family a blessed Eid celebration.
+
+Eid Mubarak,
+[Your Name]
+[Company Name]</pre>
+                </div>
+                <div class="template-actions">
+                    <button class="btn btn-primary" onclick="useTemplate('eid-greetings')">
+                        <span>📧</span> Use Template
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyTemplate('eid-greetings')">
+                        <span>📋</span> Copy Code
+                    </button>
+                </div>
+            </div>
+
+            <!-- Template 8: Business Closure -->
+            <div class="template-card" data-category="business urgent">
+                <div class="template-header">
+                    <div class="template-icon">🏢</div>
+                    <h3 class="template-title">Business Closure</h3>
+                </div>
+                <div class="template-description">
+                    Professional business closure announcement template with proper notification procedures and client communication guidelines.
+                </div>
+                <div class="template-features">
+                    <li>Professional closure announcement</li>
+                    <li>Client notification system</li>
+                    <li>Transition arrangements</li>
+                    <li>Professional boundaries</li>
+                </div>
+                <div class="template-tags">
+                    <span class="tag">Business</span>
+                    <span class="tag urgent">Important</span>
+                    <span class="tag">Formal</span>
+                </div>
+                <div class="template-preview">
+                    <pre>Subject: Important Business Update - [Company Name]
+
+Dear Valued Clients and Partners,
+
+Assalamu Alaikum,
+
+I hope this email finds you well.
+
+It is with careful consideration that I must inform you of an important business update regarding [Company Name].
+
+[Clear and honest closure explanation]
+
+We want to assure you that we are taking all necessary steps to [transition action]. Our commitment to [ongoing obligations] remains our priority.
+
+For any immediate concerns or questions, please contact:
+[Contact Person]: [Name]
+[Email]: [Email]
+[Phone]: [Number]
+
+Thank you for your understanding and the privilege of serving you.
+
+Best regards,
+[Your Name]
+[Company Name]</pre>
+                </div>
+                <div class="template-actions">
+                    <button class="btn btn-primary" onclick="useTemplate('business-closure')">
+                        <span>📧</span> Use Template
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyTemplate('business-closure')">
+                        <span>📋</span> Copy Code
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Download Section -->
+        <div style="text-align: center; padding: 40px 0; background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            <h2 style="margin-bottom: 20px; color: var(--text-dark);">Download Complete Collection</h2>
+            <p style="margin-bottom: 30px; color: var(--text-light); max-width: 600px; margin: 0 auto;">
+                Get all 25+ premium Saudi business email templates in a downloadable package with customization options and ongoing updates.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <button class="btn btn-primary" style="font-size: 16px; padding: 16px 32px);">
+                    <span>📦</span> Download Complete Package
+                </button>
+                <button class="btn btn-secondary" style="font-size: 16px; padding: 16px 32px;">
+                    <span>💎</span> Premium Version
+                </button>
+            </div>
+            <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--border-color);">
+                <p style="color: var(--text-light); font-size: 14px; margin-bottom: 10px;">
+                    <strong>Premium Features:</strong>
+                </p>
+                <ul style="list-style: none; color: var(--text-light); font-size: 14px; text-align: left; max-width: 600px; margin: 0 auto;">
+                    <li style="margin-bottom: 8px;">✓ All 25+ templates in HTML and plain text formats</li>
+                    <li style="margin-bottom: 8px;">✓ Arabic and English versions included</li>
+                    <li style="margin-bottom: 8px;">✓ Customizable branding options</li>
+                    <li style="margin-bottom: 8px;">✓ Lifetime updates and new templates</li>
+                    <li style="margin-bottom: 8px;">✓ Priority customer support</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Template storage
+        const templates = {
+            'business-introduction': `Subject: Introduction - [Your Company Name]
+
+Dear [Recipient Name],
+
+Assalamu Alaikum wa Rahmatullahi wa Barakatuh
+
+I hope this email finds you well. My name is [Your Name] and I am the [Your Position] at [Your Company Name], a [brief description of your company].
+
+I am reaching out to introduce our company and explore potential business collaboration opportunities in the Saudi market. We specialize in [your main service/product] and have been serving the Saudi business community for [number] years.
+
+Our commitment to excellence and understanding of Saudi business culture makes us an ideal partner for companies looking to [specific benefit you provide].
+
+I would appreciate the opportunity to discuss how we might work together. Would you be available for a brief meeting in the coming weeks?
+
+Thank you for your time and consideration.
+
+Wassalam,
+[Your Name]
+[Your Position]
+[Company Name]
+[Contact Information]`,
+            
+            'meeting-request': `Subject: Meeting Request - [Topic]
+
+Dear [Recipient Name],
+
+Assalamu Alaikum,
+
+I hope this email finds you in good health and spirits.
+
+Following up on our recent discussion about [topic], I would like to request a meeting to discuss [specific purpose] in more detail.
+
+I would like to propose the following times:
+- [Date] at [Time] (Riyadh time)
+- [Alternative Date] at [Alternative Time]
+- [Third Option] at [Time]
+
+Please let me know which of these times works best for you, or suggest an alternative time that would be more convenient. I am flexible with scheduling during Saudi business hours (Saturday - Thursday, 8:00 AM - 6:00 PM).
+
+I can accommodate virtual meetings via video conference or in-person meetings at your convenience.
+
+Thank you for your consideration. I look forward to our discussion.
+
+Best regards,
+[Your Name]
+[Your Position]`,
+
+            // Add other templates here...
+        };
+
+        // Filter functionality
+        function filterTemplates(category) {
+            const cards = document.querySelectorAll('.template-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show/hide cards
+            cards.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    const cardCategories = card.dataset.category.split(' ');
+                    card.style.display = cardCategories.includes(category) ? 'block' : 'none';
+                }
+            });
+        }
+
+        // Search functionality
+        function searchTemplates() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.template-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        }
+
+        // Use template functionality
+        function useTemplate(templateId) {
+            // This would open a modal or navigate to a customization page
+            alert(`Template "${templateId}" would open for customization. In a real implementation, this would open a modal or editor.`);
+        }
+
+        // Copy template functionality
+        function copyTemplate(templateId) {
+            const template = templates[templateId];
+            if (template) {
+                navigator.clipboard.writeText(template).then(() => {
+                    // Show success message
+                    const button = event.target.closest('.template-actions').querySelector('.btn-secondary');
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<span>✓</span> Copied!';
+                    button.style.background = '#10B981';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = '';
+                    }, 2000);
+                });
+            }
+        }
+
+        // Add search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchTemplates();
+            }
+        });
+    </script>
+</body>
+</html>

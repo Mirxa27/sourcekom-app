@@ -21,6 +21,54 @@ import {
   Lightbulb
 } from 'lucide-react'
 import Link from 'next/link'
+import { cn } from '@/lib/utils'
+
+const toneStyles = {
+  brand: {
+    iconBg: 'bg-brand/15',
+    iconText: 'text-brand',
+    hoverBorder: 'hover:border-brand/30',
+    statText: 'text-brand'
+  },
+  secondary: {
+    iconBg: 'bg-brand-secondary/15',
+    iconText: 'text-brand-secondary',
+    hoverBorder: 'hover:border-brand-secondary/30',
+    statText: 'text-brand-secondary'
+  },
+  highlight: {
+    iconBg: 'bg-brand-highlight/15',
+    iconText: 'text-brand-highlight',
+    hoverBorder: 'hover:border-brand-highlight/30',
+    statText: 'text-brand-highlight'
+  },
+  info: {
+    iconBg: 'bg-state-info/10',
+    iconText: 'text-state-info',
+    hoverBorder: 'hover:border-state-info/30',
+    statText: 'text-state-info'
+  },
+  success: {
+    iconBg: 'bg-state-success/10',
+    iconText: 'text-state-success',
+    hoverBorder: 'hover:border-state-success/30',
+    statText: 'text-state-success'
+  },
+  warning: {
+    iconBg: 'bg-state-warning/10',
+    iconText: 'text-state-warning',
+    hoverBorder: 'hover:border-state-warning/30',
+    statText: 'text-state-warning'
+  },
+  danger: {
+    iconBg: 'bg-state-error/10',
+    iconText: 'text-state-error',
+    hoverBorder: 'hover:border-state-error/30',
+    statText: 'text-state-error'
+  }
+} as const
+
+type Tone = keyof typeof toneStyles
 
 export default function ServicesPage() {
   const services = [
@@ -29,7 +77,7 @@ export default function ServicesPage() {
       icon: Truck,
       title: 'Logistics and Supply Chain Management',
       description: 'Comprehensive solutions for optimizing your logistics operations and supply chain processes to improve efficiency and reduce costs.',
-      color: 'emerald',
+      tone: 'brand',
       features: [
         'Supply chain optimization',
         'Inventory management',
@@ -50,7 +98,7 @@ export default function ServicesPage() {
       icon: Building,
       title: 'Resource Optimization and Exchange',
       description: 'Innovative platform for businesses to exchange underutilized resources, creating new value and reducing waste.',
-      color: 'blue',
+      tone: 'info',
       features: [
         'Resource sharing platform',
         'Underutilized asset identification',
@@ -71,7 +119,7 @@ export default function ServicesPage() {
       icon: TrendingUp,
       title: 'Strategic Business Consulting',
       description: 'Expert guidance on business strategy, market positioning, and growth opportunities tailored to the Saudi Arabian market.',
-      color: 'purple',
+      tone: 'secondary',
       features: [
         'Market analysis and research',
         'Strategic planning',
@@ -92,7 +140,7 @@ export default function ServicesPage() {
       icon: BarChart3,
       title: 'Operational Efficiency Improvement',
       description: 'Analysis and enhancement of business operations to maximize productivity and minimize resource waste.',
-      color: 'orange',
+      tone: 'warning',
       features: [
         'Process optimization',
         'Workflow analysis',
@@ -113,7 +161,7 @@ export default function ServicesPage() {
       icon: Shield,
       title: 'Sustainable Business Practices',
       description: 'Implementation of environmentally friendly and socially responsible business practices that also improve profitability.',
-      color: 'green',
+      tone: 'success',
       features: [
         'Sustainability assessment',
         'Green strategy development',
@@ -134,7 +182,7 @@ export default function ServicesPage() {
       icon: Target,
       title: 'Market Entry and Expansion Services',
       description: 'Support for businesses looking to enter or expand within the Saudi Arabian market, leveraging our local knowledge and connections.',
-      color: 'red',
+      tone: 'danger',
       features: [
         'Market entry strategy',
         'Regulatory compliance guidance',
@@ -153,46 +201,28 @@ export default function ServicesPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Link>
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                <Building className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-bold text-xl">SourceKom</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div>
       {/* Hero Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-emerald-50 via-white to-blue-50">
+      <section className="py-20 px-4 bg-gradient-secondary">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto text-center">
-            <Badge className="mb-6 bg-emerald-100 text-emerald-800 hover:bg-emerald-200">
+            <Badge className="mb-6 bg-brand/15 text-brand hover:bg-brand/25 border-brand/30">
               Our Services
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-brand bg-clip-text text-transparent">
               Comprehensive Solutions for Business Excellence
             </h1>
-            <p className="text-xl text-muted-foreground mb-8">
+            <p className="text-xl text-app-muted mb-8">
               SourceKom offers comprehensive solutions to optimize your resources and enhance your business performance in the Saudi Arabian market.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-emerald-600 hover:bg-emerald-700" asChild>
+              <Button variant="brand" asChild>
                 <Link href="/contact">
                   Get Started
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
-              <Button variant="outline" asChild>
+              <Button variant="outline" className="border-brand text-brand hover:bg-brand hover:text-app" asChild>
                 <Link href="/contact">
                   Schedule Consultation
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -216,11 +246,12 @@ export default function ServicesPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service) => {
               const IconComponent = service.icon
+              const tone = toneStyles[service.tone as Tone]
               return (
-                <Card key={service.id} className="hover:shadow-lg transition-shadow group">
+                <Card key={service.id} className={cn("hover:shadow-lg transition-shadow group", tone.hoverBorder)}>
                   <CardHeader>
-                    <div className={`w-16 h-16 bg-${service.color}-100 rounded-lg flex items-center justify-center mb-4 group-hover:scale-105 transition-transform`}>
-                      <IconComponent className={`w-8 h-8 text-${service.color}-600`} />
+                    <div className={cn("w-16 h-16 rounded-lg flex items-center justify-center mb-4 group-hover:scale-105 transition-transform", tone.iconBg)}>
+                      <IconComponent className={cn("w-8 h-8", tone.iconText)} />
                     </div>
                     <CardTitle className="text-xl">{service.title}</CardTitle>
                     <CardDescription className="text-base">
@@ -234,7 +265,7 @@ export default function ServicesPage() {
                         <ul className="space-y-1">
                           {service.features.slice(0, 3).map((feature, index) => (
                             <li key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <CheckCircle className="w-3 h-3 text-emerald-600 flex-shrink-0" />
+                              <CheckCircle className="w-3 h-3 text-state-success flex-shrink-0" />
                               {feature}
                             </li>
                           ))}
@@ -259,7 +290,7 @@ export default function ServicesPage() {
       <section className="py-16 px-4 bg-muted/20">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <Badge className="mb-4 bg-emerald-100 text-emerald-800 hover:bg-emerald-200">
+            <Badge className="mb-4 bg-brand/15 text-brand hover:bg-brand/25 border-brand/30">
               Our Process
             </Badge>
             <h2 className="text-3xl font-bold mb-4">How We Deliver Excellence</h2>
@@ -270,8 +301,8 @@ export default function ServicesPage() {
 
           <div className="grid md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lightbulb className="w-8 h-8 text-emerald-600" />
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-brand/15">
+                <Lightbulb className="w-8 h-8 text-brand" />
               </div>
               <h3 className="font-semibold mb-2">1. Discover</h3>
               <p className="text-sm text-muted-foreground">
@@ -279,8 +310,8 @@ export default function ServicesPage() {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Target className="w-8 h-8 text-blue-600" />
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-brand-secondary/15">
+                <Target className="w-8 h-8 text-brand-secondary" />
               </div>
               <h3 className="font-semibold mb-2">2. Strategize</h3>
               <p className="text-sm text-muted-foreground">
@@ -288,8 +319,8 @@ export default function ServicesPage() {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-purple-600" />
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-brand-highlight/15">
+                <Users className="w-8 h-8 text-brand-highlight" />
               </div>
               <h3 className="font-semibold mb-2">3. Implement</h3>
               <p className="text-sm text-muted-foreground">
@@ -297,8 +328,8 @@ export default function ServicesPage() {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <BarChart3 className="w-8 h-8 text-orange-600" />
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 bg-state-warning/10">
+                <BarChart3 className="w-8 h-8 text-state-warning" />
               </div>
               <h3 className="font-semibold mb-2">4. Optimize</h3>
               <p className="text-sm text-muted-foreground">
@@ -314,41 +345,41 @@ export default function ServicesPage() {
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge className="mb-4 bg-emerald-100 text-emerald-800 hover:bg-emerald-200">
+              <Badge className="mb-4 bg-brand/15 text-brand hover:bg-brand/25 border-brand/30">
                 Key Benefits
               </Badge>
               <h2 className="text-3xl font-bold mb-6">Why Choose Our Services</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-emerald-600 mt-1 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-state-success mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="font-semibold">Local Market Expertise</h3>
                     <p className="text-muted-foreground">Deep understanding of Saudi Arabian business landscape and regulatory environment.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-emerald-600 mt-1 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-state-success mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="font-semibold">Proven Methodology</h3>
                     <p className="text-muted-foreground">Systematic approach backed by years of successful client engagements.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-emerald-600 mt-1 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-state-success mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="font-semibold">Customized Solutions</h3>
                     <p className="text-muted-foreground">Tailored strategies that address your specific business needs and challenges.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-emerald-600 mt-1 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-state-success mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="font-semibold">Measurable Results</h3>
                     <p className="text-muted-foreground">Focus on delivering tangible outcomes and ROI for your business.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-emerald-600 mt-1 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-state-success mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="font-semibold">Ongoing Support</h3>
                     <p className="text-muted-foreground">Continuous partnership to ensure long-term success and adaptation.</p>
@@ -358,19 +389,19 @@ export default function ServicesPage() {
             </div>
             <div className="grid grid-cols-2 gap-6">
               <Card className="text-center p-6">
-                <div className="text-3xl font-bold text-emerald-600 mb-2">30%</div>
+                <div className="text-3xl font-bold text-state-success mb-2">30%</div>
                 <p className="text-sm text-muted-foreground">Average Cost Reduction</p>
               </Card>
               <Card className="text-center p-6">
-                <div className="text-3xl font-bold text-blue-600 mb-2">85%</div>
+                <div className="text-3xl font-bold text-brand mb-2">85%</div>
                 <p className="text-sm text-muted-foreground">Client Satisfaction Rate</p>
               </Card>
               <Card className="text-center p-6">
-                <div className="text-3xl font-bold text-purple-600 mb-2">500+</div>
+                <div className="text-3xl font-bold text-brand-highlight mb-2">500+</div>
                 <p className="text-sm text-muted-foreground">Businesses Transformed</p>
               </Card>
               <Card className="text-center p-6">
-                <div className="text-3xl font-bold text-orange-600 mb-2">10+</div>
+                <div className="text-3xl font-bold text-state-warning mb-2">10+</div>
                 <p className="text-sm text-muted-foreground">Years Experience</p>
               </Card>
             </div>
@@ -379,7 +410,7 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-emerald-600 to-blue-600 text-white">
+      <section className="py-20 px-4 bg-gradient-secondary text-app">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">
             Ready to Transform Your Business?
@@ -388,20 +419,20 @@ export default function ServicesPage() {
             Let's discuss how our services can help you achieve your business goals and drive sustainable growth.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="secondary" size="lg" asChild>
+            <Button variant="brand" size="lg" asChild>
               <Link href="/contact">
                 Schedule Consultation
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" className="text-white border-white hover:bg-white hover:text-emerald-600" asChild>
+            <Button variant="outline" size="lg" className="border-app text-app hover:bg-app/80" asChild>
               <Link href="tel:+9661234567890">
                 <Phone className="w-4 h-4 mr-2" />
                 Call Us Now
               </Link>
             </Button>
           </div>
-          <div className="mt-8 flex items-center justify-center gap-8 text-sm">
+          <div className="mt-8 flex items-center justify-center gap-8 text-sm text-app-muted">
             <div className="flex items-center gap-2">
               <Mail className="w-4 h-4" />
               <span>info@sourcekom.com</span>

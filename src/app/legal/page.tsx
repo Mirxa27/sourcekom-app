@@ -50,47 +50,7 @@ export default function LegalPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-                <Building className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-bold text-xl">SourceKom</span>
-            </Link>
-            <div className="hidden md:flex items-center space-x-6">
-              <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
-                About
-              </Link>
-              <Link href="/services" className="text-muted-foreground hover:text-foreground transition-colors">
-                Services
-              </Link>
-              <Link href="/resources" className="text-muted-foreground hover:text-foreground transition-colors">
-                Resources
-              </Link>
-              <Link href="/legal" className="text-foreground font-medium">
-                Legal Services
-              </Link>
-              <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
-                Contact
-              </Link>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <Button variant="outline" asChild>
-              <Link href="/contact">Contact Us</Link>
-            </Button>
-            <Button className="bg-emerald-600 hover:bg-emerald-700" asChild>
-              <Link href="/legal/consultation">Book Consultation</Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Hero Section */}
+    <div>
       <section className="py-20 px-4 bg-gradient-to-br from-emerald-50 via-white to-blue-50">
         <div className="container mx-auto text-center">
           <Badge className="mb-6 bg-emerald-100 text-emerald-800 hover:bg-emerald-200">

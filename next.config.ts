@@ -34,8 +34,38 @@ const nextConfig: NextConfig = {
   generateBuildId: async () => {
     return 'build-' + Date.now()
   },
-  // Output configuration for Vercel
-  output: 'standalone',
+  // Output configuration for Vercel (only in production)
+  ...(process.env.NODE_ENV === 'production' && { output: 'standalone' }),
+  // Security headers (for Next.js dev server)
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
