@@ -126,12 +126,13 @@ export default function AnalyticsPage() {
 
   const topPerformingResources = analytics?.topPerformingResources || []
 
+  // Recharts requires actual color values, not CSS variables
   const CHART_COLORS = [
-    'var(--success)',
-    'var(--info)',
-    'var(--brand-highlight)',
-    'var(--warning)',
-    'var(--error)'
+    '#10b981', // success - green
+    '#3b82f6', // info - blue
+    '#0fa968', // brand-highlight - teal
+    '#f59e0b', // warning - amber
+    '#ef4444'  // error - red
   ] as const
 
   const formatCurrency = (value: number) => {
