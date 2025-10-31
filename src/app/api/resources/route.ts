@@ -176,18 +176,41 @@ export async function POST(request: NextRequest) {
       fileFormat
     } = validation.data
 
-    // Get or create default category
-    let defaultCategory = await db.category.findFirst();
+    // Get or create active "General" category
+    let defaultCategory = await db.category.findFirst({
+      where: {
+        slug: 'general',
+        isActive: true
+      }
+    });
     
     if (!defaultCategory) {
-      defaultCategory = await db.category.create({
-        data: {
-          name: 'General',
-          slug: 'general',
-          description: 'General resources',
-          isActive: true
+      // Try to find any active General category by slug only
+      defaultCategory = await db.category.findFirst({
+        where: {
+          slug: 'general'
         }
       });
+      
+      // If found but inactive, activate it
+      if (defaultCategory && !defaultCategory.isActive) {
+        defaultCategory = await db.category.update({
+          where: { id: defaultCategory.id },
+          data: { isActive: true }
+        });
+      }
+      
+      // If still not found, create it
+      if (!defaultCategory) {
+        defaultCategory = await db.category.create({
+          data: {
+            name: 'General',
+            slug: 'general',
+            description: 'General resources and digital products',
+            isActive: true
+          }
+        });
+      }
     }
 
     const newResource = await db.resource.create({
